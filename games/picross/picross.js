@@ -1,7 +1,7 @@
 import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js';
 import { loadProfile, saveProfile } from '../../assets/js/storage.js';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, countFilled, isSolved, lineRuns } from './puzzle.js';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js';
 import { downloadZip } from '../../assets/js/zip.js';
 import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
 
@@ -68,23 +68,24 @@ function updateHintStates() {
 }
 
 function scoreNow() {
-  const correct = board.reduce((total, line, row) => total + line.reduce((sum, state, column) => sum + (state === 'filled' && puzzle.solution[row][column] ? 1 : 0), 0), 0);
-  return Math.max(0, correct * 10 - mistakes * 5);
+  const solvedRows = puzzle.rowHints.filter((hint, row) => JSON.stringify(lineRuns(board[row].map(state => state === 'filled'))) === JSON.stringify(hint)).length;
+  const solvedColumns = puzzle.columnHints.filter((hint, column) => JSON.stringify(lineRuns(board.map(line => line[column] === 'filled'))) === JSON.stringify(hint)).length;
+  return (solvedRows + solvedColumns) * 10;
 }
 
 function updateProgress() {
   const filled = board.flat().filter(state => state === 'filled').length;
   const marked = board.flat().filter(state => state === 'marked').length;
-  const target = countFilled(puzzle.solution);
-  const correct = board.reduce((total, line, row) => total + line.reduce((sum, state, column) => sum + (state === 'filled' && puzzle.solution[row][column] ? 1 : 0), 0), 0);
-  const percent = Math.round(correct / target * 100);
-  $('#mistakes').textContent = mistakes;
+  const solvedRows = puzzle.rowHints.filter((hint, row) => JSON.stringify(lineRuns(board[row].map(state => state === 'filled'))) === JSON.stringify(hint)).length;
+  const solvedColumns = puzzle.columnHints.filter((hint, column) => JSON.stringify(lineRuns(board.map(line => line[column] === 'filled'))) === JSON.stringify(hint)).length;
+  const percent = Math.round((solvedRows + solvedColumns) / (puzzle.size * 2) * 100);
   $('#filled-count').textContent = filled;
   $('#marked-count').textContent = marked;
   $('#progress-label').textContent = `${percent}%`;
   $('#progress-bar').style.width = `${percent}%`;
   $('#live-score').textContent = `${scoreNow()} pts`;
-  $('#score-bar').style.width = `${Math.min(100, scoreNow() / 45)}%`;
+  $('#score-bar').style.width = `${Math.min(100, scoreNow() / (puzzle.size * 20) * 100)}%`;
+  $('#completed-lines').textContent = `${solvedRows + solvedColumns} / ${puzzle.size * 2}`;
   const left = mode === 'timed' ? Math.max(0, (size === 10 ? 240 : 90) - secondsPlayed()) : secondsPlayed();
   $('#timer').textContent = formatTime(left);
 }
@@ -184,10 +185,6 @@ async function clickCell(row, column, selectedTool = tool) {
   const previous = board[row][column];
   const next = selectedTool === 'mark' ? 'marked' : 'filled';
   board[row][column] = previous === next ? 'empty' : next;
-  if (board[row][column] === 'filled' && !puzzle.solution[row][column] && previous !== 'filled') {
-    mistakes++;
-    notify('Esa casilla no forma parte del dibujo.');
-  }
   focusIndex = row * puzzle.size + column;
   const cell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
   if (cell) {
@@ -197,14 +194,14 @@ async function clickCell(row, column, selectedTool = tool) {
     boardRoot.querySelectorAll('.cell').forEach(item => item.tabIndex = item === cell ? 0 : -1);
   }
   updateProgress(); updateHintStates();
-  if (isSolved(puzzle.solution, board)) await completePuzzle();
+  if (isSolved(puzzle, board)) await completePuzzle();
   else await saveActive();
 }
 
 async function completePuzzle() {
   const duration = Math.max(0, Math.floor(elapsed + (Date.now() - startedAt) / 1000));
   completed = true; playing = false; elapsed = duration;
-  const earnedPoints = Math.max(40, Math.round(100 + puzzle.size * 16 - mistakes * 12 - duration / 2));
+  const earnedPoints = Math.max(40, Math.round(100 + puzzle.size * 16 - duration / 2));
   const stats = profile.games.picross;
   const completedLevel = mode === 'classic' ? activeLevel : 0;
   const puzzleId = mode === 'daily' ? `daily:${localDate()}` : completedLevel > 0 ? `level:${completedLevel}` : `${mode}:${size}:${puzzle.id}`;
@@ -225,7 +222,7 @@ async function completePuzzle() {
   profile.games.picross.active = null;
   await saveProfile(profile);
   renderPlayerStats(); updateProgress();
-  $('#win-message').textContent = `+${earnedPoints} puntos · ${formatTime(duration)} · ${mistakes} fallos`;
+  $('#win-message').textContent = `+${earnedPoints} puntos · ${formatTime(duration)}`;
   $('#next-puzzle').textContent = mode === 'classic' && completedLevel === CAMPAIGN_LEVEL_COUNT
     ? 'Repetir nivel 60'
     : mode === 'classic' && completedLevel > 0
