@@ -1,0 +1,360 @@
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js';
+import { loadProfile, saveProfile } from '../../assets/js/storage.js';
+import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, countFilled, isSolved, lineRuns } from './puzzle.js';
+import { downloadZip } from '../../assets/js/zip.js';
+import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
+
+const $ = selector => document.querySelector(selector);
+const boardRoot = $('#nonogram');
+const localDate = () => new Date().toLocaleDateString('en-CA');
+const formatTime = seconds => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+
+let profile;
+let mode = 'classic';
+let size = 5;
+let activeLevel = 1;
+let tool = 'fill';
+let puzzle;
+let board;
+let mistakes = 0;
+let elapsed = 0;
+let startedAt = Date.now();
+let playing = false;
+let completed = false;
+let counted = false;
+let focusIndex = 0;
+let lastSave = 0;
+
+function notify(message) {
+  const toast = $('#toast'); toast.textContent = message; toast.classList.add('visible');
+  clearTimeout(notify.timeout); notify.timeout = setTimeout(() => toast.classList.remove('visible'), 2500);
+}
+
+function secondsPlayed() {
+  return elapsed + (playing ? Math.floor((Date.now() - startedAt) / 1000) : 0);
+}
+
+function createEmptyBoard() {
+  return Array.from({ length: puzzle.size }, () => Array(puzzle.size).fill('empty'));
+}
+
+function renderBoard() {
+  const count = puzzle.size;
+  boardRoot.style.setProperty('--size', count);
+  const corner = '<div class="grid-corner" aria-hidden="true">◈</div>';
+  const columns = `<div class="column-hints">${puzzle.columnHints.map((hint, column) => `<div class="hint vertical" data-column-hint="${column}">${hint.map(value => `<span>${value}</span>`).join('')}</div>`).join('')}</div>`;
+  const rows = `<div class="row-hints">${puzzle.rowHints.map((hint, row) => `<div class="hint horizontal" data-row-hint="${row}">${hint.map(value => `<span>${value}</span>`).join('')}</div>`).join('')}</div>`;
+  const cells = `<div class="cell-grid ${count === 10 ? 'break-five' : ''}">${board.map((line, row) => line.map((state, column) => {
+    const label = state === 'filled' ? 'rellena' : state === 'marked' ? 'marcada vacía' : 'sin marcar';
+    const index = row * count + column;
+    return `<button class="cell" type="button" data-row="${row}" data-column="${column}" data-state="${state}" aria-label="Fila ${row + 1}, columna ${column + 1}, ${label}" aria-pressed="${state !== 'empty'}" tabindex="${index === focusIndex ? '0' : '-1'}"></button>`;
+  }).join('')).join('')}</div>`;
+  boardRoot.innerHTML = corner + columns + rows + cells;
+  updateProgress(); updateHintStates();
+}
+
+function updateHintStates() {
+  for (let row = 0; row < puzzle.size; row++) {
+    const actual = lineRuns(board[row].map(state => state === 'filled'));
+    const done = JSON.stringify(actual) === JSON.stringify(puzzle.rowHints[row]);
+    boardRoot.querySelector(`[data-row-hint="${row}"]`)?.classList.toggle('complete', done);
+  }
+  for (let column = 0; column < puzzle.size; column++) {
+    const actual = lineRuns(board.map(line => line[column] === 'filled'));
+    const done = JSON.stringify(actual) === JSON.stringify(puzzle.columnHints[column]);
+    boardRoot.querySelector(`[data-column-hint="${column}"]`)?.classList.toggle('complete', done);
+  }
+}
+
+function scoreNow() {
+  const correct = board.reduce((total, line, row) => total + line.reduce((sum, state, column) => sum + (state === 'filled' && puzzle.solution[row][column] ? 1 : 0), 0), 0);
+  return Math.max(0, correct * 10 - mistakes * 5);
+}
+
+function updateProgress() {
+  const filled = board.flat().filter(state => state === 'filled').length;
+  const marked = board.flat().filter(state => state === 'marked').length;
+  const target = countFilled(puzzle.solution);
+  const correct = board.reduce((total, line, row) => total + line.reduce((sum, state, column) => sum + (state === 'filled' && puzzle.solution[row][column] ? 1 : 0), 0), 0);
+  const percent = Math.round(correct / target * 100);
+  $('#mistakes').textContent = mistakes;
+  $('#filled-count').textContent = filled;
+  $('#marked-count').textContent = marked;
+  $('#progress-label').textContent = `${percent}%`;
+  $('#progress-bar').style.width = `${percent}%`;
+  $('#live-score').textContent = `${scoreNow()} pts`;
+  $('#score-bar').style.width = `${Math.min(100, scoreNow() / 45)}%`;
+  const left = mode === 'timed' ? Math.max(0, (size === 10 ? 240 : 90) - secondsPlayed()) : secondsPlayed();
+  $('#timer').textContent = formatTime(left);
+}
+
+function renderPlayerStats() {
+  const stats = profile.games.picross;
+  $('#best-score').textContent = stats.bestScore.toLocaleString('es-ES');
+  $('#solved-count').textContent = stats.solved;
+  $('#played-count').textContent = stats.gamesPlayed;
+  $('#best-time').textContent = stats.bestTime == null ? '—' : formatTime(stats.bestTime);
+  const unlocked = new Set(profile.achievements);
+  const next = ACHIEVEMENTS.find(item => !unlocked.has(item.id));
+  $('#next-trophy').textContent = next?.name || '¡Colección completa!';
+  $('#next-detail').textContent = next?.detail || 'Has desbloqueado todos los trofeos disponibles.';
+  const counts = getAchievementCounts(profile);
+  $('#trophy-count').textContent = `${counts.earned} / ${counts.total} trofeos`;
+  renderCampaignPicker();
+}
+
+function renderCampaignPicker() {
+  const progress = profile.games.picross;
+  const completed = new Set(progress.completedLevels || []);
+  $('#level-select').innerHTML = CAMPAIGN_LEVELS.map((level, index) => {
+    const number = index + 1;
+    const locked = number > progress.unlockedLevel;
+    const state = completed.has(number) ? ' · Superado' : locked ? ' · Bloqueado' : '';
+    return `<option value="${number}" ${locked ? 'disabled' : ''}>${String(number).padStart(2, '0')} · ${level.group} · ${level.size}×${level.size}${state}</option>`;
+  }).join('');
+  const selectedLevel = mode === 'classic' && activeLevel > 0
+    ? Math.max(1, Math.min(activeLevel, progress.unlockedLevel))
+    : progress.unlockedLevel;
+  if (mode === 'classic' && activeLevel > 0) activeLevel = selectedLevel;
+  $('#level-select').value = String(selectedLevel);
+  $('#campaign-progress').textContent = `${completed.size} / ${CAMPAIGN_LEVEL_COUNT} superados`;
+}
+
+function updatePuzzleLabel(resumed = false) {
+  if (mode === 'daily') $('#puzzle-label').textContent = `RETO DIARIO · ${localDate()}`;
+  else if (mode === 'classic' && activeLevel > 0) {
+    const label = `NIVEL ${String(activeLevel).padStart(2, '0')} / ${CAMPAIGN_LEVEL_COUNT} · ${puzzle.group.toUpperCase()}`;
+    $('#puzzle-label').textContent = resumed ? `EN CURSO · ${label}` : label;
+  } else $('#puzzle-label').textContent = resumed ? `PARTIDA EN CURSO · ${size} × ${size}` : `PUZLE ${size} × ${size}`;
+}
+
+async function saveActive() {
+  profile.games.picross.active = completed ? null : {
+    id: puzzle.id, mode, level: mode === 'classic' && activeLevel > 0 ? activeLevel : null,
+    size, board, mistakes, elapsed: secondsPlayed(), counted, date: localDate(),
+  };
+  await saveProfile(profile);
+  lastSave = Date.now();
+}
+
+function updateModeUI() {
+  const campaign = mode === 'classic' && activeLevel > 0;
+  $('#level-picker').hidden = !campaign;
+  $('#size-picker').hidden = !(mode === 'timed' || (mode === 'classic' && !campaign));
+  $('#new-puzzle').hidden = campaign;
+  document.querySelectorAll('[data-mode]').forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
+  document.querySelectorAll('[data-size]').forEach(button => {
+    button.disabled = mode === 'daily' || campaign;
+    button.classList.toggle('selected', Number(button.dataset.size) === size);
+  });
+  $('#mode-label').textContent = mode === 'classic' ? (campaign ? 'CAMPAÑA' : 'CLÁSICO') : mode === 'timed' ? 'CONTRARRELOJ' : 'RETO DIARIO';
+  if (campaign) renderCampaignPicker();
+}
+
+function startPuzzle(seed = Date.now(), isResume = false) {
+  if (mode === 'daily') size = 10;
+  puzzle = mode === 'classic' && activeLevel > 0 ? buildCampaignPuzzle(activeLevel) : buildPuzzle(size, seed);
+  size = puzzle.size;
+  board = createEmptyBoard(); mistakes = 0; elapsed = 0; focusIndex = 0; completed = false;
+  startedAt = Date.now(); playing = true;
+  $('#win-overlay').hidden = true;
+  updatePuzzleLabel();
+  $('#daily-caption').textContent = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  updateModeUI(); renderBoard();
+  if (!counted && !isResume) {
+    profile.stats.gamesPlayed++;
+    profile.games.picross.gamesPlayed++;
+    counted = true;
+    unlockAchievements(profile);
+  }
+  renderPlayerStats(); saveActive();
+}
+
+function setTool(nextTool) {
+  tool = nextTool;
+  document.querySelectorAll('[data-tool]').forEach(button => {
+    button.classList.toggle('selected', button.dataset.tool === tool);
+    button.setAttribute('aria-pressed', String(button.dataset.tool === tool));
+  });
+}
+
+async function clickCell(row, column, selectedTool = tool) {
+  if (!playing || completed) return;
+  const previous = board[row][column];
+  const next = selectedTool === 'mark' ? 'marked' : 'filled';
+  board[row][column] = previous === next ? 'empty' : next;
+  if (board[row][column] === 'filled' && !puzzle.solution[row][column] && previous !== 'filled') {
+    mistakes++;
+    notify('Esa casilla no forma parte del dibujo.');
+  }
+  focusIndex = row * puzzle.size + column;
+  const cell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
+  if (cell) {
+    cell.dataset.state = board[row][column];
+    cell.setAttribute('aria-pressed', String(board[row][column] !== 'empty'));
+    cell.setAttribute('aria-label', `Fila ${row + 1}, columna ${column + 1}, ${board[row][column] === 'filled' ? 'rellena' : board[row][column] === 'marked' ? 'marcada vacía' : 'sin marcar'}`);
+    boardRoot.querySelectorAll('.cell').forEach(item => item.tabIndex = item === cell ? 0 : -1);
+  }
+  updateProgress(); updateHintStates();
+  if (isSolved(puzzle.solution, board)) await completePuzzle();
+  else await saveActive();
+}
+
+async function completePuzzle() {
+  const duration = Math.max(0, Math.floor(elapsed + (Date.now() - startedAt) / 1000));
+  completed = true; playing = false; elapsed = duration;
+  const earnedPoints = Math.max(40, Math.round(100 + puzzle.size * 16 - mistakes * 12 - duration / 2));
+  const stats = profile.games.picross;
+  const completedLevel = mode === 'classic' ? activeLevel : 0;
+  const puzzleId = mode === 'daily' ? `daily:${localDate()}` : completedLevel > 0 ? `level:${completedLevel}` : `${mode}:${size}:${puzzle.id}`;
+  const firstClear = !stats.completedPuzzles.includes(puzzleId);
+  if (firstClear) { stats.solved++; stats.completedPuzzles.push(puzzleId); }
+  if (completedLevel > 0 && firstClear) {
+    stats.completedLevels = [...new Set([...stats.completedLevels, completedLevel])].sort((a, b) => a - b);
+    stats.unlockedLevel = Math.min(CAMPAIGN_LEVEL_COUNT, Math.max(stats.unlockedLevel, completedLevel + 1));
+  }
+  stats.bestScore = Math.max(stats.bestScore, earnedPoints);
+  stats.bestTime = stats.bestTime == null ? duration : Math.min(stats.bestTime, duration);
+  profile.stats.gamesSolved += firstClear ? 1 : 0;
+  profile.stats.playSeconds += duration;
+  profile.stats.totalPoints += firstClear ? earnedPoints : 0;
+  stats.playedSeconds += duration;
+  stats.totalPoints += firstClear ? earnedPoints : 0;
+  const newTrophies = unlockAchievements(profile);
+  profile.games.picross.active = null;
+  await saveProfile(profile);
+  renderPlayerStats(); updateProgress();
+  $('#win-message').textContent = `+${earnedPoints} puntos · ${formatTime(duration)} · ${mistakes} fallos`;
+  $('#next-puzzle').textContent = mode === 'classic' && completedLevel === CAMPAIGN_LEVEL_COUNT
+    ? 'Repetir nivel 60'
+    : mode === 'classic' && completedLevel > 0
+      ? `Siguiente nivel ${String(Math.min(completedLevel + 1, CAMPAIGN_LEVEL_COUNT)).padStart(2, '0')}`
+      : 'Siguiente puzle →';
+  $('#win-overlay').hidden = false;
+  if (newTrophies.length) notify(`Trofeo desbloqueado: ${newTrophies[0].name}`);
+}
+
+function selectMode(nextMode) {
+  mode = nextMode;
+  activeLevel = mode === 'classic' ? profile.games.picross.unlockedLevel : 0;
+  if (mode === 'daily') size = 10;
+  counted = false;
+  updateModeUI();
+  const seed = mode === 'daily' ? `daily:${localDate()}` : Date.now();
+  startPuzzle(seed);
+}
+
+function selectCampaignLevel(levelNumber) {
+  mode = 'classic';
+  activeLevel = Math.max(1, Math.min(Number(levelNumber) || 1, profile.games.picross.unlockedLevel));
+  counted = false;
+  startPuzzle();
+}
+
+function advancePuzzle() {
+  if (mode === 'classic' && activeLevel > 0) {
+    selectCampaignLevel(Math.min(CAMPAIGN_LEVEL_COUNT, activeLevel + 1));
+  } else selectMode(mode);
+}
+
+function restartBoard() {
+  if (completed) return;
+  board = createEmptyBoard(); mistakes = 0; elapsed = 0; startedAt = Date.now(); playing = true; focusIndex = 0;
+  updatePuzzleLabel();
+  renderBoard(); saveActive();
+}
+
+function restoreGame(active) {
+  mode = active.mode;
+  const savedLevel = Number.isInteger(active.level) ? active.level : 0;
+  activeLevel = savedLevel >= 1 && savedLevel <= profile.games.picross.unlockedLevel ? savedLevel : 0;
+  size = active.size; counted = true; elapsed = active.elapsed || 0; mistakes = active.mistakes || 0;
+  puzzle = mode === 'classic' && activeLevel > 0 ? buildCampaignPuzzle(activeLevel) : buildPuzzle(size, active.id);
+  size = puzzle.size; board = active.board; startedAt = Date.now(); playing = true; completed = false;
+  updateModeUI();
+  updatePuzzleLabel(true);
+  renderBoard();
+}
+
+boardRoot.addEventListener('click', event => {
+  const cell = event.target.closest('.cell');
+  if (cell) clickCell(Number(cell.dataset.row), Number(cell.dataset.column));
+});
+boardRoot.addEventListener('contextmenu', event => {
+  const cell = event.target.closest('.cell');
+  if (!cell) return;
+  event.preventDefault(); clickCell(Number(cell.dataset.row), Number(cell.dataset.column), 'mark');
+});
+boardRoot.addEventListener('keydown', event => {
+  const moves = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] };
+  if (moves[event.key]) {
+    event.preventDefault();
+    const row = Math.floor(focusIndex / puzzle.size); const column = focusIndex % puzzle.size;
+    const nextRow = Math.max(0, Math.min(puzzle.size - 1, row + moves[event.key][0]));
+    const nextColumn = Math.max(0, Math.min(puzzle.size - 1, column + moves[event.key][1]));
+    focusIndex = nextRow * puzzle.size + nextColumn;
+    boardRoot.querySelector(`[data-row="${nextRow}"][data-column="${nextColumn}"]`)?.focus();
+  } else if (event.key.toLowerCase() === 'x') setTool('mark');
+  else if (event.key.toLowerCase() === 'f') setTool('fill');
+  else if (event.key === 'Escape') location.href = '../../';
+});
+
+document.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
+document.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => selectMode(button.dataset.mode)));
+document.querySelectorAll('[data-size]').forEach(button => button.addEventListener('click', () => {
+  if (button.disabled) return;
+  size = Number(button.dataset.size); activeLevel = 0; counted = false; updateModeUI(); startPuzzle(Date.now());
+}));
+$('#level-select').addEventListener('change', event => selectCampaignLevel(event.target.value));
+$('#new-puzzle').addEventListener('click', () => selectMode(mode));
+$('#next-puzzle').addEventListener('click', advancePuzzle);
+$('#clear-board').addEventListener('click', restartBoard);
+$('#mobile-clear').addEventListener('click', restartBoard);
+$('#export-game').addEventListener('click', async () => {
+  const achievements = profile.achievements.filter(id => ACHIEVEMENTS.some(item => item.id === id && item.scope === 'picross'));
+  downloadZip(await exportGameBackup('picross', profile.games.picross, achievements), 'picross.zip');
+  notify('Backup de Picross guardado.');
+});
+$('#import-game').addEventListener('click', () => $('#import-game-file').click());
+$('#import-game-file').addEventListener('change', async event => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  try {
+    if (!window.confirm('El backup reemplazará el progreso de Picross en este dispositivo. ¿Continuar?')) return;
+    await restoreBackup(file, profile, saveProfile, ['picross'], 'game');
+    notify('Progreso de Picross restaurado.');
+    setTimeout(() => location.reload(), 650);
+  } catch (error) {
+    notify(error.message || 'No se pudo restaurar el backup.');
+  } finally {
+    event.target.value = '';
+  }
+});
+$('#share-game').addEventListener('click', async () => {
+  const stats = profile.games.picross;
+  const trophies = ACHIEVEMENTS.filter(item => profile.achievements.includes(item.id)).map(item => item.name).slice(-3);
+  const image = await makeShareCard({ title: 'Picross', subtitle: `MI RÉCORD · ${stats.solved} RESUELTOS`, score: stats.bestScore.toLocaleString('es-ES'), trophies });
+  if (await shareOrSave(image, 'picross-logros.png') === 'saved') notify('Tarjeta guardada como imagen.');
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && playing) { elapsed = secondsPlayed(); playing = false; saveActive(); }
+  else if (!document.hidden && !completed && puzzle) { startedAt = Date.now(); playing = true; }
+});
+
+profile = await loadProfile();
+renderPlayerStats();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('../../sw.js').catch(() => {});
+const active = profile.games.picross.active;
+if (active?.board?.length && (active.mode !== 'daily' || active.date === localDate())) restoreGame(active);
+else { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
+
+setInterval(() => {
+  if (!puzzle || !board) return;
+  if (playing && mode === 'timed' && secondsPlayed() >= (size === 10 ? 240 : 90)) {
+    elapsed = size === 10 ? 240 : 90; playing = false; $('#puzzle-label').textContent = 'TIEMPO AGOTADO'; notify('Se acabó el tiempo. ¡Prueba de nuevo!'); saveActive();
+  }
+  updateProgress();
+  if (playing && Date.now() - lastSave > 10_000) saveActive();
+}, 500);
