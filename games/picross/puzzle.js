@@ -147,8 +147,10 @@ export function buildCampaignPuzzle(levelNumber) {
 
 export function countFilled(solution) { return solution.flat().filter(Boolean).length; }
 
-export function isSolved(solution, board) {
-  return solution.every((row, r) => row.every((cell, c) => cell === (board[r][c] === 'filled')));
+export function isSolved(puzzle, board) {
+  const rowsSolved = puzzle.rowHints.every((hint, row) => JSON.stringify(lineRuns(board[row].map(state => state === 'filled'))) === JSON.stringify(hint));
+  const columnsSolved = puzzle.columnHints.every((hint, column) => JSON.stringify(lineRuns(board.map(line => line[column] === 'filled'))) === JSON.stringify(hint));
+  return rowsSolved && columnsSolved;
 }
 
 export function lineRuns(values) { return getRuns(values); }
