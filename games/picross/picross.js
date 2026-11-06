@@ -70,7 +70,8 @@ function updateHintStates() {
 function scoreNow() {
   const solvedRows = puzzle.rowHints.filter((hint, row) => JSON.stringify(lineRuns(board[row].map(state => state === 'filled'))) === JSON.stringify(hint)).length;
   const solvedColumns = puzzle.columnHints.filter((hint, column) => JSON.stringify(lineRuns(board.map(line => line[column] === 'filled'))) === JSON.stringify(hint)).length;
-  return (solvedRows + solvedColumns) * 10;
+  const progress = (solvedRows + solvedColumns) / (puzzle.size * 2);
+  return Math.max(0, Math.round(progress * (100 + puzzle.size * 16) - secondsPlayed() / 2 - mistakes * 50));
 }
 
 function updateProgress() {
@@ -80,11 +81,12 @@ function updateProgress() {
   const solvedColumns = puzzle.columnHints.filter((hint, column) => JSON.stringify(lineRuns(board.map(line => line[column] === 'filled'))) === JSON.stringify(hint)).length;
   const percent = Math.round((solvedRows + solvedColumns) / (puzzle.size * 2) * 100);
   $('#filled-count').textContent = filled;
+  $('#mistakes').textContent = mistakes;
   $('#marked-count').textContent = marked;
   $('#progress-label').textContent = `${percent}%`;
   $('#progress-bar').style.width = `${percent}%`;
   $('#live-score').textContent = `${scoreNow()} pts`;
-  $('#score-bar').style.width = `${Math.min(100, scoreNow() / (puzzle.size * 20) * 100)}%`;
+  $('#score-bar').style.width = `${Math.min(100, scoreNow() / (100 + puzzle.size * 16) * 100)}%`;
   $('#completed-lines').textContent = `${solvedRows + solvedColumns} / ${puzzle.size * 2}`;
   const left = mode === 'timed' ? Math.max(0, (size === 10 ? 240 : 90) - secondsPlayed()) : secondsPlayed();
   $('#timer').textContent = formatTime(left);
@@ -133,7 +135,7 @@ function updatePuzzleLabel(resumed = false) {
 async function saveActive() {
   profile.games.picross.active = completed ? null : {
     id: puzzle.id, mode, level: mode === 'classic' && activeLevel > 0 ? activeLevel : null,
-    size, board, mistakes, elapsed: secondsPlayed(), counted, date: localDate(),
+    size, board, mistakes, elapsed: secondsPlayed(), counted, date: localDate(), rulesVersion: 2,
   };
   await saveProfile(profile);
   lastSave = Date.now();
@@ -184,6 +186,23 @@ async function clickCell(row, column, selectedTool = tool) {
   if (!playing || completed) return;
   const previous = board[row][column];
   const next = selectedTool === 'mark' ? 'marked' : 'filled';
+  const targetCell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
+  if (targetCell?.classList.contains('wrong')) return;
+  if (previous !== next && (next === 'filled') !== puzzle.solution[row][column]) {
+    mistakes++;
+    elapsed += 15;
+    targetCell?.classList.add('wrong');
+    targetCell?.setAttribute('aria-invalid', 'true');
+    setTimeout(() => {
+      targetCell?.classList.remove('wrong');
+      targetCell?.removeAttribute('aria-invalid');
+    }, 700);
+    notify(`Fallo: ${next === 'filled' ? 'esa casilla debe quedar vacía' : 'esa casilla debe ir rellena'}. −50 puntos y +15 s.`);
+    updateProgress();
+    checkTimeLimit();
+    await saveActive();
+    return;
+  }
   board[row][column] = previous === next ? 'empty' : next;
   focusIndex = row * puzzle.size + column;
   const cell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
@@ -201,7 +220,7 @@ async function clickCell(row, column, selectedTool = tool) {
 async function completePuzzle() {
   const duration = Math.max(0, Math.floor(elapsed + (Date.now() - startedAt) / 1000));
   completed = true; playing = false; elapsed = duration;
-  const earnedPoints = Math.max(40, Math.round(100 + puzzle.size * 16 - duration / 2));
+  const earnedPoints = scoreNow();
   const stats = profile.games.picross;
   const completedLevel = mode === 'classic' ? activeLevel : 0;
   const puzzleId = mode === 'daily' ? `daily:${localDate()}` : completedLevel > 0 ? `level:${completedLevel}` : `${mode}:${size}:${puzzle.id}`;
@@ -272,6 +291,15 @@ function restoreGame(active) {
   updateModeUI();
   updatePuzzleLabel(true);
   renderBoard();
+  checkTimeLimit();
+}
+
+function checkTimeLimit() {
+  if (mode !== 'timed' || secondsPlayed() < (size === 10 ? 240 : 90)) return;
+  elapsed = secondsPlayed();
+  playing = false;
+  $('#puzzle-label').textContent = 'TIEMPO AGOTADO · REINICIA PARA REINTENTAR';
+  notify('Tiempo agotado. Pulsa Reiniciar para volver a intentarlo.');
 }
 
 boardRoot.addEventListener('click', event => {
@@ -337,20 +365,20 @@ $('#share-game').addEventListener('click', async () => {
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && playing) { elapsed = secondsPlayed(); playing = false; saveActive(); }
-  else if (!document.hidden && !completed && puzzle) { startedAt = Date.now(); playing = true; }
+  else if (!document.hidden && !completed && puzzle && !(mode === 'timed' && elapsed >= (size === 10 ? 240 : 90))) { startedAt = Date.now(); playing = true; }
 });
 
 profile = await loadProfile();
 renderPlayerStats();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('../../sw.js').catch(() => {});
 const active = profile.games.picross.active;
-if (active?.board?.length && (active.mode !== 'daily' || active.date === localDate())) restoreGame(active);
+if (active?.rulesVersion === 2 && active?.board?.length && (active.mode !== 'daily' || active.date === localDate())) restoreGame(active);
 else { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
 setInterval(() => {
   if (!puzzle || !board) return;
   if (playing && mode === 'timed' && secondsPlayed() >= (size === 10 ? 240 : 90)) {
-    elapsed = size === 10 ? 240 : 90; playing = false; $('#puzzle-label').textContent = 'TIEMPO AGOTADO'; notify('Se acabó el tiempo. ¡Prueba de nuevo!'); saveActive();
+    checkTimeLimit(); saveActive();
   }
   updateProgress();
   if (playing && Date.now() - lastSave > 10_000) saveActive();
