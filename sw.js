@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v4';
+const CACHE = 'kookye-cat-games-shell-v5';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
   './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
