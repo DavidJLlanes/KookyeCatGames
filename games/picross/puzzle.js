@@ -1,3 +1,5 @@
+const lineOptions = new Map();
+const variantCache = new Map();
 const PATTERNS = {
   5: [
     ['..X..', '.XXX.', 'XXXXX', '.XXX.', '..X..'],
@@ -61,9 +63,13 @@ function transformMatrices(matrix) {
 }
 
 function collectVariants(size, inverted = false) {
+  const cacheKey = `${size}:${inverted}`;
+  if (variantCache.has(cacheKey)) return variantCache.get(cacheKey);
   const variants = [];
   const seen = new Set();
   for (const pattern of PATTERNS[size]) {
+    const base = matrixFromPattern(pattern).map(row => row.map(cell => inverted ? !cell : cell));
+    if (!hasUniqueSolution(base)) continue;
     for (const transformed of transformMatrices(matrixFromPattern(pattern))) {
       const matrix = transformed.map(row => row.map(cell => inverted ? !cell : cell));
       const key = matrix.map(row => row.map(cell => cell ? '1' : '0').join('')).join('/');
@@ -72,6 +78,7 @@ function collectVariants(size, inverted = false) {
       variants.push(matrix);
     }
   }
+  variantCache.set(cacheKey, variants);
   return variants;
 }
 
@@ -118,9 +125,40 @@ function getRuns(values) {
   return result.length ? result : [0];
 }
 
+function optionsFor(hint, size) {
+  const key = `${size}:${hint}`;
+  if (!lineOptions.has(key)) {
+    const options = [];
+    for (let mask = 0; mask < 2 ** size; mask++) {
+      const values = Array.from({ length: size }, (_, index) => Boolean(mask & (1 << index)));
+      if (String(getRuns(values)) === String(hint)) options.push(values);
+    }
+    lineOptions.set(key, options);
+  }
+  return lineOptions.get(key);
+}
+
+export function hasUniqueSolution(matrix) {
+  const size = matrix.length;
+  const rows = matrix.map(row => optionsFor(getRuns(row), size));
+  const columns = matrix[0].map((_, c) => optionsFor(getRuns(matrix.map(row => row[c])), size));
+  let solutions = 0;
+  function search(row, candidates) {
+    if (solutions > 1) return;
+    if (row === size) { solutions++; return; }
+    for (const option of rows[row]) {
+      const next = candidates.map((lines, c) => lines.filter(line => line[row] === option[c]));
+      if (next.every(lines => lines.length)) search(row + 1, next);
+      if (solutions > 1) return;
+    }
+  }
+  search(0, columns);
+  return solutions === 1;
+}
+
 export function buildPuzzle(size, seed) {
-  const variants = PATTERNS[size] || PATTERNS[5];
-  const rows = variants[seededIndex(seed, variants.length)].map(line => [...line].map(cell => cell === 'X'));
+  const variants = collectVariants(size === 10 ? 10 : 5);
+  const rows = variants[seededIndex(seed, variants.length)];
   return {
     id: String(seed),
     size: rows.length,
