@@ -1,10 +1,13 @@
 {
   "id": "picross",
   "name": "Picross",
-  "version": "1.4.1",
-  "progressSchema": 1,
+  "version": "2.0.0",
+  "progressSchema": 2,
   "levels": 60,
   "modes": ["classic", "timed", "daily"],
   "controls": ["touch", "pointer", "keyboard"],
-  "entry": "index.html"
+  "entry": "index.html",
+  "achievements": "achievements.js",
+  "scoring": "scoring.js",
+  "assets": "assets/achievements/"
 }

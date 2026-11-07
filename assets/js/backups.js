@@ -1,8 +1,8 @@
 import { createZip, readZip } from './zip.js';
-import { ACHIEVEMENTS } from './achievements.js';
+import { ACHIEVEMENTS } from './achievements.js?v=20';
 
 const SIGNATURE = 'kookye-cat-games-backup';
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 export function makeBackupManifest(scope, gameIds) {
   return JSON.stringify({
@@ -63,6 +63,8 @@ function validateGameProgress(gameId, progress) {
   if (gameId !== 'picross') return true;
   const counters = ['gamesPlayed', 'solved', 'playedSeconds', 'totalPoints', 'bestScore'];
   return counters.every(key => Number.isFinite(progress[key]) && progress[key] >= 0) &&
+    progress.metrics && typeof progress.metrics === 'object' &&
+    ['perfect', 'lastHeart', 'noHints', 'pure', 'dailyWins', 'timedWins', 'largeWins', 'fastWins', 'filledCells', 'emptyCells'].every(key => Number.isFinite(progress.metrics[key]) && progress.metrics[key] >= 0) &&
     Array.isArray(progress.completedPuzzles) &&
     (progress.completedLevels === undefined || Array.isArray(progress.completedLevels) && progress.completedLevels.every(level => Number.isInteger(level) && level >= 1 && level <= 60)) &&
     (progress.unlockedLevel === undefined || Number.isInteger(progress.unlockedLevel) && progress.unlockedLevel >= 1 && progress.unlockedLevel <= 60) &&

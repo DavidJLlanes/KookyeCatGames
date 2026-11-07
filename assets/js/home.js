@@ -1,7 +1,7 @@
-import { ACHIEVEMENTS, getAchievementCounts } from './achievements.js';
-import { loadProfile, saveProfile } from './storage.js';
+import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue } from './achievements.js?v=20';
+import { loadProfile, saveProfile } from './storage.js?v=20';
 import { downloadZip } from './zip.js';
-import { exportAllBackup, restoreBackup } from './backups.js';
+import { exportAllBackup, restoreBackup } from './backups.js?v=20';
 import { makeShareCard, shareOrSave } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
@@ -13,15 +13,19 @@ function showToast(message) {
 
 function renderTrophies(profile) {
   const owned = new Set(profile.achievements);
-  $('#trophy-list').innerHTML = ACHIEVEMENTS.map(item => `
-    <article class="trophy-card ${owned.has(item.id) ? 'earned' : ''}">
-      <span class="medal"><img src="./assets/art/trophy.svg" alt="" width="49" height="49" loading="lazy"></span><div><strong>${item.name}</strong>
-      <small>${owned.has(item.id) ? `${item.tier} · Desbloqueado` : item.detail}</small></div>
+  const scope = document.querySelector('[data-award-scope].selected')?.dataset.awardScope || 'all';
+  const kind = document.querySelector('[data-award-kind].selected')?.dataset.awardKind || 'all';
+  const visible = ACHIEVEMENTS.filter(item => (scope === 'all' || item.scope === scope) && (kind === 'all' || item.kind === kind));
+  $('#trophy-list').innerHTML = visible.map(item => `
+    <article class="trophy-card ${owned.has(item.id) ? 'earned' : ''} tier-${item.tier.toLowerCase()} ${item.kind}">
+      <span class="medal"><img src="${achievementIcon(item)}" alt="" width="53" height="53" loading="lazy"></span><div class="award-content"><span class="award-type">${item.kind === 'trophy' ? 'TROFEO' : 'LOGRO'} · ${item.tier}</span><strong>${item.name}</strong>
+      <small>${item.detail}</small><span class="award-progress">${owned.has(item.id) ? '✓ Desbloqueado' : `${Math.min(metricValue(profile, item.metric), item.target).toLocaleString('es-ES')} / ${item.target.toLocaleString('es-ES')}`}</span></div>
     </article>`).join('');
   const counts = getAchievementCounts(profile);
   $('#trophies-earned').textContent = counts.earned;
   $('#trophies-total').textContent = counts.total;
-  $('#trophy-progress').textContent = `${Math.round(counts.earned / counts.total * 100)}%`;
+  $('#trophy-progress').textContent = `${Math.round(visible.filter(item => owned.has(item.id)).length / visible.length * 100)}%`;
+  $('#award-summary').textContent = `${visible.filter(item => owned.has(item.id)).length} / ${visible.length} ${kind === 'trophy' ? 'trofeos' : kind === 'achievement' ? 'logros' : 'premios'} en esta selección`;
 }
 
 function renderProfile(profile) {
@@ -47,6 +51,13 @@ async function importBackup(file) {
 }
 document.addEventListener('DOMContentLoaded', async () => {
   let profile = await loadProfile();
+  $('#award-filters').addEventListener('click', event => {
+    const button = event.target.closest('button[data-award-scope],button[data-award-kind]');
+    if (!button) return;
+    const attribute = button.hasAttribute('data-award-scope') ? 'data-award-scope' : 'data-award-kind';
+    document.querySelectorAll(`[${attribute}]`).forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', String(item === button)); });
+    renderTrophies(profile);
+  });
   renderProfile(profile);
   $('#share-profile').addEventListener('click', async () => {
     profile = await loadProfile();
@@ -62,5 +73,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { await importBackup(file); } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
-  import('./pwa-update.js?v=16').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
+  import('./pwa-update.js?v=20').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
 });

@@ -38,3 +38,11 @@ sudo chown -R www-data:www-data /var/www/djl.com.es/games
 ```
 
 Los comandos copian al directorio de la arcade sin borrar archivos ajenos mediante `--delete`.
+
+## Gamificación modular (v2)
+
+- `core/achievements.js` reúne los catálogos de la arcade y los juegos. Cada premio declara identificador estable, ámbito, tipo, categoría, requisito medible e icono SVG propio.
+- `core/events.js` valida el contrato de eventos `version: 1`. Cada juego aporta su reductor y sus reglas de puntuación; Picross los define en `games/picross/scoring.js` y `games/picross/achievements.js`.
+- Cada juego tiene su directorio con `game.json`, controles, reglas, arte e insignias. Al añadir un juego, registrar su catálogo en el núcleo y su reductor en la integración del juego.
+- IndexedDB guarda el perfil local de esquema 2; los ZIP de backup usan el mismo esquema. Esta versión inicia un perfil nuevo sin migrar los datos del prototipo.
+- Las insignias SVG se cargan según se muestran, sin precargar todas durante la instalación de la PWA. La vista permite filtrar por juego y por tipo.

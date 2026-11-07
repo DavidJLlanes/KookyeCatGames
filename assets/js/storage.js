@@ -1,24 +1,27 @@
-const DATABASE = 'kookye-cat-games-local';
-const VERSION = 1;
+import { ACHIEVEMENTS } from './achievements.js?v=20';
+import { PICROSS_METRICS } from '../../games/picross/scoring.js?v=20';
+
+const DATABASE = 'kookye-cat-games-local-v2';
+const VERSION = 2;
 const STORE = 'player-profile';
 const PROFILE_KEY = 'local';
-const FALLBACK_KEY = 'kcg:profile:v1';
+const FALLBACK_KEY = 'kcg:profile:v2';
 const PICROSS_LEVEL_COUNT = 60;
 
 export function createEmptyProfile() {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     stats: { gamesPlayed: 0, gamesSolved: 0, playSeconds: 0, totalPoints: 0 },
     achievements: [],
     games: {
-      picross: { gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [], unlockedLevel: 1, active: null },
+      picross: { gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [], unlockedLevel: 1, active: null, metrics: { ...PICROSS_METRICS } },
     },
   };
 }
 
 export function normalizeProfile(value) {
   const base = createEmptyProfile();
-  if (!value || typeof value !== 'object') return base;
+  if (!value || typeof value !== 'object' || value.schemaVersion !== 2) return base;
   const savedPicross = value.games?.picross || {};
   const completedLevels = Array.isArray(savedPicross.completedLevels)
     ? [...new Set(savedPicross.completedLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= PICROSS_LEVEL_COUNT))]
@@ -28,13 +31,13 @@ export function normalizeProfile(value) {
   return {
     ...base,
     ...value,
-    schemaVersion: 1,
+    schemaVersion: 2,
     stats: { ...base.stats, ...(value.stats || {}) },
     achievements: Array.isArray(value.achievements) ? [...new Set(value.achievements)] : [],
     games: {
       ...base.games,
       ...(value.games || {}),
-      picross: { ...base.games.picross, ...savedPicross, completedLevels, unlockedLevel },
+      picross: { ...base.games.picross, ...savedPicross, completedLevels, unlockedLevel, metrics: { ...PICROSS_METRICS, ...savedPicross.metrics } },
     },
   };
 }
@@ -75,9 +78,6 @@ export async function saveProfile(value) {
   catch { try { localStorage.setItem(FALLBACK_KEY, JSON.stringify(profile)); } catch { /* Browser storage may be disabled. */ } }
   return profile;
 }
-import { ACHIEVEMENTS } from './achievements.js?v=16';
-
-
 export function resetGameProgress(profile, gameId) {
   const fresh = createEmptyProfile().games[gameId];
   if (!fresh || !profile.games?.[gameId]) throw new Error('Juego desconocido.');
@@ -89,7 +89,8 @@ export function resetGameProgress(profile, gameId) {
   const next = { ...profile, stats, games: { ...profile.games, [gameId]: structuredClone(fresh) } };
   next.achievements = profile.achievements.filter(id => {
     const achievement = ACHIEVEMENTS.find(item => item.id === id);
-    return achievement?.scope !== gameId && (achievement?.scope !== 'arcade' || achievement.test(next));
+    return achievement?.scope !== gameId && (achievement?.scope !== 'arcade' || !achievement ||
+      achievement.metric.split('.').reduce((part, key) => part?.[key], next) >= achievement.target);
   });
   return next;
 }

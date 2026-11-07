@@ -1,12 +1,14 @@
-import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js?v=16';
-import { attachBoardGesture } from './gesture.js?v=16';
-import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js?v=16';
-import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=16';
+import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove } from './rules.js?v=20';
+import { scorePicross, reducePicrossEvent } from './scoring.js?v=20';
+import { dispatchGameEvent, EVENT_VERSION } from '../../core/events.js?v=20';
+import { attachBoardGesture } from './gesture.js?v=20';
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements, metricValue, achievementIcon } from '../../assets/js/achievements.js?v=20';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=20';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=16';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=20';
 import { downloadZip } from '../../assets/js/zip.js';
-import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
-import { logicalSolution } from './logic.js?v=16';
+import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js?v=20';
+import { logicalSolution } from './logic.js?v=20';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
@@ -34,6 +36,7 @@ let tool = 'fill';
 let puzzle;
 let board;
 let mistakes = 0;
+let hintsUsed = 0;
 let elapsed = 0;
 let startedAt = Date.now();
 let playing = false;
@@ -93,7 +96,7 @@ function updateHintStates() {
 }
 
 function scoreNow() {
-  return currentScore(puzzle, board, secondsPlayed(), mistakes);
+  return scorePicross(puzzle, board, secondsPlayed(), mistakes, hintsUsed);
 }
 
 function updateProgress() {
@@ -122,11 +125,13 @@ function renderPlayerStats() {
   $('#played-count').textContent = stats.gamesPlayed;
   $('#best-time').textContent = stats.bestTime == null ? '—' : formatTime(stats.bestTime);
   const unlocked = new Set(profile.achievements);
-  const next = ACHIEVEMENTS.find(item => !unlocked.has(item.id));
+  const next = ACHIEVEMENTS.filter(item => item.scope === 'picross' && !unlocked.has(item.id))
+    .sort((a, b) => metricValue(profile, b.metric) / b.target - metricValue(profile, a.metric) / a.target)[0];
   $('#next-trophy').textContent = next?.name || '¡Colección completa!';
+  $('#next-trophy-icon').src = next ? `../../${achievementIcon(next)}` : '../../assets/art/trophy.svg';
   $('#next-detail').textContent = next?.detail || 'Has desbloqueado todos los trofeos disponibles.';
-  const counts = getAchievementCounts(profile);
-  $('#trophy-count').textContent = `${counts.earned} / ${counts.total} trofeos`;
+  const counts = getAchievementCounts(profile, 'picross');
+  $('#trophy-count').textContent = `${counts.earned} / ${counts.total} premios de Picross`;
   renderCampaignPicker();
 }
 
@@ -158,7 +163,7 @@ function updatePuzzleLabel(resumed = false) {
 async function saveActive() {
   profile.games.picross.active = completed ? null : {
     id: puzzle.id, mode, level: mode === 'classic' && activeLevel > 0 ? activeLevel : null,
-    size, board, mistakes, elapsed: secondsPlayed(), counted, date: localDate(), rulesVersion: 3,
+    size, board, mistakes, hintsUsed, elapsed: secondsPlayed(), counted, date: localDate(), rulesVersion: 3,
   };
   await persistProfile();
   lastSave = Date.now();
@@ -183,7 +188,7 @@ function startPuzzle(seed = Date.now(), isResume = false) {
   if (mode === 'daily') size = 10;
   puzzle = mode === 'classic' && activeLevel > 0 ? buildCampaignPuzzle(activeLevel) : buildPuzzle(size, seed);
   size = puzzle.size;
-  board = createEmptyBoard(); mistakes = 0; elapsed = 0; focusIndex = 0; completed = false;
+  board = createEmptyBoard(); mistakes = 0; hintsUsed = 0; elapsed = 0; focusIndex = 0; completed = false;
   startedAt = Date.now(); playing = true;
   $('#win-overlay').hidden = true;
   $('#lose-overlay').hidden = true;
@@ -193,6 +198,7 @@ function startPuzzle(seed = Date.now(), isResume = false) {
   if (!counted && !isResume) {
     profile.stats.gamesPlayed++;
     profile.games.picross.gamesPlayed++;
+    dispatchGameEvent(profile, { version: EVENT_VERSION, gameId: 'picross', type: 'game_started', payload: { mode, size } }, { picross: reducePicrossEvent });
     counted = true;
     unlockAchievements(profile);
   }
@@ -260,6 +266,11 @@ async function completePuzzle() {
   profile.stats.totalPoints += firstClear ? earnedPoints : 0;
   stats.playedSeconds += duration;
   stats.totalPoints += firstClear ? earnedPoints : 0;
+  dispatchGameEvent(profile, { version: EVENT_VERSION, gameId: 'picross', type: 'puzzle_completed', payload: {
+    firstClear, mode, size, duration, mistakes, hints: hintsUsed,
+    filledCells: puzzle.solution.flat().filter(Boolean).length,
+    emptyCells: board.flat().filter((cell, index) => cell === 'marked' && !puzzle.solution.flat()[index]).length,
+  } }, { picross: reducePicrossEvent });
   const newTrophies = unlockAchievements(profile);
   profile.games.picross.active = null;
   await persistProfile();
@@ -306,7 +317,7 @@ function advancePuzzle() {
 function restartBoard() {
   clearTimeout(advanceTimer);
   completed = false; lastClearedLevel = 0;
-  board = createEmptyBoard(); mistakes = 0; elapsed = 0; startedAt = Date.now(); playing = true; focusIndex = 0;
+  board = createEmptyBoard(); mistakes = 0; hintsUsed = 0; elapsed = 0; startedAt = Date.now(); playing = true; focusIndex = 0;
   $('#lose-overlay').hidden = true; $('#win-overlay').hidden = true;
   updatePuzzleLabel();
   renderBoard(); saveActive();
@@ -316,7 +327,7 @@ function restoreGame(active) {
   mode = active.mode;
   const savedLevel = Number.isInteger(active.level) ? active.level : 0;
   activeLevel = savedLevel >= 1 && savedLevel <= profile.games.picross.unlockedLevel ? savedLevel : 0;
-  size = active.size; counted = true; elapsed = active.elapsed || 0; mistakes = active.mistakes || 0;
+  size = active.size; counted = true; elapsed = active.elapsed || 0; mistakes = active.mistakes || 0; hintsUsed = active.hintsUsed || 0;
   puzzle = mode === 'classic' && activeLevel > 0 ? buildCampaignPuzzle(activeLevel) : buildPuzzle(size, active.id);
   size = puzzle.size; board = active.board; startedAt = Date.now(); playing = true; completed = false;
   updateModeUI();
@@ -374,6 +385,8 @@ $('#retry-puzzle').addEventListener('click', restartBoard);
 $('#mobile-clear').addEventListener('click', restartBoard);
 $('#logical-hint').addEventListener('click', () => {
   if (!playing || completed) return;
+  hintsUsed++;
+  dispatchGameEvent(profile, { version: EVENT_VERSION, gameId: 'picross', type: 'hint_used', payload: { mode, size } }, { picross: reducePicrossEvent });
   const step = logicalSolution(puzzle.solution).steps.find(({ row, column, filled }) =>
     board[row][column] !== (filled ? 'filled' : 'marked') && (filled || board[row][column] !== 'empty'));
   if (!step) { notify('Revisa las pistas: ya no quedan casillas rellenas por deducir.'); return; }
@@ -381,6 +394,7 @@ $('#logical-hint').addEventListener('click', () => {
   cell?.classList.remove('logical-hint');
   if (cell) { void cell.offsetWidth; cell.classList.add('logical-hint'); setTimeout(() => cell.classList.remove('logical-hint'), 2400); }
   notify(`Pista: observa la fila ${step.row + 1} y la columna ${step.column + 1}. Esa casilla ${step.filled ? 'se rellena' : 'está vacía'}.`);
+  saveActive();
 });
 const resetProgressButton = $('#reset-game-progress');
 let resetArmed = false;
@@ -464,7 +478,7 @@ if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && 
 }
 if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
-import('../../assets/js/pwa-update.js?v=16')
+import('../../assets/js/pwa-update.js?v=20')
   .then(({ enablePwaUpdates }) => enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }))
   .catch(() => {});
 
