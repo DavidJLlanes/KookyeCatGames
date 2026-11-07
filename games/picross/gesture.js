@@ -31,7 +31,7 @@ export function attachBoardGesture(root, getTool, paint) {
       if (!cell || stroke || event.button !== 0 || !event.isPrimary) return;
       event.preventDefault();
       begin(event.pointerId, event.clientX, event.clientY, cell);
-      root.setPointerCapture(event.pointerId);
+      try { root.setPointerCapture(event.pointerId); } catch { /* Touch keeps implicit capture on the cell. */ }
     });
     root.addEventListener('pointermove', event => {
       if (stroke?.id !== event.pointerId) return;

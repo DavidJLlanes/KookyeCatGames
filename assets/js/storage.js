@@ -75,7 +75,7 @@ export async function saveProfile(value) {
   catch { try { localStorage.setItem(FALLBACK_KEY, JSON.stringify(profile)); } catch { /* Browser storage may be disabled. */ } }
   return profile;
 }
-import { ACHIEVEMENTS } from './achievements.js';
+import { ACHIEVEMENTS } from './achievements.js?v=14';
 
 
 export function resetGameProgress(profile, gameId) {

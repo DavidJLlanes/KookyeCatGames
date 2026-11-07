@@ -1,12 +1,11 @@
-import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js';
-import { attachBoardGesture } from './gesture.js';
-import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js';
-import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js';
+import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js?v=14';
+import { attachBoardGesture } from './gesture.js?v=14';
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js?v=14';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=14';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=14';
 import { downloadZip } from '../../assets/js/zip.js';
 import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
-import { enablePwaUpdates } from '../../assets/js/pwa-update.js';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
@@ -437,10 +436,17 @@ document.addEventListener('visibilitychange', () => {
 
 profile = await loadProfile();
 renderPlayerStats();
-enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }).catch(() => {});
 const active = profile.games.picross.active;
-if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && active?.board?.length && (active.mode !== 'daily' || active.date === localDate())) restoreGame(active);
-else { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
+const validBoard = Array.isArray(active?.board) && [5, 10].includes(active.size) && active.board.length === active.size &&
+  active.board.every(row => Array.isArray(row) && row.length === active.size && row.every(cell => ['empty', 'filled', 'marked'].includes(cell)));
+if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && (active.mode !== 'daily' || active.date === localDate())) {
+  try { restoreGame(active); } catch { puzzle = null; board = null; profile.games.picross.active = null; }
+}
+if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
+
+import('../../assets/js/pwa-update.js?v=14')
+  .then(({ enablePwaUpdates }) => enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }))
+  .catch(() => {});
 
 setInterval(() => {
   if (!puzzle || !board) return;
