@@ -1,16 +1,33 @@
+import { GAME_BY_ID } from './game-registry.js?v=30';
 export const EVENT_VERSION = 1;
-const types = new Set(['game_started', 'puzzle_completed', 'cell_filled', 'cell_marked', 'hint_used']);
 export function dispatchGameEvent(profile, event, reducers) {
-  if (event?.version !== EVENT_VERSION || typeof event.gameId !== 'string' || !types.has(event.type) || !reducers[event.gameId]) {
+  if (event?.version !== EVENT_VERSION || !GAME_BY_ID.has(event.gameId) || !/^[a-z][a-z0-9_]*$/.test(event.type || '') ||
+      !event.payload || typeof event.payload !== 'object' || !reducers[event.gameId] || !profile.games?.[event.gameId]) {
     throw new Error('Evento de juego incompatible.');
   }
-  if (event.type === 'puzzle_completed') {
-    const p = event.payload;
-    if (!p || typeof p.firstClear !== 'boolean' || !['classic', 'daily', 'timed'].includes(p.mode) ||
-        ![5, 10].includes(p.size) || !['duration', 'mistakes', 'hints', 'filledCells', 'emptyCells'].every(key => Number.isFinite(p[key]) && p[key] >= 0)) {
-      throw new Error('Resultado de puzle no válido.');
-    }
-  }
   reducers[event.gameId](profile.games[event.gameId], event);
+  if (event.type === 'game_started') {
+    const games = profile.arcade.gamesTried;
+    if (!games.includes(event.gameId)) games.push(event.gameId);
+    const mode = `${event.gameId}:${event.payload.mode}`;
+    if (event.payload.mode && !profile.arcade.modesTried.includes(mode)) profile.arcade.modesTried.push(mode);
+  }
+  if (event.type === 'game_mastered' && !profile.arcade.gamesMastered.includes(event.gameId)) profile.arcade.gamesMastered.push(event.gameId);
   return event;
+}
+export function dispatchArcadeEvent(profile, event) {
+  if (event?.version !== EVENT_VERSION || event.scope !== 'arcade' || !['visit', 'export', 'import', 'share'].includes(event.type)) {
+    throw new Error('Evento de arcade incompatible.');
+  }
+  const arcade = profile.arcade;
+  if (event.type === 'visit') {
+    arcade.visits++;
+    if (typeof event.date === 'string' && !arcade.visitDays.includes(event.date)) arcade.visitDays.push(event.date);
+  } else if (event.type === 'export') arcade.exports++;
+  else if (event.type === 'import') arcade.imports++;
+  else arcade.sharedCards++;
+  return event;
+}
+export function recordArcadeAction(profile, action, date = new Date().toLocaleDateString('en-CA')) {
+  return dispatchArcadeEvent(profile, { version: EVENT_VERSION, scope: 'arcade', type: action, date });
 }

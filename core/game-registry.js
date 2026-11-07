@@ -1,0 +1,20 @@
+/** Lightweight game metadata. Add an entry; game code and awards load only when needed. */
+export const GAMES = Object.freeze([
+  {
+    id: 'picross', name: 'Picross', path: './games/picross/', art: './assets/art/picross.svg',
+    category: 'Puzle · Lógica', description: 'Descubre dibujos ocultos siguiendo las pistas. ¡Cada casilla cuenta!',
+    awardCount: 41, levels: 60,
+    modes: ['classic', 'timed', 'daily'],
+    catalog: '../games/picross/achievements.js?v=30',
+    progress: {
+      gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, arcadeXp: 0,
+      bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [],
+      unlockedLevel: 1, active: null,
+      metrics: { perfect: 0, lastHeart: 0, noHints: 0, pure: 0, dailyWins: 0,
+        timedWins: 0, largeWins: 0, fastWins: 0, filledCells: 0, emptyCells: 0 },
+    },
+  },
+]);
+export const GAME_BY_ID = new Map(GAMES.map(game => [game.id, game]));
+if (GAME_BY_ID.size !== GAMES.length) throw new Error('Identificadores de juego duplicados.');
+export const newGameProgress = game => structuredClone(game.progress);

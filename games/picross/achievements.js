@@ -42,3 +42,5 @@ export const PICROSS_ACHIEVEMENTS = [
   badge('picross-marks-500','Mapa de vacíos','Marca 500 casillas vacías correctas.','PLATA','achievement','metrics.emptyCells',500,'cross'),
   badge('picross-marks-5000','El arte del espacio','Marca 5.000 casillas vacías correctas.','ORO','trophy','metrics.emptyCells',5000,'cross'),
 ];
+
+export const ACHIEVEMENTS = PICROSS_ACHIEVEMENTS;

@@ -1,14 +1,15 @@
-import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove } from './rules.js?v=20';
-import { scorePicross, reducePicrossEvent } from './scoring.js?v=20';
-import { dispatchGameEvent, EVENT_VERSION } from '../../core/events.js?v=20';
-import { attachBoardGesture } from './gesture.js?v=20';
-import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements, metricValue, achievementIcon } from '../../assets/js/achievements.js?v=20';
-import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=20';
+import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove } from './rules.js?v=30';
+import { scorePicross, reducePicrossEvent } from './scoring.js?v=30';
+import { dispatchGameEvent, recordArcadeAction, EVENT_VERSION } from '../../core/events.js?v=30';
+import { arcadeXpForResult } from '../../core/scores.js?v=30';
+import { attachBoardGesture } from './gesture.js?v=30';
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements, metricValue, achievementIcon, loadAchievementCatalog } from '../../assets/js/achievements.js?v=30';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=30';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=20';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=30';
 import { downloadZip } from '../../assets/js/zip.js';
-import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js?v=20';
-import { logicalSolution } from './logic.js?v=20';
+import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js?v=30';
+import { logicalSolution } from './logic.js?v=30';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
@@ -264,6 +265,9 @@ async function completePuzzle() {
   profile.stats.gamesSolved += firstClear ? 1 : 0;
   profile.stats.playSeconds += duration;
   profile.stats.totalPoints += firstClear ? earnedPoints : 0;
+  const gainedXp = arcadeXpForResult(earnedPoints, 100 + size * 16, firstClear);
+  profile.stats.arcadeXp += gainedXp;
+  stats.arcadeXp += gainedXp;
   stats.playedSeconds += duration;
   stats.totalPoints += firstClear ? earnedPoints : 0;
   dispatchGameEvent(profile, { version: EVENT_VERSION, gameId: 'picross', type: 'puzzle_completed', payload: {
@@ -271,6 +275,9 @@ async function completePuzzle() {
     filledCells: puzzle.solution.flat().filter(Boolean).length,
     emptyCells: board.flat().filter((cell, index) => cell === 'marked' && !puzzle.solution.flat()[index]).length,
   } }, { picross: reducePicrossEvent });
+  if (completedLevel === CAMPAIGN_LEVEL_COUNT && firstClear) {
+    dispatchGameEvent(profile, { version: EVENT_VERSION, gameId: 'picross', type: 'game_mastered', payload: { completedLevels: CAMPAIGN_LEVEL_COUNT } }, { picross: reducePicrossEvent });
+  }
   const newTrophies = unlockAchievements(profile);
   profile.games.picross.active = null;
   await persistProfile();
@@ -439,6 +446,7 @@ resetProgressButton.addEventListener('click', async () => {
 $('#export-game').addEventListener('click', async () => {
   const achievements = profile.achievements.filter(id => ACHIEVEMENTS.some(item => item.id === id && item.scope === 'picross'));
   downloadZip(await exportGameBackup('picross', profile.games.picross, achievements), 'picross.zip');
+  recordArcadeAction(profile, 'export'); unlockAchievements(profile); await persistProfile(); renderPlayerStats();
   notify('Backup de Picross guardado.');
 });
 $('#import-game').addEventListener('click', () => $('#import-game-file').click());
@@ -448,6 +456,7 @@ $('#import-game-file').addEventListener('change', async event => {
   try {
     if (!window.confirm('El backup reemplazará el progreso de Picross en este dispositivo. ¿Continuar?')) return;
     await restoreBackup(file, profile, saveProfile, ['picross'], 'game');
+    profile = await loadProfile(); recordArcadeAction(profile, 'import'); unlockAchievements(profile); await persistProfile();
     notify('Progreso de Picross restaurado.');
     setTimeout(() => location.reload(), 650);
   } catch (error) {
@@ -460,7 +469,11 @@ $('#share-game').addEventListener('click', async () => {
   const stats = profile.games.picross;
   const trophies = ACHIEVEMENTS.filter(item => profile.achievements.includes(item.id)).map(item => item.name).slice(-3);
   const image = await makeShareCard({ title: 'Picross', subtitle: `MI RÉCORD · ${stats.solved} RESUELTOS`, score: stats.bestScore.toLocaleString('es-ES'), trophies });
-  if (await shareOrSave(image, 'picross-logros.png') === 'saved') notify('Tarjeta guardada como imagen.');
+  const result = await shareOrSave(image, 'picross-logros.png');
+  if (result) {
+    recordArcadeAction(profile, 'share'); unlockAchievements(profile); await persistProfile(); renderPlayerStats();
+    if (result === 'saved') notify('Tarjeta guardada como imagen.');
+  }
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -469,6 +482,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 profile = await loadProfile();
+await loadAchievementCatalog(['picross']);
 renderPlayerStats();
 const active = profile.games.picross.active;
 const validBoard = Array.isArray(active?.board) && [5, 10].includes(active.size) && active.board.length === active.size &&
@@ -478,7 +492,7 @@ if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && 
 }
 if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
-import('../../assets/js/pwa-update.js?v=20')
+import('../../assets/js/pwa-update.js?v=30')
   .then(({ enablePwaUpdates }) => enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }))
   .catch(() => {});
 

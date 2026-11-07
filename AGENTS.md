@@ -26,6 +26,10 @@ Crear una arcade web instalable en `https://djl.com.es/games`, con muchos miniju
 - Cada logro y cada trofeo tiene una insignia visual propia, coherente con la web. Los premios difíciles deben resultar más llamativos.
 - Separar el catálogo y la evaluación comunes de los logros, métricas y reglas de puntuación específicos de cada juego. Los eventos tienen contrato versionado y no deben conceder progreso por refrescar la página.
 - Cada juego vive en su carpeta con `game.json`, archivos de reglas y puntuación, catálogo propio de logros, imágenes y progreso independiente. La portada agrega datos sin mezclar puntuaciones de modos incompatibles.
+- Mantener `core/game-registry.js` como registro ligero de los juegos publicados; cargar sus catálogos bajo demanda. El núcleo no debe importar directamente código de Picross ni de otros juegos.
+- Cada juego conserva su puntuación nativa. La arcade usa XP normalizada por primera victoria de cada puzle o reto; un juego nuevo no cambia retrospectivamente el porcentaje global. Mostrar avance por juego y selección.
+- La vitrina debe filtrar, buscar y paginar premios; no renderizar a la vez las insignias de 50 juegos.
+- Los eventos comunes registran actividad real de la web (visitas por sesión y días distintos, juegos, modos, copias, restauraciones, tarjetas y dominios). Evitar conceder logros por refrescos repetidos.
 - Las partidas y los premios se guardan en el dispositivo; los backups individuales y globales incluyen el progreso del esquema vigente. En esta fase inicial no es necesario migrar datos de versiones anteriores.
 
 ## Tarjetas para compartir

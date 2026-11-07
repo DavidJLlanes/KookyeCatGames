@@ -41,8 +41,14 @@ Los comandos copian al directorio de la arcade sin borrar archivos ajenos median
 
 ## Gamificación modular (v2)
 
-- `core/achievements.js` reúne los catálogos de la arcade y los juegos. Cada premio declara identificador estable, ámbito, tipo, categoría, requisito medible e icono SVG propio.
+- `core/achievements.js` evalúa los premios comunes y carga cada catálogo de juego bajo demanda. Cada premio declara identificador estable, ámbito, tipo, categoría, requisito medible e icono SVG propio.
 - `core/events.js` valida el contrato de eventos `version: 1`. Cada juego aporta su reductor y sus reglas de puntuación; Picross los define en `games/picross/scoring.js` y `games/picross/achievements.js`.
 - Cada juego tiene su directorio con `game.json`, controles, reglas, arte e insignias. Al añadir un juego, registrar su catálogo en el núcleo y su reductor en la integración del juego.
 - IndexedDB guarda el perfil local de esquema 2; los ZIP de backup usan el mismo esquema. Esta versión inicia un perfil nuevo sin migrar los datos del prototipo.
 - Las insignias SVG se cargan según se muestran, sin precargar todas durante la instalación de la PWA. La vista permite filtrar por juego y por tipo.
+
+### Ampliación a 50 juegos
+
+`core/game-registry.js` declara solo metadatos ligeros, la ruta del catálogo, el estado inicial y el número de premios de cada juego publicado. `core/achievements.js` importa el catálogo de un juego bajo demanda y rechaza identificadores repetidos o cantidades incoherentes. La vitrina muestra 24 premios por página; una búsqueda global explícita carga el resto. Los eventos de `core/events.js` aceptan adaptadores de cualquier juego sin introducir condiciones específicas en el núcleo.
+
+La puntuación nativa pertenece a cada juego. `core/scores.js` transforma una primera victoria en una cantidad limitada de XP de la arcade, comparable entre juegos. El perfil local conserva el esquema 2 y añade campos con valores iniciales, por lo que una actualización no borra las partidas ya guardadas. La vitrina muestra el avance de la selección visible sin reducir un porcentaje global al publicar otro juego.

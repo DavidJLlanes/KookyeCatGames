@@ -1,44 +1,43 @@
-import { ACHIEVEMENTS } from './achievements.js?v=20';
-import { PICROSS_METRICS } from '../../games/picross/scoring.js?v=20';
+import { GAMES, GAME_BY_ID, newGameProgress } from '../../core/game-registry.js?v=30';
+import { ARCADE_ACHIEVEMENTS } from '../../core/arcade-achievements.js?v=30';
 
 const DATABASE = 'kookye-cat-games-local-v2';
 const VERSION = 2;
 const STORE = 'player-profile';
 const PROFILE_KEY = 'local';
 const FALLBACK_KEY = 'kcg:profile:v2';
-const PICROSS_LEVEL_COUNT = 60;
 
 export function createEmptyProfile() {
   return {
     schemaVersion: 2,
-    stats: { gamesPlayed: 0, gamesSolved: 0, playSeconds: 0, totalPoints: 0 },
+    stats: { gamesPlayed: 0, gamesSolved: 0, playSeconds: 0, totalPoints: 0, arcadeXp: 0 },
+    arcade: { visits: 0, visitDays: [], exports: 0, imports: 0, sharedCards: 0, modesTried: [], gamesTried: [], gamesMastered: [] },
     achievements: [],
-    games: {
-      picross: { gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [], unlockedLevel: 1, active: null, metrics: { ...PICROSS_METRICS } },
-    },
+    games: Object.fromEntries(GAMES.map(game => [game.id, newGameProgress(game)])),
   };
+}
+
+function mergeProgress(defaults, saved) {
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return defaults;
+  const next = { ...defaults };
+  for (const [key, value] of Object.entries(defaults)) {
+    const previous = saved[key];
+    if (Array.isArray(value)) next[key] = Array.isArray(previous) ? [...previous] : value;
+    else if (value && typeof value === 'object') next[key] = mergeProgress(value, previous);
+    else if (previous !== undefined) next[key] = previous;
+  }
+  return next;
 }
 
 export function normalizeProfile(value) {
   const base = createEmptyProfile();
   if (!value || typeof value !== 'object' || value.schemaVersion !== 2) return base;
-  const savedPicross = value.games?.picross || {};
-  const completedLevels = Array.isArray(savedPicross.completedLevels)
-    ? [...new Set(savedPicross.completedLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= PICROSS_LEVEL_COUNT))]
-    : [];
-  const savedUnlock = Number.isInteger(savedPicross.unlockedLevel) ? savedPicross.unlockedLevel : 1;
-  const unlockedLevel = Math.max(1, Math.min(PICROSS_LEVEL_COUNT, Math.max(savedUnlock, ...completedLevels.map(level => level + 1))));
   return {
     ...base,
-    ...value,
-    schemaVersion: 2,
     stats: { ...base.stats, ...(value.stats || {}) },
+    arcade: mergeProgress(base.arcade, value.arcade),
     achievements: Array.isArray(value.achievements) ? [...new Set(value.achievements)] : [],
-    games: {
-      ...base.games,
-      ...(value.games || {}),
-      picross: { ...base.games.picross, ...savedPicross, completedLevels, unlockedLevel, metrics: { ...PICROSS_METRICS, ...savedPicross.metrics } },
-    },
+    games: Object.fromEntries(GAMES.map(game => [game.id, mergeProgress(base.games[game.id], value.games?.[game.id])])),
   };
 }
 
@@ -79,18 +78,19 @@ export async function saveProfile(value) {
   return profile;
 }
 export function resetGameProgress(profile, gameId) {
-  const fresh = createEmptyProfile().games[gameId];
+  const fresh = GAME_BY_ID.has(gameId) && newGameProgress(GAME_BY_ID.get(gameId));
   if (!fresh || !profile.games?.[gameId]) throw new Error('Juego desconocido.');
   const previous = profile.games[gameId];
   const stats = { ...profile.stats };
-  for (const [total, game] of [['gamesPlayed', 'gamesPlayed'], ['gamesSolved', 'solved'], ['playSeconds', 'playedSeconds'], ['totalPoints', 'totalPoints']]) {
+  for (const [total, game] of [['gamesPlayed', 'gamesPlayed'], ['gamesSolved', 'solved'], ['playSeconds', 'playedSeconds'], ['totalPoints', 'totalPoints'], ['arcadeXp', 'arcadeXp']]) {
     stats[total] = Math.max(0, (Number(stats[total]) || 0) - (Number(previous[game]) || 0));
   }
   const next = { ...profile, stats, games: { ...profile.games, [gameId]: structuredClone(fresh) } };
+  next.arcade = { ...profile.arcade, gamesTried: profile.arcade.gamesTried.filter(id => id !== gameId) };
   next.achievements = profile.achievements.filter(id => {
-    const achievement = ACHIEVEMENTS.find(item => item.id === id);
-    return achievement?.scope !== gameId && (achievement?.scope !== 'arcade' || !achievement ||
-      achievement.metric.split('.').reduce((part, key) => part?.[key], next) >= achievement.target);
+    if (id.startsWith(`${gameId}-`)) return false;
+    const achievement = ARCADE_ACHIEVEMENTS.find(item => item.id === id);
+    return !achievement || achievement.metric.split('.').reduce((part, key) => part?.[key], next) >= achievement.target;
   });
   return next;
 }

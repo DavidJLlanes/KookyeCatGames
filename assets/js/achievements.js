@@ -1,1 +1,1 @@
-export { ACHIEVEMENTS, achievementIcon, getAchievement, getAchievementCounts, unlockAchievements, metricValue } from '../../core/achievements.js';
+export { ACHIEVEMENTS, achievementIcon, getAchievement, getAchievementCounts, unlockAchievements, metricValue, loadAchievementCatalog, loadGameAchievements, unloadedGames } from '../../core/achievements.js?v=30';

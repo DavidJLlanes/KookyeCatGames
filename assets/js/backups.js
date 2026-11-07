@@ -1,5 +1,7 @@
 import { createZip, readZip } from './zip.js';
-import { ACHIEVEMENTS } from './achievements.js?v=20';
+import { ACHIEVEMENTS } from './achievements.js?v=30';
+import { GAMES, GAME_BY_ID } from '../../core/game-registry.js?v=30';
+import { loadAchievementCatalog } from './achievements.js?v=30';
 
 const SIGNATURE = 'kookye-cat-games-backup';
 const SCHEMA_VERSION = 2;
@@ -60,19 +62,20 @@ function validateGameIds(gameIds, knownGames) {
 
 function validateGameProgress(gameId, progress) {
   if (!progress || typeof progress !== 'object' || Array.isArray(progress)) return false;
-  if (gameId !== 'picross') return true;
-  const counters = ['gamesPlayed', 'solved', 'playedSeconds', 'totalPoints', 'bestScore'];
-  return counters.every(key => Number.isFinite(progress[key]) && progress[key] >= 0) &&
-    progress.metrics && typeof progress.metrics === 'object' &&
-    ['perfect', 'lastHeart', 'noHints', 'pure', 'dailyWins', 'timedWins', 'largeWins', 'fastWins', 'filledCells', 'emptyCells'].every(key => Number.isFinite(progress.metrics[key]) && progress.metrics[key] >= 0) &&
-    Array.isArray(progress.completedPuzzles) &&
-    (progress.completedLevels === undefined || Array.isArray(progress.completedLevels) && progress.completedLevels.every(level => Number.isInteger(level) && level >= 1 && level <= 60)) &&
-    (progress.unlockedLevel === undefined || Number.isInteger(progress.unlockedLevel) && progress.unlockedLevel >= 1 && progress.unlockedLevel <= 60) &&
-    (progress.bestTime === null || Number.isFinite(progress.bestTime) && progress.bestTime >= 0) &&
-    (progress.active === null || typeof progress.active === 'object' && !Array.isArray(progress.active));
+  const expected = GAME_BY_ID.get(gameId)?.progress;
+  const compatible = (value, template) => Object.entries(template).every(([key, sample]) => {
+    const item = value[key];
+    if (Array.isArray(sample)) return Array.isArray(item);
+    if (sample === null) return item === null || typeof item === 'object' && !Array.isArray(item);
+    if (typeof sample === 'object') return item && typeof item === 'object' && !Array.isArray(item) && compatible(item, sample);
+    if (typeof sample === 'number') return key === 'arcadeXp' && item === undefined || Number.isFinite(item) && item >= 0;
+    return typeof item === typeof sample;
+  });
+  return !!expected && compatible(progress, expected);
 }
 
-export async function restoreBackup(file, profile, saveProfile, knownGames = ['picross'], expectedScope = null) {
+export async function restoreBackup(file, profile, saveProfile, knownGames = GAMES.map(game => game.id), expectedScope = null) {
+  await loadAchievementCatalog(knownGames);
   const files = await readZip(file);
   const manifest = parseJson(files, 'backup-manifest.json', 'El manifiesto del backup no existe o está dañado.');
   if (manifest.format !== SIGNATURE || manifest.version !== SCHEMA_VERSION || !['game', 'all'].includes(manifest.scope)) {
@@ -95,6 +98,7 @@ export async function restoreBackup(file, profile, saveProfile, knownGames = ['p
     for (const key of ['gamesPlayed', 'gamesSolved', 'playSeconds', 'totalPoints']) {
       if (!Number.isFinite(next.stats[key]) || next.stats[key] < 0) throw new Error('El backup contiene estadísticas no válidas.');
     }
+    if (next.stats.arcadeXp !== undefined && (!Number.isFinite(next.stats.arcadeXp) || next.stats.arcadeXp < 0)) throw new Error('El backup contiene XP no válidos.');
     const profileGameIds = Object.keys(next.games);
     if (profileGameIds.length !== manifest.gameIds.length || profileGameIds.some(id => !manifest.gameIds.includes(id))) {
       throw new Error('El perfil del backup no coincide con la lista de juegos declarada.');
@@ -124,6 +128,7 @@ export async function restoreBackup(file, profile, saveProfile, knownGames = ['p
       ['gamesSolved', 'solved'],
       ['playSeconds', 'playedSeconds'],
       ['totalPoints', 'totalPoints'],
+      ['arcadeXp', 'arcadeXp'],
     ]) {
       aggregate[aggregateKey] = Math.max(0,
         (Number(profile.stats[aggregateKey]) || 0) - (Number(previous[gameKey]) || 0) + (Number(updated[gameKey]) || 0));

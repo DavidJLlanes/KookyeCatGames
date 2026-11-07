@@ -1,7 +1,7 @@
 {
   "id": "picross",
   "name": "Picross",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "progressSchema": 2,
   "levels": 60,
   "modes": ["classic", "timed", "daily"],

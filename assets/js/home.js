@@ -1,7 +1,9 @@
-import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue } from './achievements.js?v=20';
-import { loadProfile, saveProfile } from './storage.js?v=20';
+import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=30';
+import { GAMES } from '../../core/game-registry.js?v=30';
+import { recordArcadeAction } from '../../core/events.js?v=30';
+import { loadProfile, saveProfile } from './storage.js?v=30';
 import { downloadZip } from './zip.js';
-import { exportAllBackup, restoreBackup } from './backups.js?v=20';
+import { exportAllBackup, restoreBackup } from './backups.js?v=30';
 import { makeShareCard, shareOrSave } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
@@ -15,8 +17,11 @@ function renderTrophies(profile) {
   const owned = new Set(profile.achievements);
   const scope = document.querySelector('[data-award-scope].selected')?.dataset.awardScope || 'all';
   const kind = document.querySelector('[data-award-kind].selected')?.dataset.awardKind || 'all';
-  const visible = ACHIEVEMENTS.filter(item => (scope === 'all' || item.scope === scope) && (kind === 'all' || item.kind === kind));
-  $('#trophy-list').innerHTML = visible.map(item => `
+  const search = $('#award-search').value.trim().toLocaleLowerCase('es');
+  const visible = ACHIEVEMENTS.filter(item => (scope === 'all' || item.scope === scope) && (kind === 'all' || item.kind === kind) &&
+    (!search || `${item.name} ${item.detail}`.toLocaleLowerCase('es').includes(search)));
+  const pageSize = Number($('#trophy-list').dataset.limit || 24);
+  $('#trophy-list').innerHTML = visible.slice(0, pageSize).map(item => `
     <article class="trophy-card ${owned.has(item.id) ? 'earned' : ''} tier-${item.tier.toLowerCase()} ${item.kind}">
       <span class="medal"><img src="${achievementIcon(item)}" alt="" width="53" height="53" loading="lazy"></span><div class="award-content"><span class="award-type">${item.kind === 'trophy' ? 'TROFEO' : 'LOGRO'} · ${item.tier}</span><strong>${item.name}</strong>
       <small>${item.detail}</small><span class="award-progress">${owned.has(item.id) ? '✓ Desbloqueado' : `${Math.min(metricValue(profile, item.metric), item.target).toLocaleString('es-ES')} / ${item.target.toLocaleString('es-ES')}`}</span></div>
@@ -24,54 +29,101 @@ function renderTrophies(profile) {
   const counts = getAchievementCounts(profile);
   $('#trophies-earned').textContent = counts.earned;
   $('#trophies-total').textContent = counts.total;
-  $('#trophy-progress').textContent = `${Math.round(visible.filter(item => owned.has(item.id)).length / visible.length * 100)}%`;
+  $('#trophy-progress').textContent = `${visible.filter(item => owned.has(item.id)).length} / ${visible.length}`;
   $('#award-summary').textContent = `${visible.filter(item => owned.has(item.id)).length} / ${visible.length} ${kind === 'trophy' ? 'trofeos' : kind === 'achievement' ? 'logros' : 'premios'} en esta selección`;
+  $('#more-awards').hidden = visible.length <= pageSize && (scope !== 'all' || !unloadedGames().length);
 }
 
 function renderProfile(profile) {
   $('#games-played').textContent = profile.stats.gamesPlayed;
   $('#play-time').textContent = profile.stats.playSeconds < 60 ? `${profile.stats.playSeconds} s` : `${Math.floor(profile.stats.playSeconds / 60)} min`;
-  $('#picross-progress').textContent = `${profile.games.picross.completedLevels.length} / 60 niveles · ${profile.games.picross.solved} resueltos`;
-  $('#personal-score').textContent = `${profile.stats.totalPoints.toLocaleString('es-ES')} pts`;
+  $('#game-list').querySelectorAll('[data-game-progress]').forEach(label => {
+    const progress = profile.games[label.dataset.gameProgress];
+    label.textContent = `${progress?.solved || 0} resueltos · ${progress?.gamesPlayed || 0} partidas`;
+  });
+  $('#personal-score').textContent = `${profile.stats.arcadeXp.toLocaleString('es-ES')} XP`;
   renderTrophies(profile);
 }
 
 async function exportAll() {
   const profile = await loadProfile();
+  recordArcadeAction(profile, 'export'); unlockAchievements(profile); await saveProfile(profile);
   downloadZip(await exportAllBackup(profile), 'games.zip');
+  renderProfile(profile);
   showToast('Copia de seguridad guardada en tu dispositivo.');
+  return profile;
 }
 
 async function importBackup(file) {
   if (!window.confirm('El progreso de los juegos incluidos en el backup se restaurará en este dispositivo. ¿Continuar?')) return;
   const profile = await loadProfile();
-  await restoreBackup(file, profile, saveProfile, ['picross']);
-  renderProfile(await loadProfile());
+  await restoreBackup(file, profile, saveProfile, GAMES.map(game => game.id));
+  const restored = await loadProfile();
+  recordArcadeAction(restored, 'import'); unlockAchievements(restored); await saveProfile(restored);
+  renderProfile(restored);
   showToast('Backup restaurado en este dispositivo.');
+  return restored;
 }
 document.addEventListener('DOMContentLoaded', async () => {
   let profile = await loadProfile();
-  $('#award-filters').addEventListener('click', event => {
+  if (GAMES[0]) await loadAchievementCatalog([GAMES[0].id]);
+  $('#game-list').insertAdjacentHTML('afterbegin', GAMES.map(game => `<a class="game-card" href="${game.path}"><div class="game-art"><img src="${game.art}" alt="" width="800" height="480" loading="lazy"><span class="art-tag">¡JUEGA YA!</span></div><div class="game-info"><span class="tag">🧩 ${game.category.toLocaleUpperCase('es')}</span><h3>${game.name}</h3><p>${game.description}</p><div class="card-bottom"><span data-game-progress="${game.id}">Aún sin partidas</span><b aria-hidden="true">→</b></div></div></a>`).join(''));
+  try {
+    const today = new Date().toLocaleDateString('en-CA');
+    if (!sessionStorage.getItem('kcg:arcade:visit') || !profile.arcade.visitDays.includes(today)) {
+      sessionStorage.setItem('kcg:arcade:visit', '1');
+      recordArcadeAction(profile, 'visit', today); unlockAchievements(profile); await saveProfile(profile);
+    }
+  } catch { /* Private mode may disable session storage. */ }
+  const scopeGroup = document.querySelector('[data-award-scope="all"]')?.parentElement;
+  for (const game of GAMES) {
+    const button = document.createElement('button');
+    button.type = 'button'; button.dataset.awardScope = game.id; button.textContent = game.name; button.setAttribute('aria-pressed', 'false');
+    scopeGroup?.append(button);
+  }
+  $('#award-filters').addEventListener('click', async event => {
     const button = event.target.closest('button[data-award-scope],button[data-award-kind]');
     if (!button) return;
     const attribute = button.hasAttribute('data-award-scope') ? 'data-award-scope' : 'data-award-kind';
     document.querySelectorAll(`[${attribute}]`).forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', String(item === button)); });
+    $('#trophy-list').dataset.limit = '24';
+    if (button.dataset.awardScope && button.dataset.awardScope !== 'all' && button.dataset.awardScope !== 'arcade') await loadAchievementCatalog([button.dataset.awardScope]);
+    renderTrophies(profile);
+  });
+  $('#award-search').addEventListener('input', async () => {
+    $('#trophy-list').dataset.limit = '24';
+    if ($('#award-search').value.trim() && document.querySelector('[data-award-scope].selected')?.dataset.awardScope === 'all') await loadAchievementCatalog();
+    renderTrophies(profile);
+  });
+  $('#more-awards').addEventListener('click', async () => {
+    const nextLimit = Number($('#trophy-list').dataset.limit || 24) + 24;
+    $('#trophy-list').dataset.limit = String(nextLimit);
+    const scope = document.querySelector('[data-award-scope].selected')?.dataset.awardScope;
+    const kind = document.querySelector('[data-award-kind].selected')?.dataset.awardKind;
+    const search = $('#award-search').value.trim().toLocaleLowerCase('es');
+    const matching = () => ACHIEVEMENTS.filter(item => (scope === 'all' || item.scope === scope) &&
+      (kind === 'all' || item.kind === kind) && (!search || `${item.name} ${item.detail}`.toLocaleLowerCase('es').includes(search))).length;
+    while (scope === 'all' && matching() < nextLimit && unloadedGames().length) await loadAchievementCatalog([unloadedGames()[0].id]);
     renderTrophies(profile);
   });
   renderProfile(profile);
   $('#share-profile').addEventListener('click', async () => {
     profile = await loadProfile();
     const trophies = ACHIEVEMENTS.filter(item => profile.achievements.includes(item.id)).slice(-3).map(item => item.name);
-    const image = await makeShareCard({ title: 'Mi arcade', subtitle: 'KOOKYE CAT GAMES', score: profile.stats.totalPoints.toLocaleString('es-ES'), trophies });
-    if (await shareOrSave(image, 'kookye-cat-games.png') === 'saved') showToast('Tarjeta guardada como imagen.');
+    const image = await makeShareCard({ title: 'Mi arcade', subtitle: 'KOOKYE CAT GAMES', score: `${profile.stats.arcadeXp.toLocaleString('es-ES')} XP`, trophies });
+    const result = await shareOrSave(image, 'kookye-cat-games.png');
+    if (result) {
+      recordArcadeAction(profile, 'share'); unlockAchievements(profile); await saveProfile(profile); renderProfile(profile);
+      if (result === 'saved') showToast('Tarjeta guardada como imagen.');
+    }
   });
-  $('#backup-all').addEventListener('click', exportAll);
+  $('#backup-all').addEventListener('click', async () => { profile = await exportAll(); });
   $('#import-all').addEventListener('click', () => $('#backup-file').click());
   $('#backup-file').addEventListener('change', async event => {
     const file = event.target.files?.[0];
     if (!file) return;
-    try { await importBackup(file); profile = await loadProfile(); } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
+    try { profile = await importBackup(file) || profile; } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
-  import('./pwa-update.js?v=20').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
+  import('./pwa-update.js?v=30').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
 });

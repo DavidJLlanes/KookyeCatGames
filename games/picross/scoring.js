@@ -6,6 +6,8 @@ export function reducePicrossEvent(progress, event) {
   const metrics = progress.metrics;
   const data = event.payload || {};
   if (event.type !== 'puzzle_completed') return;
+  if (typeof data.firstClear !== 'boolean' || !['classic', 'daily', 'timed'].includes(data.mode) || ![5, 10].includes(data.size) ||
+    !['duration', 'mistakes', 'hints', 'filledCells', 'emptyCells'].every(key => Number.isFinite(data[key]) && data[key] >= 0)) throw new Error('Resultado de Picross no válido.');
   if (!data.firstClear) return;
   metrics.filledCells += data.filledCells;
   metrics.emptyCells += data.emptyCells;
@@ -18,7 +20,7 @@ export function reducePicrossEvent(progress, event) {
   if (data.size === 10) metrics.largeWins++;
   if (data.duration < 60) metrics.fastWins++;
 }
-import { lineProgress, POINTS_PER_MISTAKE } from './rules.js?v=20';
+import { lineProgress, POINTS_PER_MISTAKE } from './rules.js?v=30';
 
 export function scorePicross(puzzle, board, seconds, mistakes, hints = 0) {
   const { solved, total } = lineProgress(puzzle, board);

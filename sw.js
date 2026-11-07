@@ -1,9 +1,9 @@
-const CACHE = 'kookye-cat-games-shell-v21';
+const CACHE = 'kookye-cat-games-shell-v30';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
   './assets/art/hero.svg', './assets/art/picross.svg', './assets/art/trophy.svg', './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
   './assets/js/pwa-update.js',
-  './assets/css/achievements.css', './core/achievements.js', './core/arcade-achievements.js', './core/events.js', './assets/js/share-card.js', './assets/js/zip.js', './assets/js/backups.js', './games/picross/', './games/picross/index.html',
+  './assets/css/achievements.css', './core/game-registry.js', './core/scores.js', './core/achievements.js', './core/arcade-achievements.js', './core/events.js', './assets/js/share-card.js', './assets/js/zip.js', './assets/js/backups.js', './games/picross/', './games/picross/index.html',
   './games/picross/achievements.js', './games/picross/scoring.js', './games/picross/game.json', './games/picross/picross.css', './games/picross/picross-responsive.css', './games/picross/picross.js', './games/picross/gesture.js', './games/picross/rules.js', './games/picross/logic.js', './games/picross/puzzle.js',
 ];
 
