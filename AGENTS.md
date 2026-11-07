@@ -75,6 +75,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Modos previstos: clásico, contrarreloj y reto diario (máximo tres).
 
 ## Proceso de ampliación
+- Norma permanente de David: cada nuevo juego debe tener su descripción en el README principal antes de publicarse. Añadirlo al catálogo y documentar imagen propia, mecánica, modos, controles, niveles, premios, carpeta, enlace para jugar y nombre del backup; actualizar también los datos generales que cambien. Si se modifica un juego existente, mantener su documentación al día.
 - Consultar estas instrucciones antes de añadir o modificar juegos y servicios compartidos.
 - Preservar compatibilidad del progreso mediante versiones de esquema y migraciones explícitas.
 - Evitar archivos monolíticos; separar responsabilidades en archivos pequeños.
