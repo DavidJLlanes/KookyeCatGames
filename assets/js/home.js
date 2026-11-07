@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('#backup-file').addEventListener('change', async event => {
     const file = event.target.files?.[0];
     if (!file) return;
-    try { await importBackup(file); } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
+    try { await importBackup(file); profile = await loadProfile(); } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
   import('./pwa-update.js?v=20').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
