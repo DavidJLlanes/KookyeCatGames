@@ -10,9 +10,11 @@ import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT
 import { downloadZip } from '../../assets/js/zip.js';
 import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js?v=45';
 import { logicalSolution } from './logic.js?v=45';
+import { createGameSound } from '../../assets/js/game-sound.js?v=46';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
+const playSound = createGameSound('picross');
 const wrongTimers = new WeakMap();
 function showCellError(cell) {
   if (!cell) return;
@@ -221,6 +223,7 @@ async function clickCell(row, column, selectedTool = tool, isStroke = false) {
   const targetCell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
   if (isStroke && previous === next) return;
   if (isWrongMove(puzzle, board, row, column, selectedTool)) {
+    playSound('error');
     mistakes++;
     if (mode === 'timed') elapsed += TIME_PENALTY;
     showCellError(targetCell);
@@ -232,6 +235,7 @@ async function clickCell(row, column, selectedTool = tool, isStroke = false) {
     return;
   }
   board[row][column] = previous === next ? 'empty' : next;
+  playSound(selectedTool === 'mark' ? 'tap' : 'merge');
   focusIndex = row * puzzle.size + column;
   const cell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
   if (cell) {
@@ -247,8 +251,10 @@ async function clickCell(row, column, selectedTool = tool, isStroke = false) {
 }
 
 async function completePuzzle() {
+  playSound('win');
   const duration = Math.max(0, Math.floor(elapsed + (Date.now() - startedAt) / 1000));
   completed = true; playing = false; elapsed = duration;
+  window.dispatchEvent(new CustomEvent('kcg:mascot',{ detail: { mood: 'win' } }));
   const earnedPoints = scoreNow();
   const stats = profile.games.picross;
   const completedLevel = mode === 'classic' ? activeLevel : 0;
@@ -346,6 +352,7 @@ function restoreGame(active) {
 
 function finishAttempt(reason) {
   if (!playing) return;
+  window.dispatchEvent(new CustomEvent('kcg:mascot',{ detail: { mood: 'try' } }));
   elapsed = secondsPlayed();
   playing = false;
   $('#lose-title').textContent = reason === 'lives' ? 'Te has quedado sin vidas' : 'Se acabó el tiempo';

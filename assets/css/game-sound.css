@@ -1,0 +1,4 @@
+.sound-toggle{border:1.5px solid #c7dbf4;border-radius:999px;background:#eff7ff;color:#245281;padding:9px 12px;font:inherit;font-weight:800;white-space:nowrap;cursor:pointer;min-height:42px;touch-action:manipulation}
+.sound-toggle[aria-pressed="false"]{background:#f5f6f9;color:#60708d}
+.sound-toggle:focus-visible{outline:3px solid #2685f0;outline-offset:2px}
+@media(max-width:600px){.sound-toggle{font-size:12px;padding:7px 9px;min-height:38px}}

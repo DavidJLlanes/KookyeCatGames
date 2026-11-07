@@ -50,6 +50,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Generar las imágenes en el dispositivo, sin enviar progreso a un servidor.
 
 ## Interfaz y controles
+- Cada juego incorpora efectos sonoros suaves para movimientos, aciertos y errores, sin música. Cada juego muestra un interruptor accesible para activar o desactivar sus sonidos y recuerda esa preferencia localmente. Aplicar la misma norma a todos los juegos futuros.
 - Estética divertida, colorida y estimulante, con jerarquía visual clara y controles accesibles.
 - Los juegos se adaptan a pantalla completa en móvil y PC; pueden mostrar puntuación, logros, trofeos y navegación además del área de juego.
 - Cada juego incluye un control visible para volver a la portada.
@@ -59,6 +60,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Usar Inspo MCP al diseñar nuevas pantallas o juegos, salvo que ya exista un sistema visual establecido que deba respetarse.
 
 ## Recursos visuales
+- El gato azul de vóxeles es la mascota permanente de KookyeCat Games: poses de reposo, saludo, juego y celebración, movimiento suave y reacción al toque o clic. Cada pose debe conservar exactamente cuatro extremidades reconocibles (dos patas delanteras y dos traseras); la cola debe distinguirse de las patas. Mantener el mismo estilo de vóxeles y no tapar tableros ni controles.
 - Crear o preparar los gráficos e iconos necesarios para la arcade y cada juego.
 - Incluir iconos de instalación para Android, iPhone y PC, favicon y Open Graph cuando corresponda.
 - Mantener consistencia visual entre portada, juegos, iconos y tarjetas compartibles.
