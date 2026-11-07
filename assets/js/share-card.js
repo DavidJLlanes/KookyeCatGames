@@ -1,5 +1,5 @@
-import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=43';
-import { GAMES } from '../../core/game-registry.js?v=43';
+import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=44';
+import { GAMES } from '../../core/game-registry.js?v=44';
 
 const rect=(c,x,y,w,h,r,color)=>{c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();};
 const text=(c,value,x,y,size,color='#182440',weight=800)=>{c.fillStyle=color;c.font=`${weight} ${size}px system-ui, sans-serif`;c.fillText(String(value),x,y);};
@@ -48,23 +48,25 @@ export async function makeShareCard({profile,scope='arcade',title,subtitle,score
 }
 
 const preparedCards=new WeakMap();
+export const isMobileDevice=()=>Boolean(navigator.userAgentData?.mobile||/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1));
+export function labelShareButtons(...buttons){for(const button of buttons){if(button)button.textContent=isMobileDevice()?'Compartir tarjeta':'Descargar tarjeta PNG';}}
 const canShareImage=(blob,filename)=>typeof navigator.share==='function'&&navigator.canShare?.({files:[new File([blob],filename,{type:'image/png'})]});
 
 export async function shareProgressCard(card,filename,button){
   const cached=preparedCards.get(button);
   const stillFresh=cached&&Date.now()-cached.created<60000;
   const blob=stillFresh?cached.blob:await makeShareCard(card);
-  if(canShareImage(blob,filename)&&!stillFresh&&navigator.userActivation?.isActive===false){
+  if(isMobileDevice()&&canShareImage(blob,filename)&&!stillFresh&&navigator.userActivation?.isActive===false){
     preparedCards.set(button,{blob,created:Date.now(),label:button.textContent});
     button.textContent='Tarjeta lista: toca para compartir';
     return 'ready';
   }
   try{
-    const result=await shareOrSave(blob,filename);
+    const result=await shareOrSave(blob,filename,isMobileDevice());
     if(stillFresh){button.textContent=cached.label;preparedCards.delete(button);}
     return result;
   }catch(error){
-    if(error.name==='NotAllowedError'&&canShareImage(blob,filename)&&navigator.userActivation?.isActive!==true){
+    if(error.name==='NotAllowedError'&&isMobileDevice()&&canShareImage(blob,filename)&&navigator.userActivation?.isActive!==true){
       preparedCards.set(button,{blob,created:Date.now(),label:cached?.label||button.textContent});
       button.textContent='Tarjeta lista: toca para compartir';
       return 'ready';
@@ -73,10 +75,10 @@ export async function shareProgressCard(card,filename,button){
   }
 }
 
-export async function shareOrSave(blob,filename){
+export async function shareOrSave(blob,filename,nativeShare=true){
   if(!blob)throw new Error('No se pudo crear la tarjeta.');
   const file=new File([blob],filename,{type:'image/png'});
-  if(navigator.share&&navigator.canShare?.({files:[file]})){
+  if(nativeShare&&navigator.share&&navigator.canShare?.({files:[file]})){
     try{await navigator.share({files:[file],title:'KookyeCat Games'});return 'shared';}
     catch(error){if(error.name==='AbortError')return 'cancelled';if(error.name==='NotAllowedError')throw error;}
   }

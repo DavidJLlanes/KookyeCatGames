@@ -99,3 +99,5 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Las acciones de backup deben explicar claramente qué se descarga y qué se restaura, tanto en la portada como dentro de cada juego.
 
 - Las tarjetas de arcade y de cada juego deben abrir la opción nativa de compartir archivos en Android y iPhone al tocar Compartir; ofrecer descarga PNG como alternativa cuando el navegador no admita compartir la imagen. Si la generación consume la activación del usuario, mantener la tarjeta preparada y pedir un segundo toque para abrir Compartir, sin descargar automáticamente.
+
+- El botón para crear la tarjeta debe estar visible cerca de la cabecera también en móvil, además de la sección de progreso. En escritorio la acción descarga el PNG directamente y el texto del botón debe decirlo; solo dispositivos móviles usan Compartir nativo.

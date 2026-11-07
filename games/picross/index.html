@@ -7,8 +7,8 @@
   <link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
   <link rel="manifest" href="../../manifest.webmanifest">
   <link rel="stylesheet" href="../../assets/css/base.css">
-  <link rel="stylesheet" href="../../assets/css/profile-actions.css?v=43"><link rel="stylesheet" href="./picross.css?v=43">
-  <link rel="stylesheet" href="./picross-responsive.css?v=43">
+  <link rel="stylesheet" href="../../assets/css/profile-actions.css?v=44"><link rel="stylesheet" href="./picross.css?v=44">
+  <link rel="stylesheet" href="./picross-responsive.css?v=44">
   <title>Picross — Kookye Cat Games</title>
 </head>
 <body class="picross-page">
@@ -16,7 +16,7 @@
     <header class="game-topbar">
       <a class="back-home" href="../../" aria-label="Volver a la arcade">← <span>Arcade</span></a>
       <div class="game-name"><b>✳ &nbsp;PICROSS</b><span>/</span><small id="mode-label">CLÁSICO</small></div>
-      <div class="top-actions"><span class="privacy-game"><i></i> LOCAL</span></div>
+      <div class="top-actions"><span class="privacy-game"><i></i> LOCAL</span><button id="share-game" class="share-top" type="button" aria-label="Compartir o descargar mi tarjeta de Picross">Compartir tarjeta</button></div>
     </header>
     <main class="game-layout">
       <section class="play-area" aria-label="Juego Picross">
@@ -35,12 +35,12 @@
         <section class="hud-card progress-card"><div class="hud-label">ESTA PARTIDA <b id="progress-label">0%</b></div><div class="progress-track"><i id="progress-bar"></i></div><div class="progress-details"><span>▰ Rellenas <b id="filled-count">0</b></span><span>× Vacías <b id="marked-count">0</b></span></div></section>
         <section class="hud-card personal-card"><div class="hud-label">TU PICROSS <b class="lime">✦</b></div><div><span><strong id="solved-count">0</strong><small>resueltos</small></span><span><strong id="played-count">0</strong><small>partidas</small></span><span><strong id="best-time">—</strong><small>mejor tiempo</small></span></div></section>
         <section class="next-achievement"><div><i><img id="next-trophy-icon" src="../../assets/art/trophy.svg" alt="" width="34" height="34"></i><span><small>PRÓXIMO PREMIO</small><b id="next-trophy">Primera partida</b></span></div><p id="next-detail">Juega tu primera partida para desbloquearlo.</p><footer><span id="trophy-count">0 / 16 trofeos</span><a href="../../#trofeos" aria-label="Ver trofeos">↗</a></footer></section>
-        <button class="new-puzzle" id="new-puzzle"><b>＋</b> Nuevo puzle</button><section class="data-section game-data"><h2>Guarda tu Picross</h2><p>El progreso vive en este dispositivo. Descarga una copia para recuperarlo cuando lo necesites.</p><div class="data-actions"><article><h3>↓ Guardar progreso</h3><p>Descarga un archivo ZIP con tus niveles, récords y premios de Picross.</p><button id="export-game" type="button">Descargar copia de Picross</button></article><article><h3>↑ Recuperar progreso</h3><p>Elige una copia anterior de Picross para restaurarla en este dispositivo.</p><button id="import-game" type="button">Restaurar copia de Picross</button></article><article class="share-action"><h3>✦ Mi tarjeta</h3><p>Comparte tus niveles, puntuación e insignias de Picross desde iPhone o Android; en PC descarga el PNG.</p><button id="share-game" type="button">Compartir mi tarjeta</button></article></div></section><input id="import-game-file" type="file" accept=".zip,application/zip" hidden><button class="reset-progress" id="reset-game-progress" type="button">Borrar todo mi progreso de Picross</button>
+        <button class="new-puzzle" id="new-puzzle"><b>＋</b> Nuevo puzle</button><section class="data-section game-data"><h2>Guarda tu Picross</h2><p>El progreso vive en este dispositivo. Descarga una copia para recuperarlo cuando lo necesites.</p><div class="data-actions"><article><h3>↓ Guardar progreso</h3><p>Descarga un archivo ZIP con tus niveles, récords y premios de Picross.</p><button id="export-game" type="button">Descargar copia de Picross</button></article><article><h3>↑ Recuperar progreso</h3><p>Elige una copia anterior de Picross para restaurarla en este dispositivo.</p><button id="import-game" type="button">Restaurar copia de Picross</button></article><article class="share-action"><h3>✦ Mi tarjeta</h3><p>Comparte tus niveles, puntuación e insignias de Picross desde iPhone o Android; en PC descarga el PNG.</p><button id="share-game-secondary" type="button">Compartir tarjeta</button></article></div></section><input id="import-game-file" type="file" accept=".zip,application/zip" hidden><button class="reset-progress" id="reset-game-progress" type="button">Borrar todo mi progreso de Picross</button>
         <p class="private-note">▣ &nbsp;Tu progreso solo se guarda en este dispositivo.</p>
       </aside>
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./picross.js?v=43"></script>
+  <script type="module" src="./picross.js?v=44"></script>
 </body>
 </html>

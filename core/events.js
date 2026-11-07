@@ -1,4 +1,4 @@
-import { GAME_BY_ID } from './game-registry.js?v=43';
+import { GAME_BY_ID } from './game-registry.js?v=44';
 export const EVENT_VERSION = 1;
 export function dispatchGameEvent(profile, event, reducers) {
   if (event?.version !== EVENT_VERSION || !GAME_BY_ID.has(event.gameId) || !/^[a-z][a-z0-9_]*$/.test(event.type || '') ||
