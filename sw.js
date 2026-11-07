@@ -1,7 +1,8 @@
-const CACHE = 'kookye-cat-games-shell-v9';
+const CACHE = 'kookye-cat-games-shell-v10';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
   './assets/art/hero.svg', './assets/art/picross.svg', './assets/art/trophy.svg', './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
+  './assets/js/pwa-update.js',
   './assets/js/share-card.js', './assets/js/zip.js', './assets/js/backups.js', './games/picross/', './games/picross/index.html',
   './games/picross/game.json', './games/picross/picross.css', './games/picross/picross-responsive.css', './games/picross/picross.js', './games/picross/gesture.js', './games/picross/rules.js', './games/picross/puzzle.js',
 ];
@@ -18,6 +19,13 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET' || new URL(event.request.url).origin !== location.origin) return;
+  if (['image', 'font'].includes(event.request.destination)) {
+    event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
+      if (response.ok) event.waitUntil(caches.open(CACHE).then(cache => cache.put(event.request, response.clone())));
+      return response;
+    })));
+    return;
+  }
   event.respondWith(fetch(event.request).then(response => {
     if (response.ok) {
       const copy = response.clone();

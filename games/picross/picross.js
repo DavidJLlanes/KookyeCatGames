@@ -6,6 +6,7 @@ import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
 import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js';
 import { downloadZip } from '../../assets/js/zip.js';
 import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
+import { enablePwaUpdates } from '../../assets/js/pwa-update.js';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
@@ -362,19 +363,44 @@ $('#next-puzzle').addEventListener('click', advancePuzzle);
 $('#clear-board').addEventListener('click', restartBoard);
 $('#retry-puzzle').addEventListener('click', restartBoard);
 $('#mobile-clear').addEventListener('click', restartBoard);
-$('#reset-game-progress').addEventListener('click', async () => {
-  if (!window.confirm('¿Borrar todo tu progreso de Picross en este dispositivo? Se perderán niveles, récords, trofeos y la partida actual. Esta acción no se puede deshacer.')) return;
+const resetProgressButton = $('#reset-game-progress');
+let resetArmed = false;
+let resetArmedTimer;
+resetProgressButton.addEventListener('click', async () => {
+  if (!resetArmed) {
+    resetArmed = true;
+    resetProgressButton.textContent = 'Confirmar: borrar niveles, récords y trofeos';
+    resetProgressButton.classList.add('armed');
+    clearTimeout(resetArmedTimer);
+    resetArmedTimer = setTimeout(() => {
+      resetArmed = false;
+      resetProgressButton.textContent = 'Borrar todo mi progreso de Picross';
+      resetProgressButton.classList.remove('armed');
+    }, 10000);
+    return;
+  }
+  clearTimeout(resetArmedTimer);
+  resetArmed = false;
+  resetProgressButton.disabled = true;
   playing = false;
   clearTimeout(advanceTimer);
   await saveQueue.catch(() => {});
   try {
-    profile = resetGameProgress(profile, 'picross');
-    await persistProfile();
+    const emptyProfile = resetGameProgress(profile, 'picross');
+    await saveProfile(emptyProfile);
+    profile = await loadProfile();
+    if (profile.games.picross.unlockedLevel !== 1 || profile.games.picross.completedLevels.length) throw new Error('No se guardó el borrado.');
+    saveQueue = Promise.resolve();
     mode = 'classic'; activeLevel = 1; size = 5; counted = false; lastClearedLevel = 0;
     startPuzzle(Date.now(), true);
     notify('Progreso de Picross eliminado. Comienzas desde el nivel 1.');
   } catch {
+    playing = true; startedAt = Date.now();
     notify('No se pudo borrar el progreso. Inténtalo de nuevo.');
+  } finally {
+    resetProgressButton.disabled = false;
+    resetProgressButton.textContent = 'Borrar todo mi progreso de Picross';
+    resetProgressButton.classList.remove('armed');
   }
 });
 $('#export-game').addEventListener('click', async () => {
@@ -411,7 +437,7 @@ document.addEventListener('visibilitychange', () => {
 
 profile = await loadProfile();
 renderPlayerStats();
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('../../sw.js').catch(() => {});
+enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }).catch(() => {});
 const active = profile.games.picross.active;
 if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && active?.board?.length && (active.mode !== 'daily' || active.date === localDate())) restoreGame(active);
 else { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }

@@ -66,4 +66,5 @@ Crear una arcade web instalable en `https://djl.com.es/games`, con muchos miniju
 ## Robustez
 - Aislar la base de datos IndexedDB, stores y claves bajo el namespace KookyeCatGames para evitar colisiones con otras aplicaciones del mismo origen.
 - Coordinar el service worker y la PWA con el alcance `/games/`; usar caché versionada y verificar operación offline.
+- La PWA instalada se actualiza automáticamente. Limitar las comprobaciones de versión para no sobrecargar el VPS y, al cargar una actualización, mostrar un aviso visible de que ya está en la última versión.
 - Definir un contrato de eventos versionado entre juegos y el sistema común de logros.

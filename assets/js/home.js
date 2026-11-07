@@ -3,6 +3,7 @@ import { loadProfile, saveProfile } from './storage.js';
 import { downloadZip } from './zip.js';
 import { exportAllBackup, restoreBackup } from './backups.js';
 import { makeShareCard, shareOrSave } from './share-card.js';
+import { enablePwaUpdates } from './pwa-update.js';
 
 const $ = selector => document.querySelector(selector);
 
@@ -62,5 +63,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { await importBackup(file); } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(() => {});
+  enablePwaUpdates('./sw.js', showToast).catch(() => {});
 });
