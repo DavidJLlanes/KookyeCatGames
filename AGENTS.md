@@ -1,7 +1,18 @@
 # KookyeCatGames — instrucciones permanentes del proyecto
 
 ## Objetivo
-Crear una arcade web instalable en `https://djl.com.es/games`, con muchos minijuegos sencillos. La portada ofrece acceso al catálogo. Cada juego vive en su propia subcarpeta y conserva progreso separado.
+Crear una arcade web instalable en `https://djl.com.es/games`, pensada para aproximadamente 50 juegos. La portada ofrece acceso al catálogo. Cada juego vive en su propia subcarpeta y conserva progreso separado.
+
+## Decisiones permanentes de David
+- La plataforma debe ser muy visual, atractiva y coherente entre portada, juegos, iconos, logros y trofeos. Cada nuevo juego necesita portada e imágenes propias adaptadas al lenguaje gráfico común.
+- Cada juego debe tener carpeta, `game.json`, reglas, lógica, puntuación y récords independientes, imágenes, controles, progreso, catálogo de premios e insignias propias. El registro común declara los juegos disponibles y carga sus catálogos cuando hacen falta.
+- La gamificación debe cubrir el uso real de la arcade y los aspectos relevantes de cada juego. Incluir variedad de logros y trofeos, hitos de dominio y objetivos de largo plazo; evitar que unas pocas partidas desbloqueen una gran proporción del catálogo.
+- Cada premio tiene icono propio y dificultad visible. Los premios difíciles requieren una presentación más llamativa. La vitrina debe seguir siendo navegable con 50 juegos, mediante filtros, búsqueda, paginación y carga diferida.
+- Los juegos deben responder con fluidez a táctil, ratón y teclado. Verificar gestos, cruces y correcciones de casillas, reinicios, fin de nivel, errores y persistencia antes de publicar cambios.
+- Picross debe poder resolverse por deducción sin adivinar; la comprobación se aplica a toda la campaña y a puzles aleatorios. Las marcas vacías equivocadas muestran aviso visual sin consumir vida; rellenar mal consume corazón. El aviso en la casilla se desvanece en dos segundos y no bloquea otras casillas.
+- La PWA instalada se actualiza sola con comprobaciones limitadas para no sobrecargar el VPS y muestra un aviso al cargar la última versión. Coordinar HTML, módulos y caché para evitar mezclas de versiones.
+- Conservar la estructura modular y documentar las decisiones que afecten a futuros juegos. En esta etapa inicial no se exige migrar los datos del prototipo, pero las actualizaciones normales no deben borrar el progreso vigente.
+- Trabajar en el repositorio, publicar en `main` tras revisar, y entregar el comando de despliegue manual para el VPS. No desplegar en el VPS sin petición expresa.
 
 ## Tecnología y arquitectura
 - Priorizar HTML5, CSS y JavaScript modular, con archivos pequeños, enfocados y fáciles de revisar.
