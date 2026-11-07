@@ -12,27 +12,56 @@ export function attachBoardGesture(root, getTool, paint) {
     lastPointerPaint = Date.now();
     paint(Number(cell.dataset.row), Number(cell.dataset.column), stroke.tool);
   };
+  const begin = (id, cell, x, y) => {
+    stroke = { id, tool: getTool(), visited: new Set(), x, y };
+    visit(cell);
+  };
+  const move = (id, x, y) => {
+    if (stroke?.id !== id) return;
+    const steps = Math.max(1, Math.ceil(Math.hypot(x - stroke.x, y - stroke.y) / 9));
+    for (let step = 1; step <= steps; step++) {
+      visit(hit(stroke.x + (x - stroke.x) * step / steps, stroke.y + (y - stroke.y) * step / steps));
+    }
+    stroke.x = x;
+    stroke.y = y;
+  };
+  const end = id => { if (stroke?.id === id) stroke = null; };
   root.addEventListener('pointerdown', event => {
-    if (event.button !== 0 || !event.target.closest('.cell')) return;
+    if (event.pointerType === 'touch' || event.button !== 0) return;
+    const cell = event.target.closest('.cell');
+    if (!cell) return;
     event.preventDefault();
-    stroke = { id: event.pointerId, tool: getTool(), visited: new Set(), x: event.clientX, y: event.clientY };
-    root.setPointerCapture(event.pointerId);
-    visit(event.target.closest('.cell'));
+    begin(event.pointerId, cell, event.clientX, event.clientY);
+    root.setPointerCapture?.(event.pointerId);
   });
   root.addEventListener('pointermove', event => {
-    if (stroke?.id !== event.pointerId) return;
+    if (event.pointerType === 'touch' || stroke?.id !== event.pointerId) return;
     event.preventDefault();
-    const steps = Math.max(1, Math.ceil(Math.hypot(event.clientX - stroke.x, event.clientY - stroke.y) / 9));
-    for (let step = 1; step <= steps; step++) {
-      visit(hit(stroke.x + (event.clientX - stroke.x) * step / steps, stroke.y + (event.clientY - stroke.y) * step / steps));
-    }
-    stroke.x = event.clientX;
-    stroke.y = event.clientY;
+    move(event.pointerId, event.clientX, event.clientY);
   });
-  const end = event => { if (stroke?.id === event.pointerId) stroke = null; };
-  root.addEventListener('pointerup', end);
-  root.addEventListener('pointercancel', end);
-  root.addEventListener('lostpointercapture', end);
+  root.addEventListener('touchstart', event => {
+    const cell = event.target.closest('.cell');
+    if (!cell || stroke || event.touches.length !== 1) return;
+    event.preventDefault();
+    const touch = event.changedTouches[0];
+    begin(touch.identifier, cell, touch.clientX, touch.clientY);
+  }, { passive: false });
+  root.addEventListener('touchmove', event => {
+    if (!stroke || event.touches.length !== 1) return;
+    const touch = [...event.changedTouches].find(item => item.identifier === stroke.id);
+    if (!touch) return;
+    event.preventDefault();
+    move(touch.identifier, touch.clientX, touch.clientY);
+  }, { passive: false });
+  root.addEventListener('touchend', event => {
+    for (const touch of event.changedTouches) end(touch.identifier);
+  });
+  root.addEventListener('touchcancel', event => {
+    for (const touch of event.changedTouches) end(touch.identifier);
+  });
+  root.addEventListener('pointerup', event => end(event.pointerId));
+  root.addEventListener('pointercancel', event => end(event.pointerId));
+  root.addEventListener('lostpointercapture', event => end(event.pointerId));
   root.addEventListener('click', event => {
     const cell = event.target.closest('.cell');
     if (!cell || event.detail !== 0 && Date.now() - lastPointerPaint < 500) return;

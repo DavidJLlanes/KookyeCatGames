@@ -19,7 +19,7 @@ Las imágenes PNG de instalación y Open Graph se generan desde los recursos vec
 - `index.html`: portada y catálogo.
 - `assets/js/`: almacenamiento local, logros, tarjetas compartibles y ZIP.
 - `games/<id>/`: cada juego y su manifiesto independiente.
-- `games/picross/`: `puzzle.js` contiene niveles y pistas; `rules.js`, vidas, errores y puntuación; `gesture.js`, controles de arrastre; `picross.js`, partida y almacenamiento; `picross.css` y `picross-responsive.css`, presentación adaptable.
+- `games/picross/`: `puzzle.js` contiene niveles y pistas; `rules.js`, vidas, errores y puntuación; `gesture.js`, arrastre táctil y con ratón; `picross.js`, partida y almacenamiento; `picross.css` y `picross-responsive.css`, presentación adaptable.
 
 Picross incluye una campaña de 60 niveles: 20 de 5×5, 20 de 10×10 y 20 avanzados de 10×10. Los niveles se desbloquean en orden y se puede volver a jugar cualquiera que ya esté abierto.
 

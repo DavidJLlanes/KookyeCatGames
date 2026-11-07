@@ -27,6 +27,15 @@ let completed = false;
 let counted = false;
 let focusIndex = 0;
 let lastSave = 0;
+let lastClearedLevel = 0;
+let saveQueue = Promise.resolve();
+let advanceTimer;
+
+function persistProfile() {
+  const snapshot = structuredClone(profile);
+  saveQueue = saveQueue.catch(() => {}).then(() => saveProfile(snapshot));
+  return saveQueue;
+}
 
 function notify(message) {
   const toast = $('#toast'); toast.textContent = message; toast.classList.add('visible');
@@ -137,7 +146,7 @@ async function saveActive() {
     id: puzzle.id, mode, level: mode === 'classic' && activeLevel > 0 ? activeLevel : null,
     size, board, mistakes, elapsed: secondsPlayed(), counted, date: localDate(), rulesVersion: 3,
   };
-  await saveProfile(profile);
+  await persistProfile();
   lastSave = Date.now();
 }
 
@@ -156,6 +165,7 @@ function updateModeUI() {
 }
 
 function startPuzzle(seed = Date.now(), isResume = false) {
+  clearTimeout(advanceTimer);
   if (mode === 'daily') size = 10;
   puzzle = mode === 'classic' && activeLevel > 0 ? buildCampaignPuzzle(activeLevel) : buildPuzzle(size, seed);
   size = puzzle.size;
@@ -225,6 +235,7 @@ async function completePuzzle() {
   const earnedPoints = scoreNow();
   const stats = profile.games.picross;
   const completedLevel = mode === 'classic' ? activeLevel : 0;
+  lastClearedLevel = completedLevel;
   const puzzleId = mode === 'daily' ? `daily:${localDate()}` : completedLevel > 0 ? `level:${completedLevel}` : `${mode}:${size}:${puzzle.id}`;
   const firstClear = !stats.completedPuzzles.includes(puzzleId);
   if (firstClear) { stats.solved++; stats.completedPuzzles.push(puzzleId); }
@@ -241,7 +252,7 @@ async function completePuzzle() {
   stats.totalPoints += firstClear ? earnedPoints : 0;
   const newTrophies = unlockAchievements(profile);
   profile.games.picross.active = null;
-  await saveProfile(profile);
+  await persistProfile();
   renderPlayerStats(); updateProgress();
   $('#win-message').textContent = `+${earnedPoints} puntos · ${formatTime(duration)}`;
   $('#next-puzzle').textContent = mode === 'classic' && completedLevel === CAMPAIGN_LEVEL_COUNT
@@ -250,6 +261,12 @@ async function completePuzzle() {
       ? `Siguiente nivel ${String(Math.min(completedLevel + 1, CAMPAIGN_LEVEL_COUNT)).padStart(2, '0')}`
       : 'Siguiente puzle →';
   $('#win-overlay').hidden = false;
+  if (completedLevel > 0 && completedLevel < CAMPAIGN_LEVEL_COUNT) {
+    $('#win-message').textContent += ' · Siguiente nivel en 3 segundos';
+    advanceTimer = setTimeout(() => {
+      if (completed && mode === 'classic' && activeLevel === completedLevel) advancePuzzle();
+    }, 3000);
+  }
   if (newTrophies.length) notify(`Trofeo desbloqueado: ${newTrophies[0].name}`);
 }
 
@@ -271,8 +288,8 @@ function selectCampaignLevel(levelNumber) {
 }
 
 function advancePuzzle() {
-  if (mode === 'classic' && activeLevel > 0) {
-    selectCampaignLevel(Math.min(CAMPAIGN_LEVEL_COUNT, activeLevel + 1));
+  if (mode === 'classic' && lastClearedLevel > 0) {
+    selectCampaignLevel(Math.min(CAMPAIGN_LEVEL_COUNT, lastClearedLevel + 1));
   } else selectMode(mode);
 }
 
