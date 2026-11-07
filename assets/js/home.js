@@ -1,9 +1,9 @@
-import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=44';
-import { GAMES } from '../../core/game-registry.js?v=44';
-import { recordArcadeAction } from '../../core/events.js?v=44';
-import { loadProfile, saveProfile } from './storage.js?v=44';
+import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=45';
+import { GAMES } from '../../core/game-registry.js?v=45';
+import { recordArcadeAction } from '../../core/events.js?v=45';
+import { loadProfile, saveProfile } from './storage.js?v=45';
 import { downloadZip } from './zip.js';
-import { exportAllBackup, restoreBackup } from './backups.js?v=44';
+import { exportAllBackup, restoreBackup } from './backups.js?v=45';
 import { shareProgressCard, labelShareButtons } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
@@ -117,8 +117,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (result === 'saved') showToast('Tarjeta guardada como imagen.');
     }
   });
-  labelShareButtons($('#share-profile'), $('#share-profile-secondary'));
-  $('#share-profile-secondary').addEventListener('click', () => $('#share-profile').click());
+  labelShareButtons($('#share-profile'), $('#share-profile-header'));
+  $('#share-profile-header').addEventListener('click', () => $('#share-profile').click());
   $('#backup-all').addEventListener('click', async () => { profile = await exportAll(); });
   $('#import-all').addEventListener('click', () => $('#backup-file').click());
   $('#backup-file').addEventListener('change', async event => {
@@ -127,5 +127,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { profile = await importBackup(file) || profile; } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
-  import('./pwa-update.js?v=44').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
+  import('./pwa-update.js?v=45').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
 });

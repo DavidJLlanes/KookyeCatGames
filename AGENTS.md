@@ -101,3 +101,5 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Las tarjetas de arcade y de cada juego deben abrir la opción nativa de compartir archivos en Android y iPhone al tocar Compartir; ofrecer descarga PNG como alternativa cuando el navegador no admita compartir la imagen. Si la generación consume la activación del usuario, mantener la tarjeta preparada y pedir un segundo toque para abrir Compartir, sin descargar automáticamente.
 
 - El botón para crear la tarjeta debe estar visible cerca de la cabecera también en móvil, además de la sección de progreso. En escritorio la acción descarga el PNG directamente y el texto del botón debe decirlo; solo dispositivos móviles usan Compartir nativo.
+
+- La tarjeta de progreso debe tener una llamada a la acción destacada al comienzo de la sección de datos en móvil. No depender de que una tercera tarjeta al final de las copias de seguridad sea visible.
