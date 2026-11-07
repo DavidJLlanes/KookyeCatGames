@@ -1,2 +1,0 @@
-export const finalScore=game=>game.score+game.lines*25+game.combo*40+Math.max(0,120-game.elapsed)*2;
-export function reduceTetrisEvent(progress,event){const m=progress.metrics,p=event.payload;if(event.type==='piece_locked'){m.pieces++;m.lines+=p.lines;m.tetrises+=p.lines===4?1:0;m.maxLevel=Math.max(m.maxLevel,p.level);m.maxCombo=Math.max(m.maxCombo,p.combo);}if(event.type==='game_completed'){if(p.mode==='daily')m.dailyWins++;if(p.mode==='timed')m.timedWins++;m.fastWins+=p.elapsed<=60?1:0;}}
