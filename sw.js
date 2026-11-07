@@ -1,7 +1,7 @@
-const CACHE = 'kookye-cat-games-shell-v5';
+const CACHE = 'kookye-cat-games-shell-v6';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
-  './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
+  './assets/art/hero.svg', './assets/art/picross.svg', './assets/art/trophy.svg', './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
   './assets/js/share-card.js', './assets/js/zip.js', './assets/js/backups.js', './games/picross/', './games/picross/index.html',
   './games/picross/game.json', './games/picross/picross.css', './games/picross/picross.js', './games/picross/puzzle.js',
 ];

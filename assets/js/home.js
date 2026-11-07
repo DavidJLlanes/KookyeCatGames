@@ -15,7 +15,7 @@ function renderTrophies(profile) {
   const owned = new Set(profile.achievements);
   $('#trophy-list').innerHTML = ACHIEVEMENTS.map(item => `
     <article class="trophy-card ${owned.has(item.id) ? 'earned' : ''}">
-      <span class="medal">${item.icon}</span><div><strong>${item.name}</strong>
+      <span class="medal"><img src="./assets/art/trophy.svg" alt="" width="49" height="49" loading="lazy"></span><div><strong>${item.name}</strong>
       <small>${owned.has(item.id) ? `${item.tier} · Desbloqueado` : item.detail}</small></div>
     </article>`).join('');
   const counts = getAchievementCounts(profile);

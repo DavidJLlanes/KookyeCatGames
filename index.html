@@ -1,50 +1,21 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#11101a">
-  <meta name="description" content="Minijuegos, retos y trofeos. Gratis, instalable y con tu progreso guardado en el dispositivo.">
-  <meta property="og:title" content="Kookye Cat Games — Tu próxima partida empieza aquí">
-  <meta property="og:description" content="Minijuegos, retos y trofeos. Juega donde quieras; tu progreso es tuyo.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="./assets/og-games.png">
-  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
-  <link rel="icon" href="./assets/favicon-32.png" sizes="32x32" type="image/png">
-  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./assets/css/base.css">
-  <title>Kookye Cat Games — Arcade</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#fffaf3">
+  <meta name="description" content="Juega a Picross y descubre una arcade llena de color. Retos, niveles y trofeos con tu progreso guardado en el dispositivo.">
+  <meta property="og:title" content="KookyeCat Games — Un mundo para jugar"><meta property="og:description" content="Juegos, retos y trofeos. Juega a tu ritmo, gratis y sin cuenta."><meta property="og:type" content="website"><meta property="og:image" content="./assets/og-games.png">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml"><link rel="icon" href="./assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="./assets/apple-touch-icon.png"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./assets/css/base.css"><title>KookyeCat Games — Juegos para volver a jugar</title>
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <a class="brand" href="./"><img src="./assets/icon.svg" alt="" width="40" height="40"><span>Kookye<span class="pink">Cat</span><small>GAMES ARCADE</small></span></a>
-      <nav aria-label="Navegación"><a class="active" href="#juegos">Juegos</a><a href="#trofeos">Trofeos</a></nav>
-      <div class="top-actions"><span class="privacy"><i></i> Solo en tu dispositivo</span><button id="backup-all" class="round-button" aria-label="Guardar backup de todos los juegos" title="Guardar backup">↓</button><button id="import-all" class="round-button" aria-label="Restaurar backup" title="Restaurar backup">↑</button><button id="share-profile" class="round-button" aria-label="Compartir tarjeta de arcade" title="Compartir tarjeta">↗</button></div>
-    </header>
-
-    <main>
-      <section class="hero">
-        <div class="hero-copy"><div class="eyebrow"><b>✦</b> UNA ARCADE HECHA PARA TI</div><h1>Un juego más.<br><span>Solo uno más.</span></h1><p>Pequeños juegos, grandes piques. Entra, juega y hazte con todos los trofeos.</p><a class="primary-button" href="#juegos">Explorar juegos <span>↓</span></a><div class="hero-note">▣ &nbsp;Sin cuentas. Tu progreso se queda contigo.</div></div>
-        <div class="hero-art" aria-hidden="true"><div class="orbit"></div><div class="pixel-picture"><i></i><i class="on coral"></i><i class="on rose"></i><i></i><i></i><i class="on purple"></i><i class="on"></i><i class="on rose"></i><i class="on purple"></i><i></i><i class="on purple"></i><i class="on"></i><i class="on coral"></i><i class="on"></i><i class="on purple"></i><i></i><i class="on purple"></i><i class="on"></i><i class="on purple"></i><i></i><i></i><i></i><i class="on purple"></i><i></i><i></i></div><span class="float-star">✦</span><div class="float-score"><span>✦</span><div><small>RÉCORD PERSONAL</small><b id="personal-score">0 pts</b></div></div></div>
-      </section>
-
-      <section class="stats" aria-label="Tu actividad"><div><b class="stat-icon cyan">▦</b><strong id="games-played">0</strong><small>partidas jugadas</small></div><i></i><div><b class="stat-icon pink">♛</b><strong><span id="trophies-earned">0</span><em> / <span id="trophies-total">16</span></em></strong><small>trofeos conseguidos</small></div><i></i><div><b class="stat-icon gold">◷</b><strong id="play-time">0 min</strong><small>de pura diversión</small></div><span class="ready"><i></i> <span id="ready-count">1 juego listo</span></span></section>
-
-      <section class="games-section" id="juegos"><div class="section-head"><div><small>ELIGE TU SIGUIENTE PIQUE</small><h2>Juegos <sup>01</sup></h2></div><span class="section-label">TU COLECCIÓN</span></div>
-        <div class="game-list">
-          <a class="game-card" href="./games/picross/"><div class="game-art"><span class="art-tag">PI</span><div class="mini-grid"><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div><span class="art-spark">✦</span></div><div class="game-info"><span class="tag">PUZLE LÓGICO</span><h3>Picross</h3><p>Descubre el dibujo, casilla a casilla.</p><div class="card-bottom"><span><i></i><span id="picross-progress">Aún sin partidas</span></span><b>↗</b></div></div></a>
-          <article class="coming-card"><div class="coming-graphic">＋<span>✦</span></div><small>PRÓXIMAMENTE</small><h3>Más juegos<br>en camino</h3><p>La colección acaba de empezar.</p></article>
-          <article class="add-card"><span>+</span><small>NUEVOS JUEGOS<br>MUY PRONTO</small></article>
-        </div>
-      </section>
-      <section class="trophies" id="trofeos"><div class="section-head"><div><small>CADA PARTIDA CUENTA</small><h2>Tu vitrina <sup>✦</sup></h2></div><span class="section-label"><b id="trophy-progress">0%</b> completado</span></div><div id="trophy-list" class="trophy-grid"></div></section>
-    </main>
-    <footer><b>Kookye<span>Cat</span> Games</b><span>Juega a tu ritmo. Tus partidas son tuyas.</span><span class="local-note"><i></i> Progreso local y privado</span></footer>
-  </div>
-  <input id="backup-file" type="file" accept=".zip,application/zip" hidden>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./assets/js/home.js"></script>
-</body>
-</html>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<div class="shell">
+<header class="topbar"><a class="brand" href="./" aria-label="KookyeCat Games, inicio"><span class="brand-mark">✦</span><span>Kookye<span class="pink">Cat</span><small>GAMES</small></span></a><nav aria-label="Navegación principal"><a class="active" href="#juegos">🎮 <span>Juegos</span></a><a href="#progreso">📊 <span>Mi progreso</span></a><a href="#trofeos">🏆 <span>Trofeos</span></a></nav><div class="top-actions"><span class="privacy">🔒 Sin cuentas</span><button id="backup-all" class="round-button" aria-label="Descargar copia de seguridad" title="Descargar copia">↓</button><button id="import-all" class="round-button" aria-label="Restaurar copia de seguridad" title="Restaurar copia">↑</button><button id="share-profile" class="round-button" aria-label="Compartir tarjeta" title="Compartir tarjeta">↗</button></div></header>
+<main id="contenido">
+<section class="hero" aria-labelledby="hero-title"><img class="hero-image" src="./assets/art/hero.svg" alt="" width="900" height="540" fetchpriority="high"><div class="hero-copy"><div class="eyebrow">✨ TU RINCÓN PARA JUGAR</div><h1 id="hero-title">Un mundo de juegos <span>para disfrutar.</span></h1><p>Una partida rápida, un reto nuevo y un trofeo que conquistar. Entra y juega a tu ritmo.</p><a class="primary-button" href="#juegos">Explorar juegos <span>→</span></a></div><div class="hero-badge" aria-hidden="true">⭐<strong>60</strong><small>niveles<br>de Picross</small></div></section>
+<section class="welcome-strip" aria-label="Bienvenida"><span>✦ Juegos gratis</span><span>🎮 Ratón, teclado y móvil</span><span>🔒 Tu progreso se queda contigo</span></section>
+<section class="games-section" id="juegos" aria-labelledby="games-title"><div class="section-head"><div><span class="eyebrow">ELIGE TU PRÓXIMA AVENTURA</span><h2 id="games-title">Descubre los juegos <span class="heading-spark">✦</span></h2></div><span class="section-label">1 juego disponible</span></div><div class="game-list"><a class="game-card" href="./games/picross/"><div class="game-art"><img src="./assets/art/picross.svg" alt="" width="800" height="480" loading="lazy"><span class="art-tag">¡JUEGA YA!</span></div><div class="game-info"><span class="tag">🧩 PUZLE · LÓGICA</span><h3>Picross</h3><p>Descubre dibujos ocultos siguiendo las pistas. ¡Cada casilla cuenta!</p><div class="card-bottom"><span id="picross-progress">Aún sin partidas</span><b aria-hidden="true">→</b></div></div></a><article class="coming-card"><div class="coming-graphic" aria-hidden="true">🎲 <span>✦</span></div><div><span class="tag">MUY PRONTO</span><h3>Más aventuras en camino</h3><p>Esta colección acaba de empezar. Vuelve para descubrir qué viene después.</p></div></article></div></section>
+<section class="progress-panel" id="progreso" aria-labelledby="progress-title"><div class="section-head"><div><span class="eyebrow">ESTE ES TU CAMINO</span><h2 id="progress-title">Tu aventura hasta ahora</h2></div><span class="section-label">Guardada en este dispositivo</span></div><div class="stats" aria-label="Tu actividad"><div><b class="stat-icon cyan">🎮</b><strong id="games-played">0</strong><small>partidas jugadas</small></div><div><b class="stat-icon pink">🏆</b><strong><span id="trophies-earned">0</span><em> / <span id="trophies-total">16</span></em></strong><small>trofeos ganados</small></div><div><b class="stat-icon gold">⏱️</b><strong id="play-time">0 min</strong><small>tiempo jugando</small></div><div><b class="stat-icon mint">⭐</b><strong id="personal-score">0 pts</strong><small>puntos acumulados</small></div></div><p class="progress-note">🔒 Juega sin registrarte. Tus partidas y logros viven solo en tu dispositivo.</p></section>
+<section class="trophies" id="trofeos" aria-labelledby="trophies-title"><div class="section-head"><div><span class="eyebrow">CADA PARTIDA CUENTA</span><h2 id="trophies-title">Vitrina de trofeos 🏆</h2></div><span class="section-label"><b id="trophy-progress">0%</b> conseguido</span></div><p class="section-intro">Desbloquea medallas jugando, resolviendo Picross y superando retos diarios.</p><div id="trophy-list" class="trophy-grid"></div></section>
+</main><footer><b>Kookye<span>Cat</span> Games</b><span>Un pequeño mundo de juegos que no para de crecer.</span><span class="local-note">Hecho para jugar. Y volver a jugar.</span></footer></div>
+<input id="backup-file" type="file" accept=".zip,application/zip" hidden><div id="toast" class="toast" role="status" aria-live="polite"></div><script type="module" src="./assets/js/home.js"></script>
+</body></html>
