@@ -1,4 +1,4 @@
-import {CANNON,WIDTH,HEIGHT,aimAt,clampAngle} from './rules.js?v=48';
+import {CANNON,WIDTH,HEIGHT,aimAt,clampAngle} from './rules.js?v=49';
 
 export function bindControls({canvas,aim,fire,swap,pause,enabled}) {
   let angle=0, pointer=null;

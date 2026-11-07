@@ -1,4 +1,4 @@
-import {RADIUS, STEP, CANNON, LIMIT, MISS_LIMIT, columns, position, neighbors, key, random, clampAngle} from './rules.js?v=48';
+import {RADIUS, STEP, CANNON, LIMIT, MISS_LIMIT, columns, position, neighbors, key, random, clampAngle} from './rules.js?v=49';
 
 export function availableColors(game) { return [...new Set(game.board.map(b => b.color))].sort(); }
 export function nextColor(game) { const colors = availableColors(game); return colors[Math.floor(random(game) * colors.length)] ?? 0; }

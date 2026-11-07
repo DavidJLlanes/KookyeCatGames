@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-3%20juegos-ED539A?style=for-the-badge" alt="3 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-180%20niveles-168B79?style=for-the-badge" alt="180 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-4%20juegos-ED539A?style=for-the-badge" alt="4 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-240%20niveles-168B79?style=for-the-badge" alt="240 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Tres juegos y 180 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Cuatro juegos y 240 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -45,7 +45,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 | --- | --- |
 | HTML, CSS y JavaScript modular | Aplicación estática, sin framework ni proceso de compilación obligatorio. |
 | CSS Grid, Flexbox y media queries | Distribución común y adaptación a móvil, tablet y escritorio. |
-| Canvas 2D | Tablero de Bubble Shooter y generación de tarjetas PNG. |
+| Canvas 2D | Tableros Canvas 2D de Tetris y Bubble Shooter, además de tarjetas PNG. |
 | SVG y WebP | Portadas, iconos, insignias y poses de la mascota. |
 | IndexedDB | Perfil, partidas, récords y premios. `localStorage` actúa como alternativa y conserva preferencias. |
 | Service Worker y Cache API | Caché de la aplicación y recursos para uso offline. |
@@ -62,6 +62,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 | **Picross** | 60 niveles | Contrarreloj y reto diario | 41 | [Abrir Picross](https://djl.com.es/games/games/picross/) |
 | **Fusión 2048** | 60 niveles | Contrarreloj de 180 s y reto diario | 35 | [Abrir Fusión 2048](https://djl.com.es/games/games/2048/) |
 | **Bubble Shooter** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Bubble Shooter](https://djl.com.es/games/games/bubbleshooter/) |
+| **Tetris** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Tetris](https://djl.com.es/games/games/tetris/) |
 
 ### Picross
 
@@ -124,6 +125,7 @@ El perfil se guarda en la base IndexedDB `kookye-cat-games-local-v2`, dentro del
 | `picross.zip` | Partida, estadísticas, niveles y premios de Picross. | Dentro de Picross. |
 | `2048.zip` | Partida, estadísticas, niveles y premios de Fusión 2048. | Dentro de Fusión 2048. |
 | `bubbleshooter.zip` | Partida, estadísticas, niveles y premios de Bubble Shooter. | Dentro de Bubble Shooter. |
+| `tetris.zip` | Partida, estadísticas, niveles y premios de Tetris. | Dentro de Tetris. |
 
 Las copias incluyen metadatos y se validan por formato, versión y juego antes de restaurarse. Una copia individual solo sustituye el progreso de ese juego. Los archivos se generan y leen en el navegador: no se suben ni se descomprimen en el VPS.
 
@@ -147,7 +149,19 @@ En escritorio, la acción de tarjeta descarga la imagen. En Android, iPhone y ot
 
 La primera carga necesita conexión para descargar los recursos. Después, el service worker puede servir el contenido cacheado sin red. Las insignias se cargan según se necesitan; no se precarga todo el catálogo de premios en la instalación.
 
+En iPhone/iPad, Safari no muestra un aviso de instalación automática: el botón **Instalar app** de la portada abre los pasos para usar Compartir → Añadir a pantalla de inicio. En Safari para Mac indica Archivo → Añadir al Dock. En navegadores compatibles se ofrece el aviso nativo.
+
 La aplicación comprueba actualizaciones al registrarse y limita las comprobaciones adicionales a un intervalo de seis horas. Al cargar una actualización muestra un aviso. Al cambiar la versión de recursos hay que coordinar el HTML, los módulos y la caché para evitar mezclas de versiones.
+
+### Tetris
+
+<a href="https://djl.com.es/games/games/tetris/"><img src="games/tetris/assets/cover.svg" alt="Portada de Tetris" width="460"></a>
+
+Gira y encaja las siete piezas para completar filas horizontales. Las líneas desaparecen, suman puntos y hacen que las piezas caigan más rápido. La campaña ofrece 60 metas progresivas; el reto diario propone el mismo tablero inicial durante ese día y el contrarreloj da 120 segundos para completar 15 filas.
+
+**Controles:** botones táctiles, flechas izquierda/derecha para mover, abajo para bajar, arriba o X para girar, espacio para caída rápida y P para pausar. El juego también ofrece sonidos suaves con interruptor, progreso local y una colección de 35 insignias propias.
+
+**Carpeta:** [`games/tetris/`](games/tetris/) · **Manifiesto:** [`game.json`](games/tetris/game.json) · **Copia individual:** `tetris.zip`.
 
 ## Desarrollo local
 
@@ -166,7 +180,7 @@ cd KookyeCatGames
 python -m http.server 8080
 ```
 
-En Windows puedes usar `py -m http.server 8080` si ese es el lanzador instalado. Abre [http://localhost:8080/](http://localhost:8080/). Los juegos estarán bajo `/games/picross/`, `/games/2048/` y `/games/bubbleshooter/` en ese servidor local.
+En Windows puedes usar `py -m http.server 8080` si ese es el lanzador instalado. Abre [http://localhost:8080/](http://localhost:8080/). Los juegos estarán bajo `/games/picross/`, `/games/2048/` y `/games/bubbleshooter/` y `/games/tetris/` en ese servidor local.
 
 Sirve el proyecto por HTTP; abrir los HTML directamente como archivos no reproduce correctamente el funcionamiento de los módulos ni de la PWA. En producción, utiliza HTTPS para las funciones de instalación y compartición compatibles.
 
@@ -179,7 +193,7 @@ node scripts/check-game-interfaces.mjs
 node --test games/bubbleshooter/engine.test.mjs
 ```
 
-La primera comprobación revisa el contrato de las tres interfaces, los identificadores de controles, el orden de los paneles, las rutas de recursos, los estados de modo y la lógica de pantalla completa. Las pruebas de Bubble Shooter cubren, entre otros casos, el tablero hexagonal, los rebotes, los grupos, las caídas, el guardado de tiros y los backups.
+La primera comprobación revisa el contrato de las cuatro interfaces, los identificadores de controles, el orden de los paneles, las rutas de recursos, los estados de modo y la lógica de pantalla completa. Las pruebas de Bubble Shooter cubren, entre otros casos, el tablero hexagonal, los rebotes, los grupos, las caídas, el guardado de tiros y los backups.
 
 Estas comprobaciones no sustituyen la revisión en navegador: verificar escritorio y móvil, orientación, teclado, táctil, foco, reinicio, final de partida, persistencia, compartir, restauración y actualización offline antes de publicar cambios de interfaz.
 
@@ -211,7 +225,7 @@ Los generadores Python que crean imágenes rasterizadas requieren Pillow. `rende
 | [`scripts/`](scripts/) | Comprobaciones y generación de recursos. |
 | [`AGENTS.md`](AGENTS.md) | Normas permanentes de diseño, arquitectura, privacidad y ampliación. |
 
-El núcleo no importa directamente las reglas de Picross, 2048 o Bubble Shooter. Cada juego aporta su reductor de eventos y su catálogo, y conserva sus datos bajo un ID estable. La portada agrega la información a través del registro. Esta separación permite añadir juegos sin convertir el núcleo en un archivo monolítico.
+El núcleo no importa directamente las reglas de Picross, 2048, Bubble Shooter ni Tetris. Cada juego aporta su reductor de eventos y su catálogo, y conserva sus datos bajo un ID estable. La portada agrega la información a través del registro. Esta separación permite añadir juegos sin convertir el núcleo en un archivo monolítico.
 
 ## Añadir un juego
 

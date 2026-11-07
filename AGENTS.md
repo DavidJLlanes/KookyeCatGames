@@ -117,3 +117,12 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - El botón para crear la tarjeta debe estar visible cerca de la cabecera también en móvil, además de la sección de progreso. En escritorio la acción descarga el PNG directamente y el texto del botón debe decirlo; solo dispositivos móviles usan Compartir nativo.
 
 - La tarjeta de progreso debe tener una llamada a la acción destacada al comienzo de la sección de datos en móvil. No depender de que una tercera tarjeta al final de las copias de seguridad sea visible.
+
+## Cuarto juego
+- Tetris vive en `games/tetris/`: campaña de 60 niveles de líneas objetivo crecientes, contrarreloj de 120 segundos para completar 15 filas y reto diario determinista; 35 insignias propias y backup `tetris.zip`.
+- Tablero de 10 × 20, siete piezas, giro con ajuste lateral, caída fantasma, caída rápida y velocidad creciente cada diez filas. Controles táctiles por botones, ratón por botones y teclado (flechas, X, espacio y P).
+- Conservar la carcasa compartida de escritorio/móvil, los efectos suaves sin música y su interruptor local. Actualizar catálogo, README, eventos y caché offline al ampliar la plataforma.
+
+## Instalación en Safari
+- La portada debe ofrecer un botón de instalación accesible y explicar los pasos manuales de Safari en iPhone/iPad (Compartir → Añadir a pantalla de inicio), ya que iOS Safari no emite el evento `beforeinstallprompt`.
+- Mantener iconos Apple y metadatos de web app, manifiesto y service worker con scope `/games/`; comprobar el flujo en Safari móvil cuando haya un dispositivo/navegador de prueba disponible.

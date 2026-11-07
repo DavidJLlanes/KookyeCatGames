@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFile,access} from 'node:fs/promises';
 import {setupGameInterface} from '../assets/js/game-interface.js';
 
-const games=[['picross','picross.js'],['2048','fusion.js'],['bubbleshooter','bubble.js']];
+const games=[['picross','picross.js'],['2048','fusion.js'],['bubbleshooter','bubble.js'],['tetris','tetris.js']];
 const contract=['arcade-topbar','arcade-workspace','arcade-modes','arcade-gamebar','arcade-stats','arcade-board-viewport','arcade-controls','arcade-primary-controls','arcade-utility-controls','arcade-sidebar','arcade-data'];
 for(const [folder,entry] of games){
   const url=new URL(`../games/${folder}/index.html`,import.meta.url),html=await readFile(url,'utf8');
@@ -17,7 +17,7 @@ for(const [folder,entry] of games){
   for(const match of html.matchAll(/(?:src|href)="(\.[^"]+)"/g)){
     const asset=new URL(match[1],url);asset.search='';asset.hash='';await access(asset);
   }
-  assert.match(html,/src="\.\/interface\.js\?v=48"/);
+  assert.match(html,/src="\.\/interface\.js\?v=49"/);
   assert.equal((html.match(/data-mode="/g)||[]).length,3);
   assert.ok(html.indexOf('arcade-board-viewport')<html.indexOf('arcade-sidebar'));
   assert.ok(html.indexOf('arcade-sidebar')<html.indexOf('arcade-data data-section'));

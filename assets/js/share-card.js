@@ -1,5 +1,5 @@
-import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=48';
-import { GAMES } from '../../core/game-registry.js?v=48';
+import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=49';
+import { GAMES } from '../../core/game-registry.js?v=49';
 
 const rect=(c,x,y,w,h,r,color)=>{c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();};
 const text=(c,value,x,y,size,color='#182440',weight=800)=>{c.fillStyle=color;c.font=`${weight} ${size}px system-ui, sans-serif`;c.fillText(String(value),x,y);};
@@ -15,8 +15,8 @@ export async function makeShareCard({profile,scope='arcade',title,subtitle,score
   const rare=earned.filter(item=>item.tier==='LEGENDARIO'||item.tier==='ORO');
   const showcase=[...rare.reverse(),...earned.filter(item=>!rare.includes(item)).reverse()].slice(0,3);
   const icons=await Promise.all(showcase.map(badgeImage));
-  const accent=scope==='picross'?'#ec5fa7':scope==='fusion-2048'?'#2b85ed':scope==='bubbleshooter'?'#157d70':'#815ce2';
-  const secondary=scope==='picross'?'#ffd3e7':scope==='fusion-2048'?'#d3eaff':scope==='bubbleshooter'?'#d8f4eb':'#eadfff';
+  const accent=scope==='picross'?'#ec5fa7':scope==='fusion-2048'?'#2b85ed':scope==='bubbleshooter'?'#157d70':scope==='tetris'?'#6552c9':'#815ce2';
+  const secondary=scope==='picross'?'#ffd3e7':scope==='fusion-2048'?'#d3eaff':scope==='bubbleshooter'?'#d8f4eb':scope==='tetris'?'#e2ddff':'#eadfff';
   const total=catalog.length,won=earned.length,ratio=total?won/total:0;
   const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=630;
   const c=canvas.getContext('2d');if(!c)throw new Error('No se pudo crear la tarjeta.');

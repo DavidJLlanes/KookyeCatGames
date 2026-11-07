@@ -1,7 +1,7 @@
-const CACHE = 'kookye-cat-games-shell-v48';
+const CACHE = 'kookye-cat-games-shell-v49';
 const FILES = [
   './assets/css/game-interface.css', './assets/js/game-interface.js',
-  './games/picross/interface.js', './games/2048/interface.js', './games/bubbleshooter/interface.js',
+  './games/picross/interface.js', './games/2048/interface.js', './games/bubbleshooter/interface.js', './games/tetris/', './games/tetris/index.html', './games/tetris/game.json', './games/tetris/rules.js', './games/tetris/engine.js', './games/tetris/scoring.js', './games/tetris/achievements.js', './games/tetris/tetris.js', './games/tetris/interface.js', './games/tetris/tetris.css', './games/tetris/assets/icon.svg', './games/tetris/assets/cover.svg',
   './games/bubbleshooter/', './games/bubbleshooter/index.html', './games/bubbleshooter/game.json',
   './games/bubbleshooter/rules.js', './games/bubbleshooter/engine.js', './games/bubbleshooter/renderer.js',
   './games/bubbleshooter/controls.js', './games/bubbleshooter/bubble.js', './games/bubbleshooter/bubble.css',
