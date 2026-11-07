@@ -1,14 +1,16 @@
-import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js?v=14';
-import { attachBoardGesture } from './gesture.js?v=14';
-import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js?v=14';
-import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=14';
+import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js?v=15';
+import { attachBoardGesture } from './gesture.js?v=15';
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js?v=15';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=15';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=14';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=15';
 import { downloadZip } from '../../assets/js/zip.js';
 import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
+import { logicalSolution } from './logic.js?v=15';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
+const wrongTimers = new WeakMap();
 const localDate = () => new Date().toLocaleDateString('en-CA');
 const formatTime = seconds => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 
@@ -193,21 +195,26 @@ function setTool(nextTool) {
   });
 }
 
-async function clickCell(row, column, selectedTool = tool) {
+async function clickCell(row, column, selectedTool = tool, isStroke = false) {
   if (!playing || completed) return;
   const previous = board[row][column];
   const next = selectedTool === 'mark' ? 'marked' : 'filled';
   const targetCell = boardRoot.querySelector(`[data-row="${row}"][data-column="${column}"]`);
-  if (targetCell?.classList.contains('wrong')) return;
+  if (isStroke && previous === next) return;
   if (isWrongMove(puzzle, board, row, column, selectedTool)) {
     mistakes++;
     if (mode === 'timed') elapsed += TIME_PENALTY;
-    targetCell?.classList.add('wrong');
-    targetCell?.setAttribute('aria-invalid', 'true');
-    setTimeout(() => {
-      targetCell?.classList.remove('wrong');
-      targetCell?.removeAttribute('aria-invalid');
-    }, 700);
+    if (targetCell) {
+      clearTimeout(wrongTimers.get(targetCell));
+      targetCell.classList.remove('wrong');
+      void targetCell.offsetWidth;
+      targetCell.classList.add('wrong');
+      targetCell.setAttribute('aria-invalid', 'true');
+      wrongTimers.set(targetCell, setTimeout(() => {
+        targetCell.classList.remove('wrong');
+        targetCell.removeAttribute('aria-invalid');
+      }, 2000));
+    }
     notify(`Fallo: esa casilla queda vacía. Te quedan ${Math.max(0, MAX_LIVES - mistakes)} vidas.`);
     updateProgress();
     if (mistakes >= MAX_LIVES) finishAttempt('lives');
@@ -362,6 +369,16 @@ $('#next-puzzle').addEventListener('click', advancePuzzle);
 $('#clear-board').addEventListener('click', restartBoard);
 $('#retry-puzzle').addEventListener('click', restartBoard);
 $('#mobile-clear').addEventListener('click', restartBoard);
+$('#logical-hint').addEventListener('click', () => {
+  if (!playing || completed) return;
+  const step = logicalSolution(puzzle.solution).steps.find(({ row, column, filled }) =>
+    board[row][column] !== (filled ? 'filled' : 'marked') && (filled || board[row][column] !== 'empty'));
+  if (!step) { notify('Revisa las pistas: ya no quedan casillas rellenas por deducir.'); return; }
+  const cell = boardRoot.querySelector(`[data-row="${step.row}"][data-column="${step.column}"]`);
+  cell?.classList.remove('logical-hint');
+  if (cell) { void cell.offsetWidth; cell.classList.add('logical-hint'); setTimeout(() => cell.classList.remove('logical-hint'), 2400); }
+  notify(`Pista: observa la fila ${step.row + 1} y la columna ${step.column + 1}. Esa casilla ${step.filled ? 'se rellena' : 'está vacía'}.`);
+});
 const resetProgressButton = $('#reset-game-progress');
 let resetArmed = false;
 let resetArmedTimer;
@@ -444,7 +461,7 @@ if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && 
 }
 if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
-import('../../assets/js/pwa-update.js?v=14')
+import('../../assets/js/pwa-update.js?v=15')
   .then(({ enablePwaUpdates }) => enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }))
   .catch(() => {});
 

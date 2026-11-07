@@ -7,8 +7,8 @@
   <link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
   <link rel="manifest" href="../../manifest.webmanifest">
   <link rel="stylesheet" href="../../assets/css/base.css">
-  <link rel="stylesheet" href="./picross.css?v=14">
-  <link rel="stylesheet" href="./picross-responsive.css?v=14">
+  <link rel="stylesheet" href="./picross.css?v=15">
+  <link rel="stylesheet" href="./picross-responsive.css?v=15">
   <title>Picross — Kookye Cat Games</title>
 </head>
 <body class="picross-page">
@@ -25,7 +25,7 @@
         <div class="board-panel">
           <div class="board-status"><span><i></i><b id="puzzle-label">PUZLE ALEATORIO</b></span><div class="board-metrics"><span class="life-meter" aria-label="Vidas restantes"><span id="hearts" class="hearts" aria-hidden="true">♥ ♥ ♥</span><strong id="lives-label" class="sr-only">3 de 3 vidas</strong></span><span class="metric">LÍNEAS <strong id="completed-lines">0 / 10</strong></span><span class="metric">TIEMPO <strong id="timer">00:00</strong></span></div></div>
           <div class="board-stage"><div id="nonogram" class="nonogram" aria-label="Tablero Picross"></div><div id="win-overlay" class="win-overlay" hidden><div class="win-sparkle">✦</div><small>¡PUZLE RESUELTO!</small><h2>¡Lo has clavado!</h2><p id="win-message"></p><button id="next-puzzle" class="primary-button">Siguiente puzle ↗</button></div><div id="lose-overlay" class="win-overlay lose-overlay" hidden><div class="win-sparkle">♡</div><small>FIN DE LA PARTIDA</small><h2 id="lose-title">Sin vidas</h2><p id="lose-message">Prueba otra vez con las pistas.</p><button id="retry-puzzle" type="button" class="primary-button">↻ Reintentar nivel</button></div></div>
-          <div class="board-tools"><div class="tool-picker"><button class="selected" data-tool="fill" aria-pressed="true"><i class="fill-icon"></i> Rellenar <kbd>F</kbd></button><button data-tool="mark" aria-pressed="false"><i class="mark-icon">×</i> Marcar vacío <kbd>X</kbd></button></div><div class="keyboard-help"><kbd>← ↑ ↓ →</kbd> mover <kbd>⏎</kbd> marcar</div><button id="clear-board" class="clear-button">↺ <span>Reiniciar</span></button></div>
+          <div class="board-tools"><div class="tool-picker"><button class="selected" data-tool="fill" aria-pressed="true"><i class="fill-icon"></i> Rellenar <kbd>F</kbd></button><button data-tool="mark" aria-pressed="false"><i class="mark-icon">×</i> Marcar vacío <kbd>X</kbd></button></div><div class="keyboard-help"><kbd>← ↑ ↓ →</kbd> mover <kbd>⏎</kbd> marcar</div><button id="logical-hint" class="clear-button" type="button">✦ Pista lógica</button><button id="clear-board" class="clear-button">↺ <span>Reiniciar</span></button></div>
         </div>
         <div class="touch-tools"><button class="selected" data-tool="fill"><i class="fill-icon"></i> Rellenar</button><button data-tool="mark"><i class="mark-icon">×</i> Vacío</button><button id="mobile-clear" aria-label="Reiniciar tablero">↺</button></div>
         <p class="rules"><strong>¿Cómo se juega?</strong> Los números indican cuántas casillas seguidas debes rellenar. Deja un espacio entre grupos. Marca con × las casillas que creas vacías: puedes corregir esas notas sin penalización. Rellenar una casilla incorrecta consume un corazón; tienes 3 vidas. En contrarreloj también pierdes 15 segundos. Reiniciar comienza un nuevo intento.</p>
@@ -41,6 +41,6 @@
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./picross.js?v=14"></script>
+  <script type="module" src="./picross.js?v=15"></script>
 </body>
 </html>

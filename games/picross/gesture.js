@@ -9,21 +9,26 @@ export function attachBoardGesture(root, getTool, paint) {
   const visit = cell => {
     if (!stroke || !cell || stroke.visited.has(cell)) return;
     stroke.visited.add(cell);
-    paint(Number(cell.dataset.row), Number(cell.dataset.column), stroke.tool);
+    paint(Number(cell.dataset.row), Number(cell.dataset.column), stroke.tool, true);
   };
   const begin = (id, x, y, cell) => {
-    stroke = { id, x, y, tool: getTool(), visited: new Set() };
+    stroke = { id, x, y, startX: x, startY: y, startCell: cell, moved: false, tool: getTool(), visited: new Set() };
     suppressClickUntil = Date.now() + 700;
-    visit(cell);
   };
   const move = (id, x, y) => {
     if (stroke?.id !== id) return;
+    if (!stroke.moved && Math.hypot(x - stroke.startX, y - stroke.startY) < 6) return;
+    if (!stroke.moved) { stroke.moved = true; visit(stroke.startCell); }
     const { x: oldX, y: oldY } = stroke;
     const steps = Math.max(1, Math.ceil(Math.hypot(x - oldX, y - oldY) / 6));
     for (let i = 1; i <= steps; i++) visit(cellAt(oldX + (x - oldX) * i / steps, oldY + (y - oldY) * i / steps));
     stroke.x = x; stroke.y = y;
   };
-  const end = id => { if (stroke?.id === id) stroke = null; };
+  const end = id => {
+    if (stroke?.id !== id) return;
+    if (!stroke.moved) paint(Number(stroke.startCell.dataset.row), Number(stroke.startCell.dataset.column), stroke.tool, false);
+    stroke = null;
+  };
 
   if (window.PointerEvent) {
     root.addEventListener('pointerdown', event => {

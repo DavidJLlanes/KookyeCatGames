@@ -1,3 +1,5 @@
+import { logicalSolution } from './logic.js?v=15';
+
 const lineOptions = new Map();
 const variantCache = new Map();
 const PATTERNS = {
@@ -69,11 +71,11 @@ function collectVariants(size, inverted = false) {
   const seen = new Set();
   for (const pattern of PATTERNS[size]) {
     const base = matrixFromPattern(pattern).map(row => row.map(cell => inverted ? !cell : cell));
-    if (!hasUniqueSolution(base)) continue;
+    if (!hasUniqueSolution(base) || !logicalSolution(base).solved) continue;
     for (const transformed of transformMatrices(matrixFromPattern(pattern))) {
       const matrix = transformed.map(row => row.map(cell => inverted ? !cell : cell));
       const key = matrix.map(row => row.map(cell => cell ? '1' : '0').join('')).join('/');
-      if (seen.has(key)) continue;
+      if (seen.has(key) || !logicalSolution(matrix).solved) continue;
       seen.add(key);
       variants.push(matrix);
     }
