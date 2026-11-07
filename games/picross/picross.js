@@ -1,16 +1,28 @@
-import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js?v=15';
-import { attachBoardGesture } from './gesture.js?v=15';
-import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js?v=15';
-import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=15';
+import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js?v=16';
+import { attachBoardGesture } from './gesture.js?v=16';
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js?v=16';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=16';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=15';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=16';
 import { downloadZip } from '../../assets/js/zip.js';
 import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js';
-import { logicalSolution } from './logic.js?v=15';
+import { logicalSolution } from './logic.js?v=16';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
 const wrongTimers = new WeakMap();
+function showCellError(cell) {
+  if (!cell) return;
+  clearTimeout(wrongTimers.get(cell));
+  cell.classList.remove('wrong');
+  void cell.offsetWidth;
+  cell.classList.add('wrong');
+  cell.setAttribute('aria-invalid', 'true');
+  wrongTimers.set(cell, setTimeout(() => {
+    cell.classList.remove('wrong');
+    cell.removeAttribute('aria-invalid');
+  }, 2000));
+}
 const localDate = () => new Date().toLocaleDateString('en-CA');
 const formatTime = seconds => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 
@@ -204,17 +216,7 @@ async function clickCell(row, column, selectedTool = tool, isStroke = false) {
   if (isWrongMove(puzzle, board, row, column, selectedTool)) {
     mistakes++;
     if (mode === 'timed') elapsed += TIME_PENALTY;
-    if (targetCell) {
-      clearTimeout(wrongTimers.get(targetCell));
-      targetCell.classList.remove('wrong');
-      void targetCell.offsetWidth;
-      targetCell.classList.add('wrong');
-      targetCell.setAttribute('aria-invalid', 'true');
-      wrongTimers.set(targetCell, setTimeout(() => {
-        targetCell.classList.remove('wrong');
-        targetCell.removeAttribute('aria-invalid');
-      }, 2000));
-    }
+    showCellError(targetCell);
     notify(`Fallo: esa casilla queda vacía. Te quedan ${Math.max(0, MAX_LIVES - mistakes)} vidas.`);
     updateProgress();
     if (mistakes >= MAX_LIVES) finishAttempt('lives');
@@ -230,6 +232,7 @@ async function clickCell(row, column, selectedTool = tool, isStroke = false) {
     cell.setAttribute('aria-pressed', String(board[row][column] !== 'empty'));
     cell.setAttribute('aria-label', `Fila ${row + 1}, columna ${column + 1}, ${board[row][column] === 'filled' ? 'rellena' : board[row][column] === 'marked' ? 'marcada vacía' : 'sin marcar'}`);
     boardRoot.querySelectorAll('.cell').forEach(item => item.tabIndex = item === cell ? 0 : -1);
+    if (board[row][column] === 'marked' && puzzle.solution[row][column]) showCellError(cell);
   }
   updateProgress(); updateHintStates();
   if (isSolved(puzzle, board)) await completePuzzle();
@@ -461,7 +464,7 @@ if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && 
 }
 if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
-import('../../assets/js/pwa-update.js?v=15')
+import('../../assets/js/pwa-update.js?v=16')
   .then(({ enablePwaUpdates }) => enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }))
   .catch(() => {});
 
