@@ -1,5 +1,5 @@
-import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=47';
-import { GAMES } from '../../core/game-registry.js?v=47';
+import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=48';
+import { GAMES } from '../../core/game-registry.js?v=48';
 
 const rect=(c,x,y,w,h,r,color)=>{c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();};
 const text=(c,value,x,y,size,color='#182440',weight=800)=>{c.fillStyle=color;c.font=`${weight} ${size}px system-ui, sans-serif`;c.fillText(String(value),x,y);};

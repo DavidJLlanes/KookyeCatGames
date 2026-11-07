@@ -1,1 +1,23 @@
-{"id":"bubbleshooter","name":"Bubble Shooter","version":"1.0.0","schemaVersion":2,"levels":60,"modes":["classic","timed","daily"],"controls":["touch-aim","mouse","keyboard"],"progress":"local","awards":"./achievements.js","rules":"./rules.js","scoring":"./scoring.js"}
+{
+  "id": "bubbleshooter",
+  "name": "Bubble Shooter",
+  "version": "1.1.0",
+  "schemaVersion": 2,
+  "levels": 60,
+  "modes": [
+    "classic",
+    "timed",
+    "daily"
+  ],
+  "controls": [
+    "touch-aim",
+    "mouse",
+    "keyboard"
+  ],
+  "progress": "local",
+  "awards": "./achievements.js",
+  "rules": "./rules.js",
+  "scoring": "./scoring.js",
+  "interface": "./interface.js",
+  "interfaceContract": 1
+}

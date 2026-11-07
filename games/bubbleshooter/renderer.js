@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,RADIUS,STEP,CANNON,LIMIT,COLORS,SYMBOLS,position} from './rules.js?v=47';
+import {WIDTH,HEIGHT,RADIUS,STEP,CANNON,LIMIT,COLORS,SYMBOLS,position} from './rules.js?v=48';
 
 export function createRenderer(canvas) {
   const c=canvas.getContext('2d');

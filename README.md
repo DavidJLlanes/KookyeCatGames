@@ -1,5 +1,15 @@
 # KookyeCatGames
 
+## Interfaz única para todos los juegos
+
+Los tres juegos comparten `assets/css/game-interface.css` y `assets/js/game-interface.js`. Cada carpeta conserva su `interface.js`, su HTML, su paleta y el CSS del tablero. La pantalla sigue siempre este orden: cabecera, modos, nivel y estado, tablero, controles, paneles de récord/progreso/premios/ayuda, y gestión de datos. No crear distribuciones distintas para juegos futuros.
+
+En escritorio, el tablero ocupa la columna principal y la información secundaria queda en una barra lateral de 276 px. A 960 px o menos, los paneles pasan debajo del juego; a 600 px o menos se apilan con el mismo orden y los backups quedan en una columna. La altura del tablero se adapta a la ventana y conserva sus proporciones nativas. La ayuda se abre bajo demanda, sin competir con la partida.
+
+Validación de la carcasa común: `node scripts/check-game-interfaces.mjs`. Comprueba los controles reales, el orden de los paneles, los recursos y la pantalla completa nativa y alternativa.
+
+El control de pantalla completa está junto al selector de nivel en todos los juegos; en navegadores sin API nativa activa un modo ampliado del que se sale con el mismo botón o Escape. Los botones de sonido y reinicio aparecen bajo el tablero. Compartir sigue visible en la cabecera y al principio de los datos. Este cambio conserva el esquema de progreso y los backups existentes.
+
 ## Bubble Shooter
 
 Tercer juego en `games/bubbleshooter/`: campaña de 60 niveles, contrarreloj de 120 segundos y reto diario reproducible. Apunta arrastrando con dedo o ratón y suelta para disparar. Con foco en el tablero: flechas para apuntar, espacio/Enter para disparar, X para cambiar burbuja y P para pausar. Los botones ofrecen las mismas acciones.
@@ -29,7 +39,7 @@ Las imágenes PNG de instalación y Open Graph se generan desde los recursos vec
 - `index.html`: portada y catálogo.
 - `assets/js/`: almacenamiento local, logros, tarjetas compartibles y ZIP.
 - `games/<id>/`: cada juego y su manifiesto independiente.
-- `games/picross/`: `puzzle.js` contiene niveles y pistas; `rules.js`, vidas, errores y puntuación; `gesture.js`, arrastre táctil y con ratón; `picross.js`, partida y almacenamiento; `picross.css` y `picross-responsive.css`, presentación adaptable.
+- `games/picross/`: `puzzle.js` contiene niveles y pistas; `rules.js`, vidas, errores y puntuación; `gesture.js`, arrastre táctil y con ratón; `picross.js`, partida y almacenamiento; `picross.css`, celdas y pistas; `interface.js` configura la carcasa compartida responsive.
 
 Picross incluye una campaña de 60 niveles: 20 de 5×5, 20 de 10×10 y 20 avanzados de 10×10. Los niveles se desbloquean en orden y se puede volver a jugar cualquiera que ya esté abierto.
 

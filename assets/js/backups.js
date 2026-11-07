@@ -1,7 +1,7 @@
 import { createZip, readZip } from './zip.js';
-import { ACHIEVEMENTS } from './achievements.js?v=47';
-import { GAMES, GAME_BY_ID } from '../../core/game-registry.js?v=47';
-import { loadAchievementCatalog } from './achievements.js?v=47';
+import { ACHIEVEMENTS } from './achievements.js?v=48';
+import { GAMES, GAME_BY_ID } from '../../core/game-registry.js?v=48';
+import { loadAchievementCatalog } from './achievements.js?v=48';
 
 const SIGNATURE = 'kookye-cat-games-backup';
 const SCHEMA_VERSION = 2;

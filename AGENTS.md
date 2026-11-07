@@ -50,6 +50,11 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Generar las imágenes en el dispositivo, sin enviar progreso a un servidor.
 
 ## Interfaz y controles
+- Norma permanente: todos los juegos usan exactamente la misma distribución de interfaz en escritorio y la misma versión responsive en móvil. La configuración y el tablero propios permanecen en la carpeta de cada juego; no se permite crear una carcasa visual distinta para un juego nuevo.
+- Contrato de pantalla: cabecera compacta con volver a Arcade, nombre, mascota y tarjeta; área principal con modos, selector de nivel, cuatro indicadores de partida, tablero y controles; paneles en orden de récord, progreso, premios y ayuda; sección final común con tarjeta, backup y restauración, y borrado de progreso.
+- El tablero es el protagonista: en escritorio ocupa la columna amplia, con los datos secundarios en una barra lateral estrecha. En tablet y móvil, los paneles pasan debajo del tablero; nunca poner ayudas, ilustraciones grandes, backups o vitrinas antes del área de juego. Mantener tamaños táctiles, foco visible y navegación sin desbordamiento horizontal.
+- Compartir `assets/css/game-interface.css` y `assets/js/game-interface.js` para estructura, jerarquía, breakpoints, controles comunes y pantalla completa. Cada carpeta aporta `interface.js`, su HTML y el CSS exclusivo del tablero; solo varían la identidad, el acento y las acciones o métricas necesarias para jugar. Mantener el orden de los paneles y las funciones comunes al ampliar la arcade.
+- Pantalla completa disponible en todos los juegos en el mismo lugar. Si el navegador no admite la API nativa, ofrecer un modo de juego ampliado con salida visible y Escape, sin alterar la partida ni su progreso.
 - Cada juego incorpora efectos sonoros suaves para movimientos, aciertos y errores, sin música. Cada juego muestra un interruptor accesible para activar o desactivar sus sonidos y recuerda esa preferencia localmente. Aplicar la misma norma a todos los juegos futuros.
 - Estética divertida, colorida y estimulante, con jerarquía visual clara y controles accesibles.
 - Los juegos se adaptan a pantalla completa en móvil y PC; pueden mostrar puntuación, logros, trofeos y navegación además del área de juego.

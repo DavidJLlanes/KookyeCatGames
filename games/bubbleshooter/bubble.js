@@ -1,17 +1,17 @@
-import {LEVELS,MISS_LIMIT,configuration,localDate} from './rules.js?v=47';
-import {newGame,launch,advance,swap,validGame} from './engine.js?v=47';
-import {createRenderer} from './renderer.js?v=47';
-import {bindControls} from './controls.js?v=47';
-import {finalScore,reduceBubbleEvent} from './scoring.js?v=47';
-import {createGameSound} from '../../assets/js/game-sound.js?v=47';
-import {loadProfile,saveProfile,resetGameProgress} from '../../assets/js/storage.js?v=47';
-import {dispatchGameEvent,recordArcadeAction,EVENT_VERSION} from '../../core/events.js?v=47';
-import {arcadeXpForResult} from '../../core/scores.js?v=47';
-import {ACHIEVEMENTS,achievementIcon,metricValue,getAchievementCounts,loadAchievementCatalog,unlockAchievements} from '../../assets/js/achievements.js?v=47';
-import {exportGameBackup,restoreBackup} from '../../assets/js/backups.js?v=47';
-import {downloadZip,readZip} from '../../assets/js/zip.js?v=47';
-import {shareProgressCard,labelShareButtons} from '../../assets/js/share-card.js?v=47';
-import {enablePwaUpdates} from '../../assets/js/pwa-update.js?v=47';
+import {LEVELS,MISS_LIMIT,configuration,localDate} from './rules.js?v=48';
+import {newGame,launch,advance,swap,validGame} from './engine.js?v=48';
+import {createRenderer} from './renderer.js?v=48';
+import {bindControls} from './controls.js?v=48';
+import {finalScore,reduceBubbleEvent} from './scoring.js?v=48';
+import {createGameSound} from '../../assets/js/game-sound.js?v=48';
+import {loadProfile,saveProfile,resetGameProgress} from '../../assets/js/storage.js?v=48';
+import {dispatchGameEvent,recordArcadeAction,EVENT_VERSION} from '../../core/events.js?v=48';
+import {arcadeXpForResult} from '../../core/scores.js?v=48';
+import {ACHIEVEMENTS,achievementIcon,metricValue,getAchievementCounts,loadAchievementCatalog,unlockAchievements} from '../../assets/js/achievements.js?v=48';
+import {exportGameBackup,restoreBackup} from '../../assets/js/backups.js?v=48';
+import {downloadZip,readZip} from '../../assets/js/zip.js?v=48';
+import {shareProgressCard,labelShareButtons} from '../../assets/js/share-card.js?v=48';
+import {enablePwaUpdates} from '../../assets/js/pwa-update.js?v=48';
 
 const $=s=>document.querySelector(s), ID='bubbleshooter', canvas=$('#board');
 const draw=createRenderer(canvas), sound=createGameSound(ID);
@@ -40,7 +40,8 @@ function render(){
   $('#pressure-text').textContent=`${MISS_LIMIT-game.misses} tiros sin grupo para que baje el techo`;
   $('#pressure-bar').style.width=`${game.misses/MISS_LIMIT*100}%`;
   $('#progress').textContent=`${p.completedLevels.length} / 60 niveles`;$('#progress-bar').style.width=`${p.completedLevels.length/60*100}%`;
-  $('#best').textContent=`Récord: ${p.bestScore.toLocaleString('es-ES')} puntos`;
+  $('#best').textContent=p.bestScore.toLocaleString('es-ES');
+  $('#solved-count').textContent=p.solved;$('#played-count').textContent=p.gamesPlayed;$('#best-time').textContent=p.bestTime===null?'—':clock(p.bestTime);
   const count=getAchievementCounts(profile,ID);$('#awards').textContent=`${count.earned} / ${count.total} premios`;
   const next=ACHIEVEMENTS.filter(a=>a.scope===ID&&!profile.achievements.includes(a.id)).sort((a,b)=>metricValue(profile,b.metric)/b.target-metricValue(profile,a.metric)/a.target)[0];
   const container=$('#next-award');container.replaceChildren();
@@ -122,7 +123,6 @@ async function init(){
   $('#level').onchange=e=>{const n=Number(e.target.value);if(n>=1&&n<=progress().unlockedLevel)start(configuration('classic',n));};
   $('#restart').onclick=()=>{if(game.counted&&!game.finished&&!confirm('¿Reiniciar esta partida? Conservarás tus niveles y premios.'))return;start(configuration(game.config.mode,Math.max(1,game.config.number)));};
   $('#continue').onclick=()=>nextAction?.();$('#pause').onclick=togglePause;
-  $('#fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if($('#play').requestFullscreen)await $('#play').requestFullscreen();else{canvas.scrollIntoView({block:'start'});toast('En este navegador puedes jugar a pantalla completa instalando la arcade.');}}catch{toast('El navegador no permite activar pantalla completa.');}};
   setInterval(()=>{
     if(!game?.counted||game.finished||paused||document.hidden)return;
     game.elapsed++;progress().playedSeconds++;profile.stats.playSeconds++;
