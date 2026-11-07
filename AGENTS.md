@@ -91,3 +91,9 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 
 ## Segundo juego
 - Fusión 2048 vive en `games/2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.
+
+## Tarjetas de progreso: instrucción permanente de David
+- La arcade tendrá una tarjeta visual propia y cada juego tendrá otra tarjeta individual, con diseño consistente con la web y entre tarjetas.
+- Las tarjetas deben ser atractivas y trabajadas: mostrar el progreso real de niveles o juegos, logros, trofeos, puntuación e insignias conseguidas con sus iconos. Adaptar acentos y contenido a cada juego sin perder la identidad común.
+- Deben generarse localmente, permitir compartir o descargar, y actualizarse al añadir nuevos juegos. Evitar tarjetas genéricas o sosas con solo texto y una puntuación.
+- Las acciones de backup deben explicar claramente qué se descarga y qué se restaura, tanto en la portada como dentro de cada juego.

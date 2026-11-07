@@ -1,65 +1,58 @@
-function roundedRect(context, x, y, width, height, radius) {
-  context.beginPath();
-  context.roundRect(x, y, width, height, radius);
+import { ACHIEVEMENTS, achievementIcon } from './achievements.js?v=42';
+import { GAMES } from '../../core/game-registry.js?v=42';
+
+const rect=(c,x,y,w,h,r,color)=>{c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();};
+const text=(c,value,x,y,size,color='#182440',weight=800)=>{c.fillStyle=color;c.font=`${weight} ${size}px system-ui, sans-serif`;c.fillText(String(value),x,y);};
+const clip=(c,value,max)=>{let s=String(value);while(c.measureText(s).width>max&&s.length>2)s=s.slice(0,-2)+'…';return s;};
+const assetRoot=new URL('../../',import.meta.url);
+async function badgeImage(award){try{const url=new URL(achievementIcon(award),assetRoot).href;const image=new Image();image.src=url;await image.decode();return image;}catch{return null;}}
+
+/** One visual family for arcade and game cards, with distinct game colors and real award progress. */
+export async function makeShareCard({profile,scope='arcade',title,subtitle,score,trophies=[]}){
+  const game=GAMES.find(item=>item.id===scope),progress=game?profile?.games?.[scope]:null;
+  const catalog=ACHIEVEMENTS.filter(item=>scope==='arcade'?true:item.scope===scope);
+  const owned=new Set(profile?.achievements||[]),earned=catalog.filter(item=>owned.has(item.id));
+  const rare=earned.filter(item=>item.tier==='LEGENDARIO'||item.tier==='ORO');
+  const showcase=[...rare.reverse(),...earned.filter(item=>!rare.includes(item)).reverse()].slice(0,3);
+  const icons=await Promise.all(showcase.map(badgeImage));
+  const accent=scope==='picross'?'#ec5fa7':scope==='fusion-2048'?'#2b85ed':'#815ce2';
+  const secondary=scope==='picross'?'#ffd3e7':scope==='fusion-2048'?'#d3eaff':'#eadfff';
+  const total=catalog.length,won=earned.length,ratio=total?won/total:0;
+  const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=630;
+  const c=canvas.getContext('2d');if(!c)throw new Error('No se pudo crear la tarjeta.');
+  const bg=c.createLinearGradient(0,0,1200,630);bg.addColorStop(0,'#fff9ef');bg.addColorStop(.55,'#f5f9ff');bg.addColorStop(1,secondary);c.fillStyle=bg;c.fillRect(0,0,1200,630);
+  c.fillStyle=secondary;c.beginPath();c.arc(1100,60,245,0,Math.PI*2);c.fill();c.beginPath();c.arc(55,610,180,0,Math.PI*2);c.fill();
+  rect(c,30,28,1140,574,34,'#ffffff');c.strokeStyle='#dce5f3';c.lineWidth=3;c.beginPath();c.roundRect(30,28,1140,574,34);c.stroke();
+  rect(c,62,57,305,46,16,'#eaf3ff');text(c,'✦  KOOKYECAT GAMES',80,87,20,'#31517c',900);
+  rect(c,965,57,171,46,16,secondary);text(c,scope==='arcade'?'MI ARCADE':game?.name?.toUpperCase()||'MI JUEGO',984,87,16,accent,900);
+  text(c,title||game?.name||'Mi arcade',70,174,57,'#172441',950);
+  text(c,scope==='arcade'?'Cada partida cuenta':subtitle||'Mi progreso',72,213,21,'#63718e',650);
+  rect(c,70,242,615,276,27,'#f2f7ff');
+  text(c,scope==='arcade'?'MI AVENTURA':'MI PARTIDA',98,284,18,'#61728f',900);
+  const main=scope==='arcade'?`${profile?.arcade?.gamesTried?.length||0} / ${GAMES.length}`:`${progress?.completedLevels?.length||0} / ${game?.levels||60}`;
+  text(c,main,98,361,72,accent,950);
+  text(c,scope==='arcade'?'juegos descubiertos':'niveles superados',103,396,21,'#465775',700);
+  rect(c,98,427,553,20,10,'#dce6f4');rect(c,98,427,Math.max(4,553*(scope==='arcade'?(profile?.arcade?.gamesTried?.length||0)/Math.max(1,GAMES.length):(progress?.completedLevels?.length||0)/(game?.levels||60))),20,10,accent);
+  text(c,scope==='arcade'?'XP DE LA ARCADE':'MEJOR PUNTUACIÓN',99,488,15,'#64738d',900);
+  text(c,scope==='arcade'?`${profile?.stats?.arcadeXp||0} XP`:(progress?.bestScore||0).toLocaleString('es-ES'),330,488,25,'#172441',900);
+  rect(c,713,242,422,276,27,'#fff8e9');text(c,'VITRINA DE PREMIOS',741,282,19,'#8a6636',900);
+  text(c,`${won} / ${total}`,741,349,54,accent,950);text(c,'logros y trofeos',744,383,20,'#625b65',700);
+  rect(c,741,410,366,16,8,'#eedfcb');rect(c,741,410,Math.max(4,366*ratio),16,8,accent);
+  const trophyTotal=catalog.filter(item=>item.kind==='trophy').length;
+  const trophyWon=earned.filter(item=>item.kind==='trophy').length;
+  text(c,`🏆 ${trophyWon} / ${trophyTotal} trofeos`,744,470,21,'#6a5070',800);
+  rect(c,70,536,1065,1,0,'#e4eaf3');text(c,'MIS INSIGNIAS',70,572,15,'#65728e',900);
+  let x=237;showcase.forEach((a,i)=>{rect(c,x,545,49,49,12,a.tier==='LEGENDARIO'?'#392a60':'#fff0c3');if(icons[i])c.drawImage(icons[i],x+2,547,45,45);else text(c,'✦',x+12,577,21,accent);c.font='700 15px system-ui';text(c,clip(c,a.name,170),x+58,574,15,'#425171',750);x+=300;});
+  if(!showcase.length)text(c,'Tus primeros premios te esperan',237,574,20,'#63718e',700);
+  return new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
 }
 
-export async function makeShareCard({ title, subtitle, score, trophies = [] }) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 1200;
-  canvas.height = 630;
-  const context = canvas.getContext('2d');
-  const background = context.createLinearGradient(0, 0, 1200, 630);
-  background.addColorStop(0, '#171421');
-  background.addColorStop(.58, '#29203b');
-  background.addColorStop(1, '#482447');
-  context.fillStyle = background;
-  context.fillRect(0, 0, 1200, 630);
-  context.globalAlpha = .25;
-  for (let radius = 75; radius < 330; radius += 30) {
-    context.beginPath();
-    context.arc(1000, 140, radius, 0, Math.PI * 2);
-    context.strokeStyle = radius % 2 ? '#ff73b8' : '#6ce7e8';
-    context.lineWidth = 2;
-    context.stroke();
+export async function shareOrSave(blob,filename){
+  if(!blob)throw new Error('No se pudo crear la tarjeta.');
+  const file=new File([blob],filename,{type:'image/png'});
+  if(navigator.share&&navigator.canShare?.({files:[file]})){
+    try{await navigator.share({files:[file],title:'KookyeCat Games'});return 'shared';}
+    catch(error){if(error.name==='AbortError')return 'cancelled';}
   }
-  context.globalAlpha = 1;
-  roundedRect(context, 70, 65, 1060, 500, 30);
-  context.fillStyle = '#11101acc';
-  context.fill();
-  context.strokeStyle = '#ffffff24';
-  context.lineWidth = 2;
-  context.stroke();
-  context.fillStyle = '#cefa8c';
-  context.font = '800 19px system-ui';
-  context.fillText(subtitle.toUpperCase(), 120, 140);
-  context.fillStyle = '#fbf9ff';
-  context.font = '800 66px system-ui';
-  context.fillText(title.slice(0, 26), 120, 235);
-  context.fillStyle = '#9c9aaa';
-  context.font = '600 20px system-ui';
-  context.fillText('PUNTUACIÓN', 122, 300);
-  context.fillStyle = '#ff73b8';
-  context.font = '800 76px system-ui';
-  context.fillText(String(score), 120, 390);
-  context.fillStyle = '#9c9aaa';
-  context.font = '600 17px system-ui';
-  context.fillText(trophies.length ? `TROFEOS · ${trophies.slice(0, 3).join(' · ')}` : 'TROFEOS · Próximo desbloqueo en camino', 122, 464);
-  context.fillStyle = '#8f8b9a';
-  context.font = '500 15px system-ui';
-  context.fillText('Progreso local · KookyeCat Games', 120, 525);
-  return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-}
-
-export async function shareOrSave(blob, filename) {
-  if (!blob) throw new Error('No se pudo crear la tarjeta.');
-  const file = new File([blob], filename, { type: 'image/png' });
-  if (navigator.share && navigator.canShare?.({ files: [file] })) {
-    try { await navigator.share({ files: [file], title: 'Kookye Cat Games' }); return 'shared'; }
-    catch (error) { if (error.name === 'AbortError') return 'cancelled'; }
-  }
-  const url = URL.createObjectURL(blob);
-  const link = Object.assign(document.createElement('a'), { href: url, download: filename });
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  return 'saved';
+  const url=URL.createObjectURL(blob),link=Object.assign(document.createElement('a'),{href:url,download:filename});link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return 'saved';
 }

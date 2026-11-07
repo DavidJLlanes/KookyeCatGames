@@ -5,7 +5,7 @@ export const GAMES = Object.freeze([
     category: 'Puzle · Lógica', description: 'Descubre dibujos ocultos siguiendo las pistas. ¡Cada casilla cuenta!',
     awardCount: 41, levels: 60,
     modes: ['classic', 'timed', 'daily'],
-    catalog: '../games/picross/achievements.js?v=41',
+    catalog: '../games/picross/achievements.js?v=42',
     progress: {
       gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, arcadeXp: 0,
       bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [],
@@ -18,7 +18,7 @@ export const GAMES = Object.freeze([
     id: 'fusion-2048', name: 'Fusión 2048', path: './games/2048/', art: './assets/art/fusion-2048.svg',
     category: 'Números · Estrategia', description: 'Desliza y fusiona números en 60 niveles, contrarreloj y reto diario.',
     awardCount: 35, levels: 60, modes: ['classic', 'timed', 'daily'],
-    catalog: '../games/2048/achievements.js?v=41',
+    catalog: '../games/2048/achievements.js?v=42',
     progress: {
       gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, arcadeXp: 0,
       bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [], unlockedLevel: 1, active: null,
