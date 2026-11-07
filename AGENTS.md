@@ -87,7 +87,9 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - No reemplazar cambios ajenos sin inspeccionarlos.
 
 ## Despliegue VPS
-- Destino: VPS Ubuntu, `/var/www/djl.com.es/games/`.
+- La portada y raíz web de la arcade van en `/var/www/djl.com.es/games/` y se sirven desde `https://djl.com.es/games/`.
+- Cada juego se despliega en una subcarpeta directa de esa raíz: `/var/www/djl.com.es/games/<id-del-juego>/` (por ejemplo, Tetris en `/var/www/djl.com.es/games/tetris/`). Nunca anidar los juegos en `/var/www/djl.com.es/games/games/<id>/`.
+- Los enlaces del catálogo, las rutas de recursos y la caché offline deben coincidir con esas URL directas. No asumir que extraer el repositorio entero en la raíz conserva este mapa: revisar el empaquetado y las rutas relativas antes de dar el comando de despliegue.
 - Al entregar una versión lista, proporcionar comandos claros para desplegar manualmente.
 - No conectarse al VPS ni ejecutar despliegues remotos salvo petición explícita. Limitar los comandos al directorio del proyecto.
 
