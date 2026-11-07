@@ -1,7 +1,7 @@
 import { createZip, readZip } from './zip.js';
-import { ACHIEVEMENTS } from './achievements.js?v=30';
-import { GAMES, GAME_BY_ID } from '../../core/game-registry.js?v=30';
-import { loadAchievementCatalog } from './achievements.js?v=30';
+import { ACHIEVEMENTS } from './achievements.js?v=40';
+import { GAMES, GAME_BY_ID } from '../../core/game-registry.js?v=40';
+import { loadAchievementCatalog } from './achievements.js?v=40';
 
 const SIGNATURE = 'kookye-cat-games-backup';
 const SCHEMA_VERSION = 2;
@@ -83,7 +83,7 @@ export async function restoreBackup(file, profile, saveProfile, knownGames = GAM
   }
   if (expectedScope && manifest.scope !== expectedScope) {
     throw new Error(expectedScope === 'game'
-      ? 'Desde Picross puedes restaurar un backup de Picross. Para restaurar todos los juegos, usa la portada.'
+      ? 'Desde un juego puedes restaurar su backup individual. Para restaurar todos los juegos, usa la portada.'
       : 'El backup no corresponde al tipo de restauración solicitado.');
   }
   validateGameIds(manifest.gameIds, knownGames);

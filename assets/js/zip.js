@@ -1,7 +1,7 @@
 const encoder = new TextEncoder();
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const MAX_BACKUP_BYTES = 10 * 1024 * 1024;
-const MAX_ENTRIES = 32;
+const MAX_ENTRIES = 128;
 let crcTable;
 
 function createCrcTable() {

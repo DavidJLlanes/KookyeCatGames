@@ -1,5 +1,5 @@
-import { ARCADE_ACHIEVEMENTS } from './arcade-achievements.js?v=30';
-import { GAME_BY_ID, GAMES } from './game-registry.js?v=30';
+import { ARCADE_ACHIEVEMENTS } from './arcade-achievements.js?v=40';
+import { GAME_BY_ID, GAMES } from './game-registry.js?v=40';
 
 export const ACHIEVEMENTS = [...ARCADE_ACHIEVEMENTS];
 const loaded = new Set();

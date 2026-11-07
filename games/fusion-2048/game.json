@@ -1,0 +1,1 @@
+{"id":"fusion-2048","name":"Fusión 2048","version":"1.0.0","schemaVersion":2,"levels":60,"modes":["classic","timed","daily"],"controls":["swipe","keyboard","mouse"],"progress":"local","awards":"./achievements.js"}

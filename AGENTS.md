@@ -88,3 +88,6 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Coordinar el service worker y la PWA con el alcance `/games/`; usar caché versionada y verificar operación offline.
 - La PWA instalada se actualiza automáticamente. Limitar las comprobaciones de versión para no sobrecargar el VPS y, al cargar una actualización, mostrar un aviso visible de que ya está en la última versión.
 - Definir un contrato de eventos versionado entre juegos y el sistema común de logros.
+
+## Segundo juego
+- Fusión 2048 vive en `games/fusion-2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.

@@ -1,0 +1,2 @@
+export const finalScore=(points,target,moves,undos)=>Math.max(0,Math.floor(points+target*2+Math.max(0,target-moves)*3-undos*target/4));
+export function reduceFusionEvent(progress,event){if(event.type!=='game_completed')return;const p=event.payload,m=progress.metrics;m.totalMoves+=p.moves;m.totalMerges+=p.merges;if(!p.undos)m.noUndo++;if(p.mode==='daily')m.dailyWins++;if(p.mode==='timed')m.timedWins++;if(p.moves<=p.target/2)m.efficientWins++;if(p.target>=256)m.tile256++;if(p.target>=1024)m.tile1024++;if(p.target>=2048)m.tile2048++;if(p.mode==='classic')m.campaignWins++;}

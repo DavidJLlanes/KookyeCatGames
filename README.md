@@ -52,3 +52,7 @@ Los comandos copian al directorio de la arcade sin borrar archivos ajenos median
 `core/game-registry.js` declara solo metadatos ligeros, la ruta del catálogo, el estado inicial y el número de premios de cada juego publicado. `core/achievements.js` importa el catálogo de un juego bajo demanda y rechaza identificadores repetidos o cantidades incoherentes. La vitrina muestra 24 premios por página; una búsqueda global explícita carga el resto. Los eventos de `core/events.js` aceptan adaptadores de cualquier juego sin introducir condiciones específicas en el núcleo.
 
 La puntuación nativa pertenece a cada juego. `core/scores.js` transforma una primera victoria en una cantidad limitada de XP de la arcade, comparable entre juegos. El perfil local conserva el esquema 2 y añade campos con valores iniciales, por lo que una actualización no borra las partidas ya guardadas. La vitrina muestra el avance de la selección visible sin reducir un porcentaje global al publicar otro juego.
+
+## Fusión 2048
+
+Segundo juego en `games/fusion-2048/`, con campaña de 60 niveles, contrarreloj de 180 segundos y reto diario. Desliza en móvil, utiliza flechas/WASD o botones. Guarda progreso local y 35 premios independientes; backup `fusion-2048.zip`.
