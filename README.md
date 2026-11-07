@@ -55,4 +55,4 @@ La puntuación nativa pertenece a cada juego. `core/scores.js` transforma una pr
 
 ## Fusión 2048
 
-Segundo juego en `games/fusion-2048/`, con campaña de 60 niveles, contrarreloj de 180 segundos y reto diario. Desliza en móvil, utiliza flechas/WASD o botones. Guarda progreso local y 35 premios independientes; backup `fusion-2048.zip`.
+Segundo juego en `games/2048/`, con campaña de 60 niveles, contrarreloj de 180 segundos y reto diario. Desliza en móvil, utiliza flechas/WASD o botones. Guarda progreso local y 35 premios independientes; backup `fusion-2048.zip`.

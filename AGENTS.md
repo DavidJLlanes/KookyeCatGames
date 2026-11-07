@@ -90,4 +90,4 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Definir un contrato de eventos versionado entre juegos y el sistema común de logros.
 
 ## Segundo juego
-- Fusión 2048 vive en `games/fusion-2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.
+- Fusión 2048 vive en `games/2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.

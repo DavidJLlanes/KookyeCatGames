@@ -20,7 +20,7 @@ export function reducePicrossEvent(progress, event) {
   if (data.size === 10) metrics.largeWins++;
   if (data.duration < 60) metrics.fastWins++;
 }
-import { lineProgress, POINTS_PER_MISTAKE } from './rules.js?v=40';
+import { lineProgress, POINTS_PER_MISTAKE } from './rules.js?v=41';
 
 export function scorePicross(puzzle, board, seconds, mistakes, hints = 0) {
   const { solved, total } = lineProgress(puzzle, board);

@@ -1,5 +1,5 @@
-import { ARCADE_ACHIEVEMENTS } from './arcade-achievements.js?v=40';
-import { GAME_BY_ID, GAMES } from './game-registry.js?v=40';
+import { ARCADE_ACHIEVEMENTS } from './arcade-achievements.js?v=41';
+import { GAME_BY_ID, GAMES } from './game-registry.js?v=41';
 
 export const ACHIEVEMENTS = [...ARCADE_ACHIEVEMENTS];
 const loaded = new Set();
@@ -31,7 +31,7 @@ export async function loadAchievementCatalog(gameIds = GAMES.map(game => game.id
 export const unloadedGames = () => GAMES.filter(game => !loaded.has(game.id));
 export const achievementIcon = item => item.scope === 'arcade'
   ? `./assets/achievements/${item.id}.svg`
-  : `./games/${item.scope}/assets/achievements/${item.id}.svg`;
+  : `${GAME_BY_ID.get(item.scope)?.path || `./games/${item.scope}/`}assets/achievements/${item.id}.svg`;
 export function metricValue(profile, path) {
   const value = path.split('.').reduce((part, key) => part?.[key], profile);
   return Array.isArray(value) ? value.length : Number(value) || 0;
