@@ -75,3 +75,21 @@ export async function saveProfile(value) {
   catch { try { localStorage.setItem(FALLBACK_KEY, JSON.stringify(profile)); } catch { /* Browser storage may be disabled. */ } }
   return profile;
 }
+import { ACHIEVEMENTS } from './achievements.js';
+
+
+export function resetGameProgress(profile, gameId) {
+  const fresh = createEmptyProfile().games[gameId];
+  if (!fresh || !profile.games?.[gameId]) throw new Error('Juego desconocido.');
+  const previous = profile.games[gameId];
+  const stats = { ...profile.stats };
+  for (const [total, game] of [['gamesPlayed', 'gamesPlayed'], ['gamesSolved', 'solved'], ['playSeconds', 'playedSeconds'], ['totalPoints', 'totalPoints']]) {
+    stats[total] = Math.max(0, (Number(stats[total]) || 0) - (Number(previous[game]) || 0));
+  }
+  const next = { ...profile, stats, games: { ...profile.games, [gameId]: structuredClone(fresh) } };
+  next.achievements = profile.achievements.filter(id => {
+    const achievement = ACHIEVEMENTS.find(item => item.id === id);
+    return achievement?.scope !== gameId && (achievement?.scope !== 'arcade' || achievement.test(next));
+  });
+  return next;
+}

@@ -14,8 +14,7 @@ export function lineProgress(puzzle, board) {
 }
 
 export function isWrongMove(puzzle, board, row, column, tool) {
-  const next = tool === 'mark' ? 'marked' : 'filled';
-  return board[row][column] !== next && (next === 'filled') !== puzzle.solution[row][column];
+  return tool !== 'mark' && board[row][column] !== 'filled' && !puzzle.solution[row][column];
 }
 
 export function currentScore(puzzle, board, seconds, mistakes) {

@@ -1,7 +1,7 @@
 import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove, currentScore } from './rules.js';
 import { attachBoardGesture } from './gesture.js';
 import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements } from '../../assets/js/achievements.js';
-import { loadProfile, saveProfile } from '../../assets/js/storage.js';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js';
 import { makeShareCard, shareOrSave } from '../../assets/js/share-card.js';
 import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js';
 import { downloadZip } from '../../assets/js/zip.js';
@@ -208,7 +208,7 @@ async function clickCell(row, column, selectedTool = tool) {
       targetCell?.classList.remove('wrong');
       targetCell?.removeAttribute('aria-invalid');
     }, 700);
-    notify(`Fallo: ${next === 'filled' ? 'esa casilla queda vacía' : 'esa casilla va rellena'}. ${Math.max(0, MAX_LIVES - mistakes)} vidas.`);
+    notify(`Fallo: esa casilla queda vacía. Te quedan ${Math.max(0, MAX_LIVES - mistakes)} vidas.`);
     updateProgress();
     if (mistakes >= MAX_LIVES) finishAttempt('lives');
     else checkTimeLimit();
@@ -294,9 +294,10 @@ function advancePuzzle() {
 }
 
 function restartBoard() {
-  if (completed) return;
+  clearTimeout(advanceTimer);
+  completed = false; lastClearedLevel = 0;
   board = createEmptyBoard(); mistakes = 0; elapsed = 0; startedAt = Date.now(); playing = true; focusIndex = 0;
-  $('#lose-overlay').hidden = true;
+  $('#lose-overlay').hidden = true; $('#win-overlay').hidden = true;
   updatePuzzleLabel();
   renderBoard(); saveActive();
 }
@@ -361,6 +362,21 @@ $('#next-puzzle').addEventListener('click', advancePuzzle);
 $('#clear-board').addEventListener('click', restartBoard);
 $('#retry-puzzle').addEventListener('click', restartBoard);
 $('#mobile-clear').addEventListener('click', restartBoard);
+$('#reset-game-progress').addEventListener('click', async () => {
+  if (!window.confirm('¿Borrar todo tu progreso de Picross en este dispositivo? Se perderán niveles, récords, trofeos y la partida actual. Esta acción no se puede deshacer.')) return;
+  playing = false;
+  clearTimeout(advanceTimer);
+  await saveQueue.catch(() => {});
+  try {
+    profile = resetGameProgress(profile, 'picross');
+    await persistProfile();
+    mode = 'classic'; activeLevel = 1; size = 5; counted = false; lastClearedLevel = 0;
+    startPuzzle(Date.now(), true);
+    notify('Progreso de Picross eliminado. Comienzas desde el nivel 1.');
+  } catch {
+    notify('No se pudo borrar el progreso. Inténtalo de nuevo.');
+  }
+});
 $('#export-game').addEventListener('click', async () => {
   const achievements = profile.achievements.filter(id => ACHIEVEMENTS.some(item => item.id === id && item.scope === 'picross'));
   downloadZip(await exportGameBackup('picross', profile.games.picross, achievements), 'picross.zip');

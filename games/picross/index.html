@@ -28,19 +28,27 @@
           <div class="board-tools"><div class="tool-picker"><button class="selected" data-tool="fill" aria-pressed="true"><i class="fill-icon"></i> Rellenar <kbd>F</kbd></button><button data-tool="mark" aria-pressed="false"><i class="mark-icon">×</i> Marcar vacío <kbd>X</kbd></button></div><div class="keyboard-help"><kbd>← ↑ ↓ →</kbd> mover <kbd>⏎</kbd> marcar</div><button id="clear-board" class="clear-button">↺ <span>Reiniciar</span></button></div>
         </div>
         <div class="touch-tools"><button class="selected" data-tool="fill"><i class="fill-icon"></i> Rellenar</button><button data-tool="mark"><i class="mark-icon">×</i> Vacío</button><button id="mobile-clear" aria-label="Reiniciar tablero">↺</button></div>
-        <p class="rules"><strong>¿Cómo se juega?</strong> Los números indican cuántas casillas seguidas debes rellenar. Deja un espacio entre grupos. Tienes 3 vidas: cada error consume un corazón. En contrarreloj también pierdes 15 segundos. Reiniciar comienza un nuevo intento.</p>
+        <p class="rules"><strong>¿Cómo se juega?</strong> Los números indican cuántas casillas seguidas debes rellenar. Deja un espacio entre grupos. Marca con × las casillas que creas vacías: puedes corregir esas notas sin penalización. Rellenar una casilla incorrecta consume un corazón; tienes 3 vidas. En contrarreloj también pierdes 15 segundos. Reiniciar comienza un nuevo intento.</p>
       </section>
       <aside class="game-hud" aria-label="Puntuación y logros">
         <section class="hud-card score-card"><div class="score-line"><i>✦</i><div><small>MEJOR PUNTUACIÓN</small><strong id="best-score">0</strong></div><span>PTS</span></div><div class="score-track"><i id="score-bar"></i></div><div class="live-score"><span>Esta partida</span><b id="live-score">0 pts</b></div></section>
         <section class="hud-card progress-card"><div class="hud-label">ESTA PARTIDA <b id="progress-label">0%</b></div><div class="progress-track"><i id="progress-bar"></i></div><div class="progress-details"><span>▰ Rellenas <b id="filled-count">0</b></span><span>× Vacías <b id="marked-count">0</b></span></div></section>
         <section class="hud-card personal-card"><div class="hud-label">TU PICROSS <b class="lime">✦</b></div><div><span><strong id="solved-count">0</strong><small>resueltos</small></span><span><strong id="played-count">0</strong><small>partidas</small></span><span><strong id="best-time">—</strong><small>mejor tiempo</small></span></div></section>
         <section class="next-achievement"><div><i>✧</i><span><small>PRÓXIMO TROFEO</small><b id="next-trophy">Primera partida</b></span></div><p id="next-detail">Juega tu primera partida para desbloquearlo.</p><footer><span id="trophy-count">0 / 16 trofeos</span><a href="../../#trofeos" aria-label="Ver trofeos">↗</a></footer></section>
-        <button class="new-puzzle" id="new-puzzle"><b>＋</b> Nuevo puzle</button><button class="export-game" id="export-game">↓ &nbsp;Guardar backup de Picross</button><button class="import-game" id="import-game">Restaurar backup de Picross</button><input id="import-game-file" type="file" accept=".zip,application/zip" hidden>
+        <button class="new-puzzle" id="new-puzzle"><b>＋</b> Nuevo puzle</button><button class="export-game" id="export-game">↓ &nbsp;Guardar backup de Picross</button><button class="import-game" id="import-game">Restaurar backup de Picross</button><input id="import-game-file" type="file" accept=".zip,application/zip" hidden><button class="reset-progress" id="reset-game-progress" type="button">Borrar todo mi progreso de Picross</button>
         <p class="private-note">▣ &nbsp;Tu progreso solo se guarda en este dispositivo.</p>
       </aside>
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) { refreshing = true; location.reload(); }
+      });
+    }
+  </script>
   <script type="module" src="./picross.js"></script>
 </body>
 </html>

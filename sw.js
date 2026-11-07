@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v8';
+const CACHE = 'kookye-cat-games-shell-v9';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
   './assets/art/hero.svg', './assets/art/picross.svg', './assets/art/trophy.svg', './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
@@ -18,8 +18,16 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET' || new URL(event.request.url).origin !== location.origin) return;
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
-    if (response.ok && event.request.destination !== 'document') caches.open(CACHE).then(cache => cache.put(event.request, response.clone()));
+  event.respondWith(fetch(event.request).then(response => {
+    if (response.ok) {
+      const copy = response.clone();
+      event.waitUntil(caches.open(CACHE).then(cache => cache.put(event.request, copy)));
+    }
     return response;
-  }).catch(() => caches.match('./index.html'))));
+  }).catch(async () => {
+    const cached = await caches.match(event.request);
+    if (cached) return cached;
+    if (event.request.mode === 'navigate') return caches.match('./index.html');
+    return Response.error();
+  }));
 });
