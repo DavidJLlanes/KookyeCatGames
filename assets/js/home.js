@@ -8,10 +8,60 @@ import { shareProgressCard, labelShareButtons } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
 
+// Capture Chrome's install event as soon as this module loads. The page performs
+// asynchronous profile and achievement work before DOMContentLoaded finishes.
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', event => {
+  event.preventDefault();
+  deferredInstall = event;
+});
+
 function showToast(message) {
   const toast = $('#toast'); toast.textContent = message; toast.classList.add('visible');
   clearTimeout(showToast.timeout); showToast.timeout = setTimeout(() => toast.classList.remove('visible'), 2600);
 }
+
+function setupInstallControls() {
+  const installButton = $('#install-app');
+  const installDialog = $('#install-dialog');
+  const installSteps = $('#install-steps');
+  if (!installButton || !installDialog || !installSteps) return;
+
+  installButton.addEventListener('click', async () => {
+    if (deferredInstall) {
+      const installEvent = deferredInstall;
+      deferredInstall = null;
+      try {
+        await installEvent.prompt();
+        await installEvent.userChoice;
+      } catch {
+        showToast('No se pudo abrir la instalación. Prueba desde el menú del navegador.');
+      }
+      return;
+    }
+
+    const ua = navigator.userAgent;
+    const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const safari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+    const macSafari = /Macintosh/.test(ua) && safari;
+    if (ios) {
+      installSteps.innerHTML = '<p>En iPhone o iPad, abre el menú <strong>Compartir</strong> y elige <strong>Añadir a pantalla de inicio</strong>. Si no aparece, busca la opción en <strong>Editar acciones</strong>.</p>';
+    } else if (macSafari) {
+      installSteps.innerHTML = '<p>En Safari para Mac, abre <strong>Archivo → Añadir al Dock</strong> para guardar la arcade como app.</p>';
+    } else {
+      installSteps.innerHTML = '<p>Abre el menú del navegador y selecciona <strong>Instalar aplicación</strong>. En Chrome también puedes usar el icono de instalación que aparece en la barra de direcciones.</p>';
+    }
+    if (installDialog.showModal) installDialog.showModal();
+    else installDialog.setAttribute('open', '');
+  });
+
+  $('#install-dismiss')?.addEventListener('click', () => installDialog.close?.());
+  const alreadyInstalled = window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true;
+  if (alreadyInstalled) { installButton.textContent = 'Aplicación instalada'; installButton.disabled = true; }
+  window.addEventListener('appinstalled', () => { installButton.textContent = 'Aplicación instalada'; installButton.disabled = true; });
+}
+
+setupInstallControls();
 
 function renderTrophies(profile) {
   const owned = new Set(profile.achievements);
@@ -117,35 +167,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (result === 'saved') showToast('Tarjeta guardada como imagen.');
     }
   });
-  // Safari on iPhone/iPad installs from Share > Add to Home Screen; it has no install prompt event.
-  let deferredInstall = null;
-  const installButton = $('#install-app'), installDialog = $('#install-dialog'), installSteps = $('#install-steps'), installAction = $('#install-action');
-  window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); deferredInstall = event; });
-  installButton.addEventListener('click', () => {
-    const ua = navigator.userAgent;
-    const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const safari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
-    const macSafari = /Macintosh/.test(ua) && safari;
-    if (deferredInstall) {
-      installSteps.innerHTML = '<p>Instala la aplicación para abrir tus juegos desde el escritorio y tenerlos a mano.</p>';
-      installAction.hidden = false;
-    } else if (ios && safari) {
-      installSteps.innerHTML = '<p>En Safari para iPhone o iPad, la instalación se hace desde el menú de compartir:</p><ol><li>Toca <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba).</li><li>Desplázate y elige <strong>Añadir a pantalla de inicio</strong>. Si no aparece, baja hasta <strong>Editar acciones</strong> y añádela.</li><li>Activa <strong>Abrir como app web</strong> y toca <strong>Añadir</strong>. El icono aparecerá junto a tus apps.</li></ol>';
-      installAction.hidden = true;
-    } else if (macSafari) {
-      installSteps.innerHTML = '<p>En Safari para Mac, abre el menú <strong>Archivo</strong> y selecciona <strong>Añadir al Dock</strong>. Después podrás abrir la arcade como una app.</p>';
-      installAction.hidden = true;
-    } else {
-      installSteps.innerHTML = '<p>Abre el menú del navegador y selecciona <strong>Instalar aplicación</strong> o <strong>Añadir a pantalla de inicio</strong>.</p>';
-      installAction.hidden = true;
-    }
-    if (installDialog.showModal) installDialog.showModal(); else installDialog.setAttribute('open', '');
-  });
-  installAction.addEventListener('click', async () => { if (!deferredInstall) return; deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall = null; installAction.hidden = true; installDialog.close?.(); });
-  $('#install-dismiss').addEventListener('click', () => installDialog.close?.());
-  const alreadyInstalled = window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true;
-  if (alreadyInstalled) { installButton.textContent = 'Aplicación instalada'; installButton.disabled = true; }
-  window.addEventListener('appinstalled', () => { installButton.textContent = 'Aplicación instalada'; installButton.disabled = true; });
   labelShareButtons($('#share-profile'), $('#share-profile-header'));
   $('#share-profile-header').addEventListener('click', () => $('#share-profile').click());
   $('#backup-all').addEventListener('click', async () => { profile = await exportAll(); });
