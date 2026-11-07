@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       installSteps.innerHTML = '<p>Instala la aplicación para abrir tus juegos desde el escritorio y tenerlos a mano.</p>';
       installAction.hidden = false;
     } else if (ios && safari) {
-      installSteps.innerHTML = '<p>En Safari para iPhone o iPad, la instalación se hace desde el menú de compartir:</p><ol><li>Toca <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba).</li><li>Desplázate y elige <strong>Añadir a pantalla de inicio</strong>.</li><li>Confirma con <strong>Añadir</strong>. El icono de KookyeCat Games aparecerá junto a tus apps.</li></ol><p>Si no aparece la opción, abre esta página directamente en Safari.</p>';
+      installSteps.innerHTML = '<p>En Safari para iPhone o iPad, la instalación se hace desde el menú de compartir:</p><ol><li>Toca <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba).</li><li>Desplázate y elige <strong>Añadir a pantalla de inicio</strong>. Si no aparece, baja hasta <strong>Editar acciones</strong> y añádela.</li><li>Activa <strong>Abrir como app web</strong> y toca <strong>Añadir</strong>. El icono aparecerá junto a tus apps.</li></ol>';
       installAction.hidden = true;
     } else if (macSafari) {
       installSteps.innerHTML = '<p>En Safari para Mac, abre el menú <strong>Archivo</strong> y selecciona <strong>Añadir al Dock</strong>. Después podrás abrir la arcade como una app.</p>';

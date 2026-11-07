@@ -149,7 +149,7 @@ En escritorio, la acción de tarjeta descarga la imagen. En Android, iPhone y ot
 
 La primera carga necesita conexión para descargar los recursos. Después, el service worker puede servir el contenido cacheado sin red. Las insignias se cargan según se necesitan; no se precarga todo el catálogo de premios en la instalación.
 
-En iPhone/iPad, Safari no muestra un aviso de instalación automática: el botón **Instalar app** de la portada abre los pasos para usar Compartir → Añadir a pantalla de inicio. En Safari para Mac indica Archivo → Añadir al Dock. En navegadores compatibles se ofrece el aviso nativo.
+En iPhone/iPad, Safari no muestra un aviso de instalación automática: el botón **Instalar app** de la portada explica cómo usar Compartir → Añadir a pantalla de inicio y activar **Abrir como app web**. Si la opción no aparece, se puede agregar desde Editar acciones. En Safari para Mac indica Archivo → Añadir al Dock. En navegadores compatibles se ofrece el aviso nativo.
 
 La aplicación comprueba actualizaciones al registrarse y limita las comprobaciones adicionales a un intervalo de seis horas. Al cargar una actualización muestra un aviso. Al cambiar la versión de recursos hay que coordinar el HTML, los módulos y la caché para evitar mezclas de versiones.
 
