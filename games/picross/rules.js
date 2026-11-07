@@ -1,4 +1,4 @@
-import { lineRuns } from './puzzle.js?v=42';
+import { lineRuns } from './puzzle.js?v=43';
 
 export const MAX_LIVES = 3;
 export const POINTS_PER_MISTAKE = 30;

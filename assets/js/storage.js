@@ -1,5 +1,5 @@
-import { GAMES, GAME_BY_ID, newGameProgress } from '../../core/game-registry.js?v=42';
-import { ARCADE_ACHIEVEMENTS } from '../../core/arcade-achievements.js?v=42';
+import { GAMES, GAME_BY_ID, newGameProgress } from '../../core/game-registry.js?v=43';
+import { ARCADE_ACHIEVEMENTS } from '../../core/arcade-achievements.js?v=43';
 
 const DATABASE = 'kookye-cat-games-local-v2';
 const VERSION = 2;

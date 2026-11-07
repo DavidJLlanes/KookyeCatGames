@@ -97,3 +97,5 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Las tarjetas deben ser atractivas y trabajadas: mostrar el progreso real de niveles o juegos, logros, trofeos, puntuación e insignias conseguidas con sus iconos. Adaptar acentos y contenido a cada juego sin perder la identidad común.
 - Deben generarse localmente, permitir compartir o descargar, y actualizarse al añadir nuevos juegos. Evitar tarjetas genéricas o sosas con solo texto y una puntuación.
 - Las acciones de backup deben explicar claramente qué se descarga y qué se restaura, tanto en la portada como dentro de cada juego.
+
+- Las tarjetas de arcade y de cada juego deben abrir la opción nativa de compartir archivos en Android y iPhone al tocar Compartir; ofrecer descarga PNG como alternativa cuando el navegador no admita compartir la imagen. Si la generación consume la activación del usuario, mantener la tarjeta preparada y pedir un segundo toque para abrir Compartir, sin descargar automáticamente.

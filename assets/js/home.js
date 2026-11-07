@@ -1,10 +1,10 @@
-import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=42';
-import { GAMES } from '../../core/game-registry.js?v=42';
-import { recordArcadeAction } from '../../core/events.js?v=42';
-import { loadProfile, saveProfile } from './storage.js?v=42';
+import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=43';
+import { GAMES } from '../../core/game-registry.js?v=43';
+import { recordArcadeAction } from '../../core/events.js?v=43';
+import { loadProfile, saveProfile } from './storage.js?v=43';
 import { downloadZip } from './zip.js';
-import { exportAllBackup, restoreBackup } from './backups.js?v=42';
-import { makeShareCard, shareOrSave } from './share-card.js';
+import { exportAllBackup, restoreBackup } from './backups.js?v=43';
+import { shareProgressCard } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
 
@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('#share-profile').addEventListener('click', async () => {
     profile = await loadProfile();
     await loadAchievementCatalog();
-    const image = await makeShareCard({ profile, scope: 'arcade', title: 'Mi arcade' });
-    const result = await shareOrSave(image, 'kookye-cat-games.png');
+    const result = await shareProgressCard({ profile, scope: 'arcade', title: 'Mi arcade' }, 'kookye-cat-games.png', $('#share-profile'));
+    if (result === 'ready') { showToast('Tarjeta lista. Toca otra vez para abrir Compartir.'); return; }
     if (result !== 'cancelled') {
       recordArcadeAction(profile, 'share'); unlockAchievements(profile); await saveProfile(profile); renderProfile(profile);
       if (result === 'saved') showToast('Tarjeta guardada como imagen.');
@@ -125,5 +125,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { profile = await importBackup(file) || profile; } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
-  import('./pwa-update.js?v=42').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
+  import('./pwa-update.js?v=43').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
 });

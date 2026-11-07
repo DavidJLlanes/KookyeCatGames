@@ -1,4 +1,4 @@
-import { logicalSolution } from './logic.js?v=42';
+import { logicalSolution } from './logic.js?v=43';
 
 const lineOptions = new Map();
 const variantCache = new Map();
