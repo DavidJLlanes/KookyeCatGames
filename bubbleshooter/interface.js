@@ -1,2 +1,2 @@
-import {setupGameInterface} from '../../assets/js/game-interface.js?v=49';
+import {setupGameInterface} from '../assets/js/game-interface.js?v=50';
 setupGameInterface({name:'Bubble Shooter',board:'#board',workspace:'#play'});

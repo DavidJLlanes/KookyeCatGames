@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {LEVELS,configuration,neighbors,position,aimAt,hash} from './rules.js';
 import {newGame,launch,advance,attach,swap,validGame,availableColors} from './engine.js';
 import {reduceBubbleEvent,finalScore} from './scoring.js';
-import {createEmptyProfile,normalizeProfile} from '../../assets/js/storage.js?v=49';
-import {dispatchGameEvent,EVENT_VERSION} from '../../core/events.js?v=49';
-import {loadAchievementCatalog,ACHIEVEMENTS,unlockAchievements,achievementIcon} from '../../assets/js/achievements.js?v=49';
-import {exportGameBackup,exportAllBackup,restoreBackup} from '../../assets/js/backups.js?v=49';
+import {createEmptyProfile,normalizeProfile} from '../assets/js/storage.js?v=50';
+import {dispatchGameEvent,EVENT_VERSION} from '../core/events.js?v=50';
+import {loadAchievementCatalog,ACHIEVEMENTS,unlockAchievements,achievementIcon} from '../assets/js/achievements.js?v=50';
+import {exportGameBackup,exportAllBackup,restoreBackup} from '../assets/js/backups.js?v=50';
 import {readFile,access} from 'node:fs/promises';
 const ID='bubbleshooter';
 const resolveShot=(g,angle)=>{const shot=launch(g,angle);for(let step=0;step<1000;step++){const result=advance(g,shot,1/60);if(result)return {...result,bounces:shot.banks};}throw Error('A shot did not resolve');};
@@ -65,7 +65,7 @@ test('registry extends existing progress without changing scores or other games'
 test('35 awards use real metrics, unique IDs and existing individual artwork',async()=>{
   await loadAchievementCatalog([ID]);const all=ACHIEVEMENTS.filter(a=>a.scope===ID);assert.equal(all.length,35);assert.equal(new Set(all.map(a=>a.id)).size,35);
   const profile=createEmptyProfile();assert.equal(unlockAchievements(profile).length,0);
-  for(const a of all){await access(new URL(`../../${achievementIcon(a)}`,import.meta.url));assert.ok(a.detail.length>15);}
+  for(const a of all){await access(new URL(`../${achievementIcon(a)}`,import.meta.url));assert.ok(a.detail.length>15);}
   const event=(type,payload)=>dispatchGameEvent(profile,{version:EVENT_VERSION,gameId:ID,type,payload},{[ID]:reduceBubbleEvent});
   event('game_started',{mode:'classic'});assert.ok(profile.arcade.gamesTried.includes(ID));
   event('shot_resolved',{popped:6,fallen:20,bank:true,combo:5});const m=profile.games[ID].metrics;
@@ -80,8 +80,8 @@ test('individual and global ZIP round-trips preserve independent game data',asyn
   await assert.rejects(()=>restoreBackup(backup,p,async()=>{},undefined,'all'));
 });
 test('offline shell references real files and includes all game runtime modules',async()=>{
-  const sw=await readFile(new URL('../../sw.js',import.meta.url),'utf8'),files=[...sw.matchAll(/'((?:\.\/)[^']+)'/g)].map(m=>m[1]);
-  for(const file of files)await access(new URL(`../../${file}`,import.meta.url));
-  for(const name of ['bubble.js','engine.js','rules.js','controls.js','renderer.js','achievements.js','scoring.js','bubble.css'])assert.ok(files.includes(`./games/bubbleshooter/${name}`));
+  const sw=await readFile(new URL('../sw.js',import.meta.url),'utf8'),files=[...sw.matchAll(/'((?:\.\/)[^']+)'/g)].map(m=>m[1]);
+  for(const file of files)await access(new URL(`../${file}`,import.meta.url));
+  for(const name of ['bubble.js','engine.js','rules.js','controls.js','renderer.js','achievements.js','scoring.js','bubble.css'])assert.ok(files.includes(`./bubbleshooter/${name}`));
   assert.ok(Number.isFinite(finalScore(newGame(configuration('classic',1)))));
 });

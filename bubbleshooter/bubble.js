@@ -1,17 +1,17 @@
-import {LEVELS,MISS_LIMIT,configuration,localDate} from './rules.js?v=49';
-import {newGame,launch,advance,swap,validGame} from './engine.js?v=49';
-import {createRenderer} from './renderer.js?v=49';
-import {bindControls} from './controls.js?v=49';
-import {finalScore,reduceBubbleEvent} from './scoring.js?v=49';
-import {createGameSound} from '../../assets/js/game-sound.js?v=49';
-import {loadProfile,saveProfile,resetGameProgress} from '../../assets/js/storage.js?v=49';
-import {dispatchGameEvent,recordArcadeAction,EVENT_VERSION} from '../../core/events.js?v=49';
-import {arcadeXpForResult} from '../../core/scores.js?v=49';
-import {ACHIEVEMENTS,achievementIcon,metricValue,getAchievementCounts,loadAchievementCatalog,unlockAchievements} from '../../assets/js/achievements.js?v=49';
-import {exportGameBackup,restoreBackup} from '../../assets/js/backups.js?v=49';
-import {downloadZip,readZip} from '../../assets/js/zip.js?v=49';
-import {shareProgressCard,labelShareButtons} from '../../assets/js/share-card.js?v=49';
-import {enablePwaUpdates} from '../../assets/js/pwa-update.js?v=49';
+import {LEVELS,MISS_LIMIT,configuration,localDate} from './rules.js?v=50';
+import {newGame,launch,advance,swap,validGame} from './engine.js?v=50';
+import {createRenderer} from './renderer.js?v=50';
+import {bindControls} from './controls.js?v=50';
+import {finalScore,reduceBubbleEvent} from './scoring.js?v=50';
+import {createGameSound} from '../assets/js/game-sound.js?v=50';
+import {loadProfile,saveProfile,resetGameProgress} from '../assets/js/storage.js?v=50';
+import {dispatchGameEvent,recordArcadeAction,EVENT_VERSION} from '../core/events.js?v=50';
+import {arcadeXpForResult} from '../core/scores.js?v=50';
+import {ACHIEVEMENTS,achievementIcon,metricValue,getAchievementCounts,loadAchievementCatalog,unlockAchievements} from '../assets/js/achievements.js?v=50';
+import {exportGameBackup,restoreBackup} from '../assets/js/backups.js?v=50';
+import {downloadZip,readZip} from '../assets/js/zip.js?v=50';
+import {shareProgressCard,labelShareButtons} from '../assets/js/share-card.js?v=50';
+import {enablePwaUpdates} from '../assets/js/pwa-update.js?v=50';
 
 const $=s=>document.querySelector(s), ID='bubbleshooter', canvas=$('#board');
 const draw=createRenderer(canvas), sound=createGameSound(ID);
@@ -45,7 +45,7 @@ function render(){
   const count=getAchievementCounts(profile,ID);$('#awards').textContent=`${count.earned} / ${count.total} premios`;
   const next=ACHIEVEMENTS.filter(a=>a.scope===ID&&!profile.achievements.includes(a.id)).sort((a,b)=>metricValue(profile,b.metric)/b.target-metricValue(profile,a.metric)/a.target)[0];
   const container=$('#next-award');container.replaceChildren();
-  if(next){const img=new Image();img.src=new URL(achievementIcon(next),new URL('../../',import.meta.url));img.alt='';img.loading='lazy';container.append(img,`${next.name} · ${Math.min(metricValue(profile,next.metric),next.target)} / ${next.target}`);}
+  if(next){const img=new Image();img.src=new URL(achievementIcon(next),new URL('../',import.meta.url));img.alt='';img.loading='lazy';container.append(img,`${next.name} · ${Math.min(metricValue(profile,next.metric),next.target)} / ${next.target}`);}
   else container.textContent='¡Vitrina completa!';
   $('#swap').disabled=!interactive()||game.swapped;$('#fire').disabled=!interactive();
   $('#aim-left').disabled=!interactive();$('#aim-right').disabled=!interactive();$('#pause').disabled=game.finished;
@@ -151,6 +151,6 @@ async function init(){
     if(result!=='cancelled'){recordArcadeAction(profile,'share');unlockAchievements(profile);await save();toast('Tu tarjeta está lista.');}
   }catch(e){toast(e.message);}};
   $('#share-header').onclick=()=>$('#share').click();
-  enablePwaUpdates('../../sw.js',toast,()=>save()).catch(()=>{});
+  enablePwaUpdates('../sw.js',toast,()=>save()).catch(()=>{});
 }
 init().catch(e=>{toast(`No se pudo iniciar Bubble Shooter: ${e.message}`);});

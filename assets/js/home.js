@@ -1,9 +1,9 @@
-import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=49';
-import { GAMES } from '../../core/game-registry.js?v=49';
-import { recordArcadeAction } from '../../core/events.js?v=49';
-import { loadProfile, saveProfile } from './storage.js?v=49';
+import { ACHIEVEMENTS, achievementIcon, getAchievementCounts, metricValue, loadAchievementCatalog, unlockAchievements, unloadedGames } from './achievements.js?v=50';
+import { GAMES } from '../../core/game-registry.js?v=50';
+import { recordArcadeAction } from '../../core/events.js?v=50';
+import { loadProfile, saveProfile } from './storage.js?v=50';
 import { downloadZip } from './zip.js';
-import { exportAllBackup, restoreBackup } from './backups.js?v=49';
+import { exportAllBackup, restoreBackup } from './backups.js?v=50';
 import { shareProgressCard, labelShareButtons } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
@@ -156,5 +156,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { profile = await importBackup(file) || profile; } catch (error) { showToast(error.message || 'No se pudo abrir el backup.'); }
     event.target.value = '';
   });
-  import('./pwa-update.js?v=49').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
+  import('./pwa-update.js?v=50').then(({ enablePwaUpdates }) => enablePwaUpdates('./sw.js', showToast)).catch(() => {});
 });

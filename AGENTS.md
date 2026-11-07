@@ -88,6 +88,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 
 ## Despliegue VPS
 - La portada y raíz web de la arcade van en `/var/www/djl.com.es/games/` y se sirven desde `https://djl.com.es/games/`.
+- En el repositorio, `index.html`, `assets/` y `core/` están en la raíz; cada juego vive también como carpeta hermana de `index.html` (`picross/`, `2048/`, `bubbleshooter/`, `tetris/`). Así, el despliegue directo conserva la misma estructura y no añade un nivel `games/` extra.
 - Cada juego se despliega en una subcarpeta directa de esa raíz: `/var/www/djl.com.es/games/<id-del-juego>/` (por ejemplo, Tetris en `/var/www/djl.com.es/games/tetris/`). Nunca anidar los juegos en `/var/www/djl.com.es/games/games/<id>/`.
 - Los enlaces del catálogo, las rutas de recursos y la caché offline deben coincidir con esas URL directas. No asumir que extraer el repositorio entero en la raíz conserva este mapa: revisar el empaquetado y las rutas relativas antes de dar el comando de despliegue.
 - Al entregar una versión lista, proporcionar comandos claros para desplegar manualmente.
@@ -100,10 +101,10 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Definir un contrato de eventos versionado entre juegos y el sistema común de logros.
 
 ## Segundo juego
-- Fusión 2048 vive en `games/2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.
+- Fusión 2048 vive en `2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.
 
 ## Tercer juego
-- Bubble Shooter vive en `games/bubbleshooter/`: campaña de 60 niveles, contrarreloj de 120 segundos y reto diario determinista; 35 premios con iconos propios y backup `bubbleshooter.zip`.
+- Bubble Shooter vive en `bubbleshooter/`: campaña de 60 niveles, contrarreloj de 120 segundos y reto diario determinista; 35 premios con iconos propios y backup `bubbleshooter.zip`.
 - Tablero hexagonal, grupos de al menos tres, caída de burbujas desconectadas, rebotes y cambio de burbuja una vez por tiro. Cada seis tiros sin eliminar un grupo baja el techo.
 - Controles: arrastrar y soltar con dedo o ratón; con foco en el tablero, flechas para apuntar, espacio/Enter para disparar, X para cambiar y P para pausar. Ofrecer botones táctiles equivalentes, guía de rebote y símbolos además del color.
 - Conservar los disparos en vuelo al guardar; pausar al ocultar la página y al recuperar una partida. El tiempo de pausa no cuenta. No volver a conceder victoria diaria ni XP del mismo reto.
@@ -121,7 +122,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - La tarjeta de progreso debe tener una llamada a la acción destacada al comienzo de la sección de datos en móvil. No depender de que una tercera tarjeta al final de las copias de seguridad sea visible.
 
 ## Cuarto juego
-- Tetris vive en `games/tetris/`: campaña de 60 niveles de líneas objetivo crecientes, contrarreloj de 120 segundos para completar 15 filas y reto diario determinista; 35 insignias propias y backup `tetris.zip`.
+- Tetris vive en `tetris/`: campaña de 60 niveles de líneas objetivo crecientes, contrarreloj de 120 segundos para completar 15 filas y reto diario determinista; 35 insignias propias y backup `tetris.zip`.
 - Tablero de 10 × 20, siete piezas, giro con ajuste lateral, caída fantasma, caída rápida y velocidad creciente cada diez filas. Controles táctiles por botones, ratón por botones y teclado (flechas, X, espacio y P).
 - Conservar la carcasa compartida de escritorio/móvil, los efectos suaves sin música y su interruptor local. Actualizar catálogo, README, eventos y caché offline al ampliar la plataforma.
 

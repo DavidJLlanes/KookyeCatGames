@@ -59,14 +59,14 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 | Juego | Campaña | Otros modos | Premios propios | Jugar |
 | --- | --- | --- | --- | --- |
-| **Picross** | 60 niveles | Contrarreloj y reto diario | 41 | [Abrir Picross](https://djl.com.es/games/games/picross/) |
-| **Fusión 2048** | 60 niveles | Contrarreloj de 180 s y reto diario | 35 | [Abrir Fusión 2048](https://djl.com.es/games/games/2048/) |
-| **Bubble Shooter** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Bubble Shooter](https://djl.com.es/games/games/bubbleshooter/) |
-| **Tetris** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Tetris](https://djl.com.es/games/games/tetris/) |
+| **Picross** | 60 niveles | Contrarreloj y reto diario | 41 | [Abrir Picross](https://djl.com.es/picross/) |
+| **Fusión 2048** | 60 niveles | Contrarreloj de 180 s y reto diario | 35 | [Abrir Fusión 2048](https://djl.com.es/2048/) |
+| **Bubble Shooter** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Bubble Shooter](https://djl.com.es/bubbleshooter/) |
+| **Tetris** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Tetris](https://djl.com.es/tetris/) |
 
 ### Picross
 
-<a href="https://djl.com.es/games/games/picross/"><img src="assets/art/picross.svg" alt="Portada de Picross" width="460"></a>
+<a href="https://djl.com.es/picross/"><img src="assets/art/picross.svg" alt="Portada de Picross" width="460"></a>
 
 Descubre dibujos ocultos interpretando las pistas de cada fila y columna. Los números indican grupos consecutivos de casillas rellenas; las cruces ayudan a anotar los espacios vacíos. La campaña contiene 20 niveles de 5 × 5, 20 de 10 × 10 y otros 20 avanzados de 10 × 10, diseñados para resolverse por deducción.
 
@@ -74,11 +74,11 @@ Rellenar mal consume un corazón. Una cruz equivocada muestra un aviso visual du
 
 **Controles:** tocar o arrastrar con dedo o ratón; flechas para moverse entre celdas, F para rellenar y X para marcar vacío. El clic derecho permite marcar huecos.
 
-**Carpeta:** [`games/picross/`](games/picross/) · **Manifiesto:** [`game.json`](games/picross/game.json) · **Copia individual:** `picross.zip`.
+**Carpeta:** [`picross/`](picross/) · **Manifiesto:** [`game.json`](picross/game.json) · **Copia individual:** `picross.zip`.
 
 ### Fusión 2048
 
-<a href="https://djl.com.es/games/games/2048/"><img src="assets/art/fusion-2048.svg" alt="Portada de Fusión 2048" width="460"></a>
+<a href="https://djl.com.es/2048/"><img src="assets/art/fusion-2048.svg" alt="Portada de Fusión 2048" width="460"></a>
 
 Desliza las casillas de un tablero de 4 × 4 y une números iguales para alcanzar la meta de cada nivel. Después de cada movimiento válido aparece una nueva casilla: colocar bien las piezas es tan importante como conseguir una gran fusión.
 
@@ -86,11 +86,11 @@ La campaña desbloquea 60 niveles de forma progresiva. El contrarreloj ofrece 18
 
 **Controles:** deslizar con el dedo, arrastrar con el ratón, usar los botones de dirección o pulsar las flechas/WASD con el foco en el tablero. Ctrl/Cmd + Z deshace cuando el tablero tiene el foco.
 
-**Carpeta:** [`games/2048/`](games/2048/) · **ID interno:** `fusion-2048` · **Manifiesto:** [`game.json`](games/2048/game.json) · **Copia individual:** `2048.zip`.
+**Carpeta:** [`2048/`](2048/) · **ID interno:** `fusion-2048` · **Manifiesto:** [`game.json`](2048/game.json) · **Copia individual:** `2048.zip`.
 
 ### Bubble Shooter
 
-<a href="https://djl.com.es/games/games/bubbleshooter/"><img src="games/bubbleshooter/assets/cover.svg" alt="Portada de Bubble Shooter" width="460"></a>
+<a href="https://djl.com.es/bubbleshooter/"><img src="bubbleshooter/assets/cover.svg" alt="Portada de Bubble Shooter" width="460"></a>
 
 Apunta, rebota en las paredes y une al menos tres burbujas del mismo color. Las que pierdan su conexión con el techo caerán, permitiendo despejar grandes zonas con un solo disparo. La guía de trayectoria ayuda a preparar carambolas, y cada color tiene un símbolo para distinguirlo mejor.
 
@@ -98,7 +98,7 @@ Incluye 60 niveles, contrarreloj de 120 segundos y un reto diario reproducible. 
 
 **Controles:** arrastrar para apuntar y soltar para disparar; con el tablero enfocado, flechas para apuntar, espacio/Enter para disparar, X para cambiar burbuja y P para pausar. También hay botones táctiles equivalentes.
 
-**Carpeta:** [`games/bubbleshooter/`](games/bubbleshooter/) · **Manifiesto:** [`game.json`](games/bubbleshooter/game.json) · **Copia individual:** `bubbleshooter.zip`.
+**Carpeta:** [`bubbleshooter/`](bubbleshooter/) · **Manifiesto:** [`game.json`](bubbleshooter/game.json) · **Copia individual:** `bubbleshooter.zip`.
 
 ## Una interfaz para todos los juegos
 
@@ -155,13 +155,13 @@ La aplicación comprueba actualizaciones al registrarse y limita las comprobacio
 
 ### Tetris
 
-<a href="https://djl.com.es/games/games/tetris/"><img src="games/tetris/assets/cover.svg" alt="Portada de Tetris" width="460"></a>
+<a href="https://djl.com.es/tetris/"><img src="tetris/assets/cover.svg" alt="Portada de Tetris" width="460"></a>
 
 Gira y encaja las siete piezas para completar filas horizontales. Las líneas desaparecen, suman puntos y hacen que las piezas caigan más rápido. La campaña ofrece 60 metas progresivas; el reto diario propone el mismo tablero inicial durante ese día y el contrarreloj da 120 segundos para completar 15 filas.
 
 **Controles:** botones táctiles, flechas izquierda/derecha para mover, abajo para bajar, arriba o X para girar, espacio para caída rápida y P para pausar. El juego también ofrece sonidos suaves con interruptor, progreso local y una colección de 35 insignias propias.
 
-**Carpeta:** [`games/tetris/`](games/tetris/) · **Manifiesto:** [`game.json`](games/tetris/game.json) · **Copia individual:** `tetris.zip`.
+**Carpeta:** [`tetris/`](tetris/) · **Manifiesto:** [`game.json`](tetris/game.json) · **Copia individual:** `tetris.zip`.
 
 ## Desarrollo local
 
@@ -180,7 +180,7 @@ cd KookyeCatGames
 python -m http.server 8080
 ```
 
-En Windows puedes usar `py -m http.server 8080` si ese es el lanzador instalado. Abre [http://localhost:8080/](http://localhost:8080/). Los juegos estarán bajo `/games/picross/`, `/games/2048/` y `/games/bubbleshooter/` y `/games/tetris/` en ese servidor local.
+En Windows puedes usar `py -m http.server 8080` si ese es el lanzador instalado. Abre [http://localhost:8080/](http://localhost:8080/). Los juegos estarán bajo `/picross/`, `/2048/`, `/bubbleshooter/` y `/tetris/` en ese servidor local.
 
 Sirve el proyecto por HTTP; abrir los HTML directamente como archivos no reproduce correctamente el funcionamiento de los módulos ni de la PWA. En producción, utiliza HTTPS para las funciones de instalación y compartición compatibles.
 
@@ -190,7 +190,7 @@ Desde la raíz del repositorio:
 
 ```bash
 node scripts/check-game-interfaces.mjs
-node --test games/bubbleshooter/engine.test.mjs
+node --test bubbleshooter/engine.test.mjs
 ```
 
 La primera comprobación revisa el contrato de las cuatro interfaces, los identificadores de controles, el orden de los paneles, las rutas de recursos, los estados de modo y la lógica de pantalla completa. Las pruebas de Bubble Shooter cubren, entre otros casos, el tablero hexagonal, los rebotes, los grupos, las caídas, el guardado de tiros y los backups.
@@ -202,9 +202,9 @@ Estas comprobaciones no sustituyen la revisión en navegador: verificar escritor
 | Comando | Recursos |
 | --- | --- |
 | `python scripts/render-graphics.py` | Iconos PNG de instalación y tarjeta Open Graph general. |
-| `python games/2048/generate-icons.py` | Insignias SVG de Fusión 2048. |
-| `node games/bubbleshooter/generate-art.mjs` | Portada, icono e insignias SVG de Bubble Shooter. |
-| `python games/bubbleshooter/render-cover.py` | Portada Open Graph PNG de Bubble Shooter, de 1200 × 630. |
+| `python 2048/generate-icons.py` | Insignias SVG de Fusión 2048. |
+| `node bubbleshooter/generate-art.mjs` | Portada, icono e insignias SVG de Bubble Shooter. |
+| `python bubbleshooter/render-cover.py` | Portada Open Graph PNG de Bubble Shooter, de 1200 × 630. |
 
 Los generadores Python que crean imágenes rasterizadas requieren Pillow. `render-cover.py` utiliza una ruta de fuentes de Windows; adapta esa ruta si lo ejecutas en otro sistema operativo.
 
@@ -221,7 +221,7 @@ Los generadores Python que crean imágenes rasterizadas requieren Pillow. `rende
 | [`assets/js/`](assets/js/) | Almacenamiento, ZIP, backups, tarjetas, sonidos, mascota y actualizaciones. |
 | [`assets/css/`](assets/css/) | Identidad visual general, interfaz compartida y componentes comunes. |
 | [`assets/art/`](assets/art/) y [`assets/mascot/`](assets/mascot/) | Ilustraciones e imágenes de la mascota. |
-| [`games/`](games/) | Código, manifiesto, configuración de interfaz y recursos independientes de cada juego. |
+| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/) y [`tetris/`](tetris/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
 | [`scripts/`](scripts/) | Comprobaciones y generación de recursos. |
 | [`AGENTS.md`](AGENTS.md) | Normas permanentes de diseño, arquitectura, privacidad y ampliación. |
 
@@ -229,7 +229,7 @@ El núcleo no importa directamente las reglas de Picross, 2048, Bubble Shooter n
 
 ## Añadir un juego
 
-1. Crear `games/<carpeta>/` con `index.html`, `game.json`, `interface.js`, lógica, reglas, puntuación, controles, catálogo de premios y recursos propios.
+1. Crear `<carpeta>/` en la raíz del repositorio, al mismo nivel que `index.html`, con `index.html`, `game.json`, `interface.js`, lógica, reglas, puntuación, controles, catálogo de premios y recursos propios.
 2. Declarar en el manifiesto identidad, versión, modos —como máximo tres—, esquema de progreso y configuración de interfaz.
 3. Registrar metadatos y estado inicial en `core/game-registry.js`; cargar el catálogo de premios bajo demanda.
 4. Reutilizar la interfaz común y mantener el tablero como protagonista. Conservar el orden de paneles y la versión responsive compartida.
@@ -244,7 +244,7 @@ Cada nuevo juego debe quedar documentado en el README principal. Si cambia un ju
 
 ## Despliegue manual
 
-El destino de producción es `/var/www/djl.com.es/games/` en un VPS Ubuntu. El servidor solo tiene que servir archivos estáticos; no necesita un proceso Node.js, una base de datos remota ni un backend de partidas.
+El destino de producción es `/var/www/djl.com.es/games/` en un VPS Ubuntu. `index.html`, los recursos compartidos y `core/` van en esa raíz; los juegos van directamente en `/var/www/djl.com.es/games/<id>/` (por ejemplo, `/var/www/djl.com.es/games/tetris/`). No se debe desplegar en `/var/www/djl.com.es/games/games/<id>/`. El servidor solo tiene que servir archivos estáticos; no necesita un proceso Node.js, una base de datos remota ni un backend de partidas.
 
 Desde una copia del repositorio en el VPS, situada fuera del directorio de destino:
 
