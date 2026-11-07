@@ -1,16 +1,16 @@
-import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove } from './rules.js?v=45';
-import { scorePicross, reducePicrossEvent } from './scoring.js?v=45';
-import { dispatchGameEvent, recordArcadeAction, EVENT_VERSION } from '../../core/events.js?v=45';
-import { arcadeXpForResult } from '../../core/scores.js?v=45';
-import { attachBoardGesture } from './gesture.js?v=45';
-import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements, metricValue, achievementIcon, loadAchievementCatalog } from '../../assets/js/achievements.js?v=45';
-import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=45';
+import { MAX_LIVES, TIME_PENALTY, timeLimit, lineProgress, isWrongMove } from './rules.js?v=47';
+import { scorePicross, reducePicrossEvent } from './scoring.js?v=47';
+import { dispatchGameEvent, recordArcadeAction, EVENT_VERSION } from '../../core/events.js?v=47';
+import { arcadeXpForResult } from '../../core/scores.js?v=47';
+import { attachBoardGesture } from './gesture.js?v=47';
+import { ACHIEVEMENTS, getAchievementCounts, unlockAchievements, metricValue, achievementIcon, loadAchievementCatalog } from '../../assets/js/achievements.js?v=47';
+import { loadProfile, saveProfile, resetGameProgress } from '../../assets/js/storage.js?v=47';
 import { shareProgressCard, labelShareButtons } from '../../assets/js/share-card.js';
-import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=45';
+import { buildPuzzle, buildCampaignPuzzle, CAMPAIGN_LEVELS, CAMPAIGN_LEVEL_COUNT, isSolved, lineRuns } from './puzzle.js?v=47';
 import { downloadZip } from '../../assets/js/zip.js';
-import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js?v=45';
-import { logicalSolution } from './logic.js?v=45';
-import { createGameSound } from '../../assets/js/game-sound.js?v=46';
+import { exportGameBackup, restoreBackup } from '../../assets/js/backups.js?v=47';
+import { logicalSolution } from './logic.js?v=47';
+import { createGameSound } from '../../assets/js/game-sound.js?v=47';
 
 const $ = selector => document.querySelector(selector);
 const boardRoot = $('#nonogram');
@@ -501,7 +501,7 @@ if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && 
 }
 if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
-import('../../assets/js/pwa-update.js?v=45')
+import('../../assets/js/pwa-update.js?v=47')
   .then(({ enablePwaUpdates }) => enablePwaUpdates('../../sw.js', notify, async () => { if (playing) await saveActive(); }))
   .catch(() => {});
 

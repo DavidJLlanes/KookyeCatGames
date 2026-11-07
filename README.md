@@ -1,5 +1,15 @@
 # KookyeCatGames
 
+## Bubble Shooter
+
+Tercer juego en `games/bubbleshooter/`: campaña de 60 niveles, contrarreloj de 120 segundos y reto diario reproducible. Apunta arrastrando con dedo o ratón y suelta para disparar. Con foco en el tablero: flechas para apuntar, espacio/Enter para disparar, X para cambiar burbuja y P para pausar. Los botones ofrecen las mismas acciones.
+
+Une tres burbujas del mismo color; las que pierden su conexión con el techo caen. Cada seis tiros sin eliminar un grupo, baja el techo. La guía anticipa rebotes y cada color tiene un símbolo propio. Incluye 35 premios, sonidos suaves con interruptor, pantalla completa, tarjeta PNG y backup individual `bubbleshooter.zip`, además de integración con `games.zip`.
+
+Reglas, física, renderizado, controles, puntuación, premios e integración están separados en módulos. Se guarda también el tiro en vuelo y se pausa al recuperar la partida o pasar a segundo plano. Las victorias diarias y la XP por reto se deduplican. La actualización añade el juego al perfil de esquema 2 sin borrar los juegos anteriores.
+
+Validación: `node --test games/bubbleshooter/engine.test.mjs`. Los recursos SVG se regeneran con `node games/bubbleshooter/generate-art.mjs`; el PNG Open Graph, con `python games/bubbleshooter/render-cover.py` (Pillow).
+
 Arcade web instalable en `https://djl.com.es/games`. Proyecto estático HTML, CSS y JavaScript; sin framework ni dependencias de ejecución.
 
 ## Desarrollo local

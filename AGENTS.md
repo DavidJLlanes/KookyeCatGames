@@ -94,6 +94,12 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 ## Segundo juego
 - Fusión 2048 vive en `games/2048/`: 60 niveles, controles táctiles y teclado, 35 premios visuales propios, modos campaña, contrarreloj y reto diario; progreso y backup independientes.
 
+## Tercer juego
+- Bubble Shooter vive en `games/bubbleshooter/`: campaña de 60 niveles, contrarreloj de 120 segundos y reto diario determinista; 35 premios con iconos propios y backup `bubbleshooter.zip`.
+- Tablero hexagonal, grupos de al menos tres, caída de burbujas desconectadas, rebotes y cambio de burbuja una vez por tiro. Cada seis tiros sin eliminar un grupo baja el techo.
+- Controles: arrastrar y soltar con dedo o ratón; con foco en el tablero, flechas para apuntar, espacio/Enter para disparar, X para cambiar y P para pausar. Ofrecer botones táctiles equivalentes, guía de rebote y símbolos además del color.
+- Conservar los disparos en vuelo al guardar; pausar al ocultar la página y al recuperar una partida. El tiempo de pausa no cuenta. No volver a conceder victoria diaria ni XP del mismo reto.
+
 ## Tarjetas de progreso: instrucción permanente de David
 - La arcade tendrá una tarjeta visual propia y cada juego tendrá otra tarjeta individual, con diseño consistente con la web y entre tarjetas.
 - Las tarjetas deben ser atractivas y trabajadas: mostrar el progreso real de niveles o juegos, logros, trofeos, puntuación e insignias conseguidas con sus iconos. Adaptar acentos y contenido a cada juego sin perder la identidad común.

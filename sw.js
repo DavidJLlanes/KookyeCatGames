@@ -1,5 +1,9 @@
-const CACHE = 'kookye-cat-games-shell-v46';
+const CACHE = 'kookye-cat-games-shell-v47';
 const FILES = [
+  './games/bubbleshooter/', './games/bubbleshooter/index.html', './games/bubbleshooter/game.json',
+  './games/bubbleshooter/rules.js', './games/bubbleshooter/engine.js', './games/bubbleshooter/renderer.js',
+  './games/bubbleshooter/controls.js', './games/bubbleshooter/bubble.js', './games/bubbleshooter/bubble.css',
+  './games/bubbleshooter/scoring.js', './games/bubbleshooter/achievements.js', './games/bubbleshooter/assets/icon.svg', './games/bubbleshooter/assets/cover.svg',
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
   './assets/art/fusion-2048.svg', './assets/art/hero.svg', './assets/art/picross.svg', './assets/art/trophy.svg', './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
   './assets/js/pwa-update.js', './assets/js/mascot.js', './assets/css/mascot.css', './assets/js/game-sound.js', './assets/css/game-sound.css', './assets/mascot/sit.webp', './assets/mascot/wave.webp', './assets/mascot/play.webp', './assets/mascot/celebrate.webp',
