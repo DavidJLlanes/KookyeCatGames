@@ -10,7 +10,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Cada premio tiene icono propio y dificultad visible. Los premios difíciles requieren una presentación más llamativa. La vitrina debe seguir siendo navegable con 50 juegos, mediante filtros, búsqueda, paginación y carga diferida.
 - Los juegos deben responder con fluidez a táctil, ratón y teclado. Verificar gestos, cruces y correcciones de casillas, reinicios, fin de nivel, errores y persistencia antes de publicar cambios.
 - Picross debe poder resolverse por deducción sin adivinar; la comprobación se aplica a toda la campaña y a puzles aleatorios. Las marcas vacías equivocadas muestran aviso visual sin consumir vida; rellenar mal consume corazón. El aviso en la casilla se desvanece en dos segundos y no bloquea otras casillas.
-- La PWA instalada se actualiza sola con comprobaciones limitadas para no sobrecargar el VPS y muestra un aviso al cargar la última versión. Coordinar HTML, módulos y caché para evitar mezclas de versiones.
+- La PWA instalada se actualiza sola: comprobar al instalar, luego como máximo cada seis horas mientras haya conexión y la app esté visible, y al volver a primer plano o a Internet si ya venció el intervalo. Reutilizar el registro compartido del service worker entre páginas, no sondear una API ni descargar recursos si no cambió la versión, guardar el progreso antes de recargar y mostrar un aviso al completar. Coordinar HTML, módulos y caché para evitar mezclas de versiones.
 - Conservar la estructura modular y documentar las decisiones que afecten a futuros juegos. En esta etapa inicial no se exige migrar los datos del prototipo, pero las actualizaciones normales no deben borrar el progreso vigente.
 - Trabajar en el repositorio, publicar en `main` tras revisar, y entregar el comando de despliegue manual para el VPS. No desplegar en el VPS sin petición expresa.
 
@@ -98,7 +98,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 ## Robustez
 - Aislar la base de datos IndexedDB, stores y claves bajo el namespace KookyeCatGames para evitar colisiones con otras aplicaciones del mismo origen.
 - Coordinar el service worker y la PWA con el alcance `/games/`; usar caché versionada y verificar operación offline.
-- La PWA instalada se actualiza automáticamente. Limitar las comprobaciones de versión para no sobrecargar el VPS y, al cargar una actualización, mostrar un aviso visible de que ya está en la última versión.
+- La PWA instalada se actualiza automáticamente con las comprobaciones limitadas descritas arriba. La instalación del nuevo worker debe precargar una sola vez la caché versionada, activarse sin pedir una acción manual y recargar las páginas abiertas tras guardar su progreso.
 - Definir un contrato de eventos versionado entre juegos y el sistema común de logros.
 
 ## Segundo juego

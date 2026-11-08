@@ -500,7 +500,7 @@ if ((active?.rulesVersion === 2 || active?.rulesVersion === 3) && validBoard && 
 }
 if (!puzzle || !board) { mode = 'classic'; activeLevel = profile.games.picross.unlockedLevel; size = 5; counted = false; startPuzzle(Date.now()); }
 
-import('../assets/js/pwa-update.js?v=50')
+import('../assets/js/pwa-update.js?v=53')
   .then(({ enablePwaUpdates }) => enablePwaUpdates('../sw.js', notify, async () => { if (playing) await saveActive(); }))
   .catch(() => {});
 

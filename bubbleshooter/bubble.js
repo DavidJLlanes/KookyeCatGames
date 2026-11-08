@@ -11,7 +11,7 @@ import {ACHIEVEMENTS,achievementIcon,metricValue,getAchievementCounts,loadAchiev
 import {exportGameBackup,restoreBackup} from '../assets/js/backups.js?v=50';
 import {downloadZip,readZip} from '../assets/js/zip.js?v=50';
 import {shareProgressCard,labelShareButtons} from '../assets/js/share-card.js?v=50';
-import {enablePwaUpdates} from '../assets/js/pwa-update.js?v=50';
+import {enablePwaUpdates} from '../assets/js/pwa-update.js?v=53';
 
 const $=s=>document.querySelector(s), ID='bubbleshooter', canvas=$('#board');
 const draw=createRenderer(canvas), sound=createGameSound(ID);

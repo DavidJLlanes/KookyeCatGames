@@ -151,7 +151,9 @@ La primera carga necesita conexión para descargar los recursos. Después, el se
 
 En iPhone/iPad, Safari no muestra un aviso de instalación automática: el botón **Instalar app** de la portada explica cómo usar Compartir → Añadir a pantalla de inicio y activar **Abrir como app web**. Si la opción no aparece, se puede agregar desde Editar acciones. En Safari para Mac indica Archivo → Añadir al Dock. En navegadores compatibles se ofrece el aviso nativo.
 
-La aplicación comprueba actualizaciones al registrarse y limita las comprobaciones adicionales a un intervalo de seis horas. Al cargar una actualización muestra un aviso. Al cambiar la versión de recursos hay que coordinar el HTML, los módulos y la caché para evitar mezclas de versiones.
+La app comprueba la versión al instalarse y, después, como máximo una vez cada seis horas mientras está abierta, visible y con conexión. Al volver a primer plano o recuperar Internet revisa si ya toca comprobar. Las pestañas comparten la marca de última comprobación; no hay sondeos frecuentes ni una API de actualización. Mientras no haya cambios solo se consulta el pequeño script del service worker. Si detecta una versión nueva, el worker descarga la caché de recursos una sola vez, la activa y recarga la app guardando antes la partida. Al terminar, muestra un aviso de actualización.
+
+Para publicar una versión, actualizar la caché versionada del service worker y mantener sus rutas alineadas con el árbol del proyecto. Los navegadores también pueden realizar sus propias comprobaciones de actualización según sus reglas.
 
 ### Tetris
 
