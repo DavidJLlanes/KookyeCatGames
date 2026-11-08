@@ -117,7 +117,7 @@ async function importBackup(file) {
 document.addEventListener('DOMContentLoaded', async () => {
   let profile = await loadProfile();
   if (GAMES[0]) await loadAchievementCatalog([GAMES[0].id]);
-  $('#game-list').insertAdjacentHTML('afterbegin', GAMES.map(game => `<a class="game-card" href="${game.path}"><div class="game-art"><img src="${game.art}" alt="" width="800" height="480" loading="lazy"><span class="art-tag">¡JUEGA YA!</span></div><div class="game-info"><span class="tag">🧩 ${game.category.toLocaleUpperCase('es')}</span><h3>${game.name}</h3><p>${game.description}</p><div class="card-bottom"><span data-game-progress="${game.id}">Aún sin partidas</span><b aria-hidden="true">→</b></div></div></a>`).join(''));
+  $('#game-list').insertAdjacentHTML('afterbegin', GAMES.map(game => `<a class="game-card" href="${game.path}"><div class="game-art"><img src="${game.art}" alt="" width="800" height="480" loading="lazy"></div><div class="game-info"><div class="game-meta"><span class="tag">🧩 ${game.category.toLocaleUpperCase('es')}</span><span class="art-tag">¡JUEGA YA!</span></div><h3>${game.name}</h3><p>${game.description}</p><div class="card-bottom"><span data-game-progress="${game.id}">Aún sin partidas</span><b aria-hidden="true">→</b></div></div></a>`).join(''));
   try {
     const today = new Date().toLocaleDateString('en-CA');
     if (!sessionStorage.getItem('kcg:arcade:visit') || !profile.arcade.visitDays.includes(today)) {
