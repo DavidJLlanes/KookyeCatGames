@@ -83,10 +83,10 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Evitar archivos monolíticos; separar responsabilidades en archivos pequeños.
 - No introducir cuentas, inicio de sesión, telemetría, sincronización ni almacenamiento remoto de partidas.
 
-## Carpeta local y GitHub
-- La raíz local del proyecto es `F:\Proyectos\KookyeCatGames`.
-- Desarrollar y revisar primero en esa carpeta; después publicar los cambios aprobados en `main` de `https://github.com/DavidJLlanes/KookyeCatGames`.
-- No reemplazar cambios ajenos sin inspeccionarlos.
+## GitHub y copia local
+- Trabajar sobre el repositorio `https://github.com/DavidJLlanes/KookyeCatGames`, directamente en la rama `main`.
+- No usar ni sincronizar la copia local del repositorio salvo que David pida expresamente sincronizarla.
+- Revisar la versión actual de `main` antes de cada cambio y no reemplazar cambios ajenos sin inspeccionarlos.
 
 ## Despliegue VPS
 - La portada y raíz web de la arcade van en `/var/www/djl.com.es/games/` y se sirven desde `https://djl.com.es/games/`.
@@ -127,6 +127,13 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Tetris vive en `tetris/`: campaña de 60 niveles de líneas objetivo crecientes, contrarreloj de 120 segundos para completar 15 filas y reto diario determinista; 35 insignias propias y backup `tetris.zip`.
 - Tablero de 10 × 20, siete piezas, giro con ajuste lateral, caída fantasma, caída rápida y velocidad creciente cada diez filas. Controles táctiles por botones y gestos en el tablero (toque o deslizar arriba para girar, arrastrar lateralmente para mover la pieza de forma continua mientras se mantiene el dedo apoyado, deslizar abajo para bajar y gesto largo/rápido hacia abajo para caída rápida), ratón por botones y teclado (flechas, X, espacio y P).
 - Conservar la carcasa compartida de escritorio/móvil, los efectos suaves sin música y su interruptor local. Actualizar catálogo, README, eventos y caché offline al ampliar la plataforma.
+
+## Quinto juego
+- Rush Hour vive en `rush/`: 60 niveles de campaña, contrarreloj de 120 segundos y reto diario determinista; 35 premios propios y backup `rush.zip`.
+- Desliza cada coche únicamente por su carril; despeja la fila del coche rojo para sacarlo por la derecha. El tablero es 6 × 6 y la ruta debe poder resolverse sin adivinar.
+- Acepta arrastre táctil o con ratón, botones direccionales y teclado; conserva deshacer, pausa, selección, sonido suave con interruptor local y progreso solo en el dispositivo.
+- Mantener el contrato de interfaz, accesibilidad, zoom móvil bloqueado, optimización para tablets verticales y progreso local común a los demás juegos.
+- Actualizar catálogo, README, eventos, caché offline y las 35 insignias al ampliar Rush Hour.
 
 ## Instalación en Safari
 - La portada debe ofrecer un botón de instalación accesible y explicar los pasos manuales de Safari en iPhone/iPad (Compartir → Añadir a pantalla de inicio), ya que iOS Safari no emite el evento `beforeinstallprompt`.
