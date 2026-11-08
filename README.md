@@ -111,7 +111,7 @@ La carcasa visual es común. Cada juego conserva la configuración de su interfa
 | Información secundaria | Barra lateral de 276 px: récord, progreso, premios y ayuda. | Debajo del juego; a partir de 600 px o menos, paneles en una columna. |
 | Datos | Sección final con tarjeta, descarga de backup, restauración y borrado. | Mismo orden, con acciones apiladas y botones táctiles. |
 
-A 960 px o menos la barra lateral pasa debajo del juego. El tablero mantiene sus proporciones propias y la ayuda se abre bajo demanda. El botón de pantalla completa está junto al selector de nivel; si la API nativa no está disponible, activa un modo ampliado con salida visible y Escape.
+A 960 px o menos la barra lateral pasa debajo del juego. En tablets verticales de proporciones habituales (3:4 y 4:3), el tablero ocupa todo el ancho disponible y se ajusta al alto útil; los paneles secundarios se ordenan en dos columnas equilibradas y la portada reorganiza la navegación y las tarjetas para ese formato. El tablero mantiene sus proporciones propias y la ayuda se abre bajo demanda. El botón de pantalla completa está junto al selector de nivel; si la API nativa no está disponible, activa un modo ampliado con salida visible y Escape.
 
 La estructura, los breakpoints y el comportamiento común viven en [`game-interface.css`](assets/css/game-interface.css) y [`game-interface.js`](assets/js/game-interface.js). Cada juego los configura desde su `interface.js`. Se respetan el foco por teclado y la preferencia de movimiento reducido.
 
