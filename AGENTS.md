@@ -188,3 +188,7 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 - Cajas (Sokoban) vive en `cajas/`, destino `/var/www/djl.com.es/games/cajas/`. Empuja dos cajas a sus metas; movimiento ortogonal, no se puede tirar ni atravesar paredes. Campaña de 60 niveles ordenados por empujes mínimos certificados por BFS de coste 0-1, y estados explorados como desempate.
 - Contrarreloj de 120 segundos y reto diario determinista, 35 premios, backup `cajas.zip`, progreso local, explicación de reglas, interfaz común, controles táctiles/ratón/teclado, sonido suave opcional.
 - Verificar niveles con `node scripts/check-cajas.mjs`; el solver de niveles vive en scripts y no se ejecuta en navegador/VPS.
+
+## Revisión de dificultad de Cajas
+- La campaña actual de `cajas/` usa tres cajas, tres metas y obstáculos internos; sus 60 niveles son distintos, con dificultad ordenada por mínimo de empujes (de 5 a 12) y estados explorados. El selector de nivel debe mostrar siempre 01–60, nunca valores indefinidos.
+- Al cambiar los tableros, aumentar la versión de la partida activa y descartarla si pertenece al conjunto anterior; conservar los niveles completados, premios y récords.
