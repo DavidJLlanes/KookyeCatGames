@@ -316,9 +316,9 @@ El despliegue se ejecuta manualmente. Publicar cambios en GitHub no significa de
 
 ## Cajas (Sokoban)
 ![Cajas](cajas/assets/cover.svg)
-Empuja las dos cajas hasta las metas. Solo puedes empujar, nunca tirar; planifica los movimientos para no atraparlas.
+Empuja las tres cajas hasta las metas. Solo puedes empujar, nunca tirar; planifica los movimientos para no atraparlas.
 - Carpeta: `cajas/`. [Jugar](https://djl.com.es/games/cajas/). Backup: `cajas.zip` y agregado a `games.zip`.
-- 60 tableros con dos cajas y dos metas; campaña, contrarreloj de 120 segundos y reto diario determinista.
+- 60 tableros con tres cajas, tres metas y obstáculos interiores; campaña, contrarreloj de 120 segundos y reto diario determinista.
 - Dificultad ordenada por empujes mínimos certificados con búsqueda y, a igualdad, estados visitados. Cada puzle se verifica como resoluble.
 - Flechas, botones en pantalla y gesto de deslizamiento; deshacer paso, pausa y reinicio. Táctil, ratón y teclado.
 - 35 premios propios, progreso local, tarjeta compartible, sonidos suaves opcionales y copia/restauración.
