@@ -183,3 +183,8 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 - Ilumina (Akari) vive en `ilumina/`, destino `/var/www/djl.com.es/games/ilumina/`. 60 tableros 5 × 5 con solución única, campaña, contrarreloj y reto diario; 35 premios y backup `ilumina.zip`.
 - Las lámparas iluminan filas y columnas hasta un muro, no pueden verse entre sí y deben respetar las pistas ortogonales de los muros. Verificar con `node scripts/check-ilumina.mjs`.
 - La campaña progresa por bifurcaciones del solucionador exacto y, a igualdad, por número mínimo de lámparas. No presentar esa métrica como tiempo humano garantizado.
+
+## Noveno juego
+- Cajas (Sokoban) vive en `cajas/`, destino `/var/www/djl.com.es/games/cajas/`. Empuja dos cajas a sus metas; movimiento ortogonal, no se puede tirar ni atravesar paredes. Campaña de 60 niveles ordenados por empujes mínimos certificados por BFS de coste 0-1, y estados explorados como desempate.
+- Contrarreloj de 120 segundos y reto diario determinista, 35 premios, backup `cajas.zip`, progreso local, explicación de reglas, interfaz común, controles táctiles/ratón/teclado, sonido suave opcional.
+- Verificar niveles con `node scripts/check-cajas.mjs`; el solver de niveles vive en scripts y no se ejecuta en navegador/VPS.
