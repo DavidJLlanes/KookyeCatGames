@@ -1,7 +1,8 @@
-const CACHE = 'kookye-cat-games-shell-v56';
+const CACHE = 'kookye-cat-games-shell-v57';
 const FILES = [
   './assets/css/game-interface.css', './assets/js/game-interface.js',
   './picross/interface.js', './2048/interface.js', './bubbleshooter/interface.js', './tetris/', './tetris/index.html', './tetris/game.json', './tetris/rules.js', './tetris/engine.js', './tetris/scoring.js', './tetris/achievements.js', './tetris/tetris.js', './tetris/interface.js', './tetris/tetris.css', './tetris/assets/icon.svg', './tetris/assets/cover.svg',
+  './rush/', './rush/index.html', './rush/game.json', './rush/rules.js', './rush/engine.js', './rush/scoring.js', './rush/achievements.js', './rush/rush.js', './rush/interface.js', './rush/rush.css', './rush/assets/icon.svg', './rush/assets/cover.svg',
   './bubbleshooter/', './bubbleshooter/index.html', './bubbleshooter/game.json',
   './bubbleshooter/rules.js', './bubbleshooter/engine.js', './bubbleshooter/renderer.js',
   './bubbleshooter/controls.js', './bubbleshooter/bubble.js', './bubbleshooter/bubble.css',
