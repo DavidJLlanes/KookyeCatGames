@@ -197,13 +197,15 @@ El contrarreloj ofrece 120 segundos y el reto diario selecciona un tablero avanz
 
 Gira las tuberías para llevar el agua desde IN hasta FIN y conectar toda la red sin fugas. Las piezas con agua se iluminan; los puntos rojos señalan conexiones abiertas. Cada toque gira 90° a la derecha. En escritorio también se puede usar el ratón o navegar con las flechas y girar con Enter/espacio.
 
-Los **60 niveles tienen solución única** y crecen de **3 × 3 a 6 × 6**, con un coste óptimo no decreciente de **2 a 31 giros**. Un solucionador comprueba las orientaciones posibles, descarta conexiones incompatibles y exige una red completamente conectada. Los tableros se precalculan; no hay cálculos pesados ni generación de partidas en el VPS.
+Los **60 niveles tienen solución única** y crecen de **4 × 4 a 6 × 6**, con un coste óptimo no decreciente de **13 a 72 giros**. Un solucionador comprueba las orientaciones posibles, descarta conexiones incompatibles y exige una red completamente conectada. Los tableros se precalculan; no hay cálculos pesados ni generación de partidas en el VPS.
 
 Incluye contrarreloj de 120 segundos, reto diario determinista, pausa, deshacer, pistas con penalización de 300 puntos, sonidos opcionales, 35 premios y tarjeta de progreso. La ayuda inicial aparece en la página del juego. El progreso y las copias se guardan solo en el dispositivo.
 
 **Carpeta:** [`tuberias/`](tuberias/) · **Manifiesto:** [`game.json`](tuberias/game.json) · **Copia:** `tuberias.zip` · **Destino:** `/var/www/djl.com.es/games/tuberias/`.
 
 Comprobación de la campaña: `node scripts/check-tuberias.mjs` (unicidad, mínimos, progresión, giros, conectividad y fugas).
+
+La campaña revisada deja al menos el 75 % de las piezas giratorias desorientadas. Además del tamaño y del coste óptimo, ordena las redes por las piezas que siguen siendo ambiguas tras propagar las restricciones locales: de 0 a 25, sin retrocesos. Esta es una medida estructural del solucionador, no una estimación del tiempo que tardará cada persona. Los primeros seis niveles son 4 × 4, los siguientes dieciocho son 5 × 5 y los treinta y seis restantes, 6 × 6. Al actualizar se reinicia solamente la partida antigua en curso; se conservan récords y niveles desbloqueados.
 
 ## Desarrollo local
 
