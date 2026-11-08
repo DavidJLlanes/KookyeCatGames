@@ -1,0 +1,2 @@
+export function finalScore(g){return Math.max(100,6000-Math.max(0,g.moves-g.optimal)*120-g.undoCount*180-g.hintCount*300+Math.max(0,120-g.elapsed)*5);}
+export function reducePipesEvent(progress,event){const m=progress.metrics,p=event.payload||{};if(event.type==='pipe_rotated')m.rotations++;if(event.type==='game_completed'){if(p.mode==='daily')m.dailyWins++;if(p.mode==='timed')m.timedWins++;if(p.undoCount===0&&p.hintCount===0)m.noHelp++;if(p.moves===p.targetMoves&&p.undoCount===0&&p.hintCount===0)m.optimalWins++;}}
