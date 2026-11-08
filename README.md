@@ -161,7 +161,7 @@ Para publicar una versión, actualizar la caché versionada del service worker y
 
 Gira y encaja las siete piezas para completar filas horizontales. Las líneas desaparecen, suman puntos y hacen que las piezas caigan más rápido. La campaña ofrece 60 metas progresivas; el reto diario propone el mismo tablero inicial durante ese día y el contrarreloj da 120 segundos para completar 15 filas.
 
-**Controles:** botones táctiles y gestos sobre el tablero: toca o desliza hacia arriba para girar, desliza a izquierda/derecha para mover, desliza hacia abajo para bajar una o varias filas y haz un gesto largo o rápido hacia abajo para caída rápida. En escritorio, usa las flechas para mover/bajar, arriba o X para girar, espacio para caída rápida y P para pausar. El juego también ofrece sonidos suaves con interruptor, progreso local y una colección de 35 insignias propias.
+**Controles:** botones táctiles y gestos sobre el tablero: toca o desliza hacia arriba para girar, arrastra a izquierda/derecha para mover la pieza mientras mantienes el dedo apoyado, desliza hacia abajo para bajar una o varias filas y haz un gesto largo o rápido hacia abajo para caída rápida. En escritorio, usa las flechas para mover/bajar, arriba o X para girar, espacio para caída rápida y P para pausar. El juego también ofrece sonidos suaves con interruptor, progreso local y una colección de 35 insignias propias.
 
 **Carpeta:** [`tetris/`](tetris/) · **Manifiesto:** [`game.json`](tetris/game.json) · **Copia individual:** `tetris.zip`.
 
