@@ -1,5 +1,6 @@
-const CACHE = 'kookye-cat-games-shell-v60';
+const CACHE = 'kookye-cat-games-shell-v61';
 const FILES = [
+  './tuberias/', './tuberias/levels.js', './tuberias/engine.js', './tuberias/rules.js', './tuberias/scoring.js', './tuberias/interface.js', './tuberias/game.json', './tuberias/tuberias.js', './tuberias/index.html', './tuberias/tuberias.css', './tuberias/achievements.js', './tuberias/assets/icon.svg', './tuberias/assets/cover.svg',
   './lights/', './lights/engine.js', './lights/lights.js', './lights/index.html', './lights/lights.css', './lights/interface.js', './lights/rules.js', './lights/scoring.js', './lights/game.json', './lights/achievements.js', './lights/assets/icon.svg', './lights/assets/cover.svg',
   './assets/css/game-interface.css', './assets/js/game-interface.js',
   './picross/interface.js', './2048/interface.js', './bubbleshooter/interface.js', './tetris/', './tetris/index.html', './tetris/game.json', './tetris/rules.js', './tetris/engine.js', './tetris/scoring.js', './tetris/achievements.js', './tetris/tetris.js', './tetris/interface.js', './tetris/tetris.css', './tetris/assets/icon.svg', './tetris/assets/cover.svg',
