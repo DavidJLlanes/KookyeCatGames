@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v69';
+const CACHE = 'kookye-cat-games-shell-v70';
 const FILES = [
   './cajas/levels.js',
   './cajas/engine.js',
