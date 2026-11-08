@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-7%20juegos-ED539A?style=for-the-badge" alt="7 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-420%20niveles-168B79?style=for-the-badge" alt="420 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-8%20juegos-ED539A?style=for-the-badge" alt="8 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-480%20niveles-168B79?style=for-the-badge" alt="480 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Siete juegos y 420 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Ocho juegos y 480 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -312,3 +312,14 @@ El alojamiento debe exponer ese directorio en [https://djl.com.es/games/](https:
 El despliegue se ejecuta manualmente. Publicar cambios en GitHub no significa desplegarlos automáticamente en el VPS.
 
 **Norma de dificultad:** cada juego nuevo debe ofrecer progresión medible, reglas comprobadas y puzles resolubles y distintos. Los mínimos se verifican con un solucionador cuando sea aplicable; aumentar una mezcla aleatoria no certifica dificultad.
+
+
+## Ilumina (Akari)
+![Ilumina](ilumina/assets/cover.svg)
+Coloca lámparas para iluminar todas las casillas blancas, sin que se vean entre sí. Los muros numerados indican la cantidad exacta de lámparas ortogonalmente contiguas.
+- Carpeta: `ilumina/`. [Jugar](https://djl.com.es/games/ilumina/). Backup: `ilumina.zip`, incluido también en `games.zip`.
+- 60 tableros 5 × 5 distintos y con solución única, campaña, contrarreloj de 120 segundos y reto diario determinista.
+- Dificultad ordenada por bifurcaciones del solucionador exacto; a igual valor, por mínimo de lámparas. Esta métrica estructural no equivale al tiempo humano de resolución.
+- Táctil y ratón: tocar para colocar/quitar. Teclado: flechas y Enter/espacio. Deshacer, pausa, reinicio, pantalla completa y sonidos suaves opcionales.
+- 35 premios e insignias propios, progreso local, tarjeta compartible y restauración de copias.
+- Validación reproducible: `node scripts/check-ilumina.mjs`. El solucionador vive en scripts y no se carga durante las partidas.
