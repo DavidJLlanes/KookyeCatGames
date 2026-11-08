@@ -8,7 +8,7 @@ Cuando David diga **«haz el siguiente juego»**, consultar primero este archivo
 
 Se adopta la numeración 1–43 del documento como orden de implementación. La sugerencia del PDF de empezar por Ilumina y Cifras no cambia esa secuencia. Una petición explícita posterior de David tiene prioridad. No iniciar juegos automáticamente ni interpretar el calendario orientativo del PDF como una programación de tareas.
 
-**Siguiente previsto: Ilumina (Akari), número 1 de esta lista y octavo juego de la arcade.**
+**Siguiente previsto: Cajas (Sokoban), número 2 de esta lista y noveno juego de la arcade.**
 
 Al terminar y verificar un juego, actualizar aquí su estado, carpeta y enlace, además del README, registro y caché correspondientes. Marcarlo completado solo cuando la implementación y sus comprobaciones estén publicadas en `main`; no confundir publicación en GitHub con despliegue en el VPS. Si está en curso, continuar ese juego antes de saltar al siguiente.
 
@@ -30,7 +30,7 @@ Los números son los del PDF, no la posición global del catálogo. A: 1–21, r
 
 | Orden | Juego | Verificación prevista | Estado |
 | --- | --- | --- | --- |
-| 1 | Ilumina (Akari) | Solución única y mínimo de lámparas | En curso: `ilumina/`; reglas y solucionador exacto publicados. Pendientes campaña, interfaz, integración y validación completa. |
+| 1 | Ilumina (Akari) | Solución única y mínimo de lámparas | Implementado en main: [ilumina/](ilumina/). Campaña verificada; revisión visual en dispositivos pendiente. |
 | 2 | Cajas (Sokoban) | BFS/A* y empujes mínimos | Pendiente |
 | 3 | Inunda | Óptimo exacto mediante IDA* | Pendiente |
 | 4 | Minas seguras | Solucionador sin adivinanzas ni situaciones 50/50 | Pendiente |
