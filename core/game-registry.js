@@ -62,6 +62,7 @@ export const GAMES = Object.freeze([
         efficientEscapes: 0, dailyWins: 0, timedWins: 0, bestScore: 0 },
     },
   },
+  {id:'lights',name:'Lights Out',path:'./lights/',art:'./lights/assets/cover.svg',category:'Puzle · Lógica',description:'Apaga todas las luces en 60 tableros de dificultad progresiva certificada.',awardCount:35,levels:60,modes:['classic','timed','daily'],catalog:'../lights/achievements.js?v=1',progress:{gamesPlayed:0,solved:0,playedSeconds:0,totalPoints:0,arcadeXp:0,bestScore:0,bestTime:null,completedPuzzles:[],completedLevels:[],unlockedLevel:1,active:null,metrics:{presses:0,optimalWins:0,noUndo:0,dailyWins:0,timedWins:0}}},
 ]);
 export const GAME_BY_ID = new Map(GAMES.map(game => [game.id, game]));
 if (GAME_BY_ID.size !== GAMES.length) throw new Error('Identificadores de juego duplicados.');
