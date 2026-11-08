@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v59';
+const CACHE = 'kookye-cat-games-shell-v60';
 const FILES = [
   './lights/', './lights/engine.js', './lights/lights.js', './lights/index.html', './lights/lights.css', './lights/interface.js', './lights/rules.js', './lights/scoring.js', './lights/game.json', './lights/achievements.js', './lights/assets/icon.svg', './lights/assets/cover.svg',
   './assets/css/game-interface.css', './assets/js/game-interface.js',
