@@ -61,6 +61,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Cada juego incluye un control visible para volver a la portada.
 - Como máximo tres modos por juego; cada uno tendrá un propósito distinto.
 - Todos los juegos deben funcionar con fluidez y de manera profesional en móvil táctil y escritorio con ratón y teclado. Los controles, foco, gestos, tamaños táctiles y estados deben sentirse coherentes y atractivos.
+- En móvil, todos los juegos y la portada deben impedir el zoom con pellizco. Mantener `maximum-scale=1,user-scalable=no` en sus metadatos viewport, `touch-action: pan-x pan-y` en el documento y cargar `assets/js/mobile-zoom-lock.js` en cada página. No retirar esta protección al añadir nuevos juegos.
 - Respetar contraste suficiente, accesibilidad por teclado y la preferencia de movimiento reducido.
 - Usar Inspo MCP al diseñar nuevas pantallas o juegos, salvo que ya exista un sistema visual establecido que deba respetarse.
 

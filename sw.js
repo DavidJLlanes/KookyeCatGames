@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v51';
+const CACHE = 'kookye-cat-games-shell-v52';
 const FILES = [
   './assets/css/game-interface.css', './assets/js/game-interface.js',
   './picross/interface.js', './2048/interface.js', './bubbleshooter/interface.js', './tetris/', './tetris/index.html', './tetris/game.json', './tetris/rules.js', './tetris/engine.js', './tetris/scoring.js', './tetris/achievements.js', './tetris/tetris.js', './tetris/interface.js', './tetris/tetris.css', './tetris/assets/icon.svg', './tetris/assets/cover.svg',
@@ -8,7 +8,7 @@ const FILES = [
   './bubbleshooter/scoring.js', './bubbleshooter/achievements.js', './bubbleshooter/assets/icon.svg', './bubbleshooter/assets/cover.svg',
   './', './index.html', './manifest.webmanifest', './assets/icon.svg', './assets/favicon-32.png', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png', './assets/og-games.svg', './assets/og-games.png',
   './assets/art/fusion-2048.svg', './assets/art/hero.svg', './assets/art/picross.svg', './assets/art/trophy.svg', './assets/css/base.css', './assets/js/home.js', './assets/js/storage.js', './assets/js/achievements.js',
-  './assets/js/pwa-update.js', './assets/js/mascot.js', './assets/css/mascot.css', './assets/js/game-sound.js', './assets/css/game-sound.css', './assets/mascot/sit.webp', './assets/mascot/wave.webp', './assets/mascot/play.webp', './assets/mascot/celebrate.webp',
+  './assets/js/pwa-update.js', './assets/js/mobile-zoom-lock.js', './assets/js/mascot.js', './assets/css/mascot.css', './assets/js/game-sound.js', './assets/css/game-sound.css', './assets/mascot/sit.webp', './assets/mascot/wave.webp', './assets/mascot/play.webp', './assets/mascot/celebrate.webp',
   './assets/css/achievements.css', './assets/css/profile-actions.css', './core/game-registry.js', './core/scores.js', './core/achievements.js', './core/arcade-achievements.js', './core/events.js', './assets/js/share-card.js', './assets/js/zip.js', './assets/js/backups.js', './picross/', './picross/index.html',
   './2048/', './2048/index.html', './2048/game.json', './2048/fusion.css', './2048/fusion.js', './2048/engine.js', './2048/scoring.js', './2048/achievements.js', './2048/assets/icon.svg', './picross/achievements.js', './picross/scoring.js', './picross/game.json', './picross/picross.css', './picross/picross.js', './picross/gesture.js', './picross/rules.js', './picross/logic.js', './picross/puzzle.js',
 ];
