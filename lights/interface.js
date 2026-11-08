@@ -1,0 +1,1 @@
+import{setupGameInterface}from'../assets/js/game-interface.js?v=50';setupGameInterface({name:'Lights Out',board:'#board',workspace:'#play'});
