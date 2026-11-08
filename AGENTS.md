@@ -167,3 +167,7 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 ## Tarjetas del catálogo: títulos completos
 - Las portadas se muestran completas, con proporción estable y `object-fit: contain`; no recortar títulos integrados en las ilustraciones.
 - Las etiquetas como «¡Juega ya!» van en el bloque de información, nunca encima de la portada. El título HTML admite varias líneas, sin elipsis ni altura fija, y las categorías y etiquetas se redistribuyen en móvil, tablet y escritorio.
+
+## Selector de juegos de la vitrina
+- Para 50 juegos o más, mantener un selector compacto con búsqueda por nombre, lista alfabética y desplazamiento interno. No volver a una fila o cuadrícula permanente con un botón por juego.
+- Mantener «Todos los juegos» y «Arcade», navegación por teclado, nombres completos y controles táctiles. Buscar juegos no debe descargar sus catálogos; cargar premios bajo demanda y conservar la paginación y los filtros de tipo y texto.
