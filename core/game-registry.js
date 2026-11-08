@@ -50,6 +50,18 @@ export const GAMES = Object.freeze([
         dailyWins: 0, timedWins: 0, steadyWins: 0, fastWins: 0, preciseWins: 0 },
     },
   },
+  {
+    id: 'rush', name: 'Rush Hour', path: './rush/', art: './rush/assets/cover.svg',
+    category: 'Puzle · Estrategia', description: 'Despeja el atasco y saca el coche rojo en 60 niveles, contrarreloj y reto diario.',
+    awardCount: 35, levels: 60, modes: ['classic', 'timed', 'daily'],
+    catalog: '../rush/achievements.js?v=1',
+    progress: {
+      gamesPlayed: 0, solved: 0, playedSeconds: 0, totalPoints: 0, arcadeXp: 0,
+      bestScore: 0, bestTime: null, completedPuzzles: [], completedLevels: [], unlockedLevel: 1, active: null,
+      metrics: { carsMoved: 0, horizontalMoves: 0, verticalMoves: 0, escapes: 0, noUndoEscapes: 0,
+        efficientEscapes: 0, dailyWins: 0, timedWins: 0, bestScore: 0 },
+    },
+  },
 ]);
 export const GAME_BY_ID = new Map(GAMES.map(game => [game.id, game]));
 if (GAME_BY_ID.size !== GAMES.length) throw new Error('Identificadores de juego duplicados.');
