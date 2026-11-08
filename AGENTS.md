@@ -154,3 +154,10 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Explicar en lenguaje sencillo el objetivo y la acción principal; añadir un ejemplo o aclarar una regla poco intuitiva cuando sea necesario. No dar por hecho que el jugador conoce el juego.
 - Estas instrucciones de juego se muestran únicamente dentro de la página de cada juego. No añadir bloques de instrucciones a la portada, al catálogo ni a otras páginas. Las descripciones y documentación ya requeridas del README se mantienen.
 - La ayuda ampliada «Cómo jugar» puede seguir disponible, pero no sustituye a esta explicación inicial visible. Mantener ambos textos coherentes con las reglas y los controles reales al modificar un juego.
+
+## Séptimo juego
+- Conecta tuberías vive en `tuberias/`, destino `/var/www/djl.com.es/games/tuberias/`. Cada toque gira una pieza 90° en sentido horario; la red gana cuando todas las piezas reciben agua desde IN y no queda ninguna conexión abierta. FIN está abajo a la derecha.
+- Campaña de 60 redes con solución única, de 3 × 3 a 6 × 6, con mínimo no decreciente de 2 a 31 giros. La dificultad combina tamaño y coste óptimo; validar unicidad, conexiones, fugas y solución con `scripts/check-tuberias.mjs` y `scripts/pipes-solver.mjs`.
+- El solucionador se utiliza durante el desarrollo, no se ejecuta en el navegador ni en el VPS. Los niveles publicados son datos estáticos.
+- Contrarreloj de 120 segundos y reto diario determinista, 35 insignias propias, backup `tuberias.zip`, tarjeta individual, controles táctiles/ratón/teclado y sonidos suaves sin música.
+- Explicación inicial visible, agua y fugas identificables, deshacer y pistas con penalización. Mantener la carcasa común y adaptación a tablets verticales.
