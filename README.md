@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-4%20juegos-ED539A?style=for-the-badge" alt="4 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-240%20niveles-168B79?style=for-the-badge" alt="240 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-5%20juegos-ED539A?style=for-the-badge" alt="5 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-300%20niveles-168B79?style=for-the-badge" alt="300 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Cuatro juegos y 240 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Cinco juegos y 300 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -63,6 +63,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 | **Fusión 2048** | 60 niveles | Contrarreloj de 180 s y reto diario | 35 | [Abrir Fusión 2048](https://djl.com.es/2048/) |
 | **Bubble Shooter** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Bubble Shooter](https://djl.com.es/bubbleshooter/) |
 | **Tetris** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Tetris](https://djl.com.es/tetris/) |
+| **Rush Hour** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Rush Hour](https://djl.com.es/games/rush/) |
 
 ### Picross
 
@@ -126,6 +127,7 @@ El perfil se guarda en la base IndexedDB `kookye-cat-games-local-v2`, dentro del
 | `2048.zip` | Partida, estadísticas, niveles y premios de Fusión 2048. | Dentro de Fusión 2048. |
 | `bubbleshooter.zip` | Partida, estadísticas, niveles y premios de Bubble Shooter. | Dentro de Bubble Shooter. |
 | `tetris.zip` | Partida, estadísticas, niveles y premios de Tetris. | Dentro de Tetris. |
+| `rush.zip` | Partida, estadísticas, niveles y premios de Rush Hour. | Dentro de Rush Hour. |
 
 Las copias incluyen metadatos y se validan por formato, versión y juego antes de restaurarse. Una copia individual solo sustituye el progreso de ese juego. Los archivos se generan y leen en el navegador: no se suben ni se descomprimen en el VPS.
 
@@ -164,6 +166,16 @@ Gira y encaja las siete piezas para completar filas horizontales. Las líneas de
 **Controles:** botones táctiles y gestos sobre el tablero: toca o desliza hacia arriba para girar, arrastra a izquierda/derecha para mover la pieza mientras mantienes el dedo apoyado, desliza hacia abajo para bajar una o varias filas y haz un gesto largo o rápido hacia abajo para caída rápida. En escritorio, usa las flechas para mover/bajar, arriba o X para girar, espacio para caída rápida y P para pausar. El juego también ofrece sonidos suaves con interruptor, progreso local y una colección de 35 insignias propias.
 
 **Carpeta:** [`tetris/`](tetris/) · **Manifiesto:** [`game.json`](tetris/game.json) · **Copia individual:** `tetris.zip`.
+
+### Rush Hour
+
+<a href="https://djl.com.es/games/rush/"><img src="rush/assets/cover.svg" alt="Portada de Rush Hour" width="460"></a>
+
+Despeja el atasco desplazando cada vehículo únicamente por su carril. El objetivo es abrir una ruta hasta el borde derecho para que salga el coche rojo. El tablero de 6 × 6 se genera con una solución válida y la campaña aumenta gradualmente la dificultad en 60 niveles.
+
+Incluye contrarreloj de 120 segundos y reto diario determinista. Puedes arrastrar los coches con el dedo o el ratón, seleccionarlos y moverlos con los botones o usar las flechas del teclado; Intro saca el coche rojo cuando la salida está libre. También ofrece deshacer, pausa, efectos suaves con interruptor, progreso local y 35 insignias propias.
+
+**Carpeta:** [`rush/`](rush/) · **Manifiesto:** [`game.json`](rush/game.json) · **Copia individual:** `rush.zip` · **Destino VPS:** `/var/www/djl.com.es/games/rush/`.
 
 ## Desarrollo local
 
@@ -223,11 +235,11 @@ Los generadores Python que crean imágenes rasterizadas requieren Pillow. `rende
 | [`assets/js/`](assets/js/) | Almacenamiento, ZIP, backups, tarjetas, sonidos, mascota y actualizaciones. |
 | [`assets/css/`](assets/css/) | Identidad visual general, interfaz compartida y componentes comunes. |
 | [`assets/art/`](assets/art/) y [`assets/mascot/`](assets/mascot/) | Ilustraciones e imágenes de la mascota. |
-| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/) y [`tetris/`](tetris/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
+| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/), [`tetris/`](tetris/) y [`rush/`](rush/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
 | [`scripts/`](scripts/) | Comprobaciones y generación de recursos. |
 | [`AGENTS.md`](AGENTS.md) | Normas permanentes de diseño, arquitectura, privacidad y ampliación. |
 
-El núcleo no importa directamente las reglas de Picross, 2048, Bubble Shooter ni Tetris. Cada juego aporta su reductor de eventos y su catálogo, y conserva sus datos bajo un ID estable. La portada agrega la información a través del registro. Esta separación permite añadir juegos sin convertir el núcleo en un archivo monolítico.
+El núcleo no importa directamente las reglas de ningún juego. Cada juego aporta su reductor de eventos y catálogo, incluido Rush Hour; la portada consulta estos datos mediante el registro común. Cada juego aporta su reductor de eventos y su catálogo, y conserva sus datos bajo un ID estable. La portada agrega la información a través del registro. Esta separación permite añadir juegos sin convertir el núcleo en un archivo monolítico.
 
 ## Añadir un juego
 
