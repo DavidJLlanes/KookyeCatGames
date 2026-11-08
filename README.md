@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-8%20juegos-ED539A?style=for-the-badge" alt="8 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-480%20niveles-168B79?style=for-the-badge" alt="480 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-9%20juegos-ED539A?style=for-the-badge" alt="9 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-540%20niveles-168B79?style=for-the-badge" alt="540 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Ocho juegos y 480 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Ocho juegos y 540 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -313,6 +313,16 @@ El despliegue se ejecuta manualmente. Publicar cambios en GitHub no significa de
 
 **Norma de dificultad:** cada juego nuevo debe ofrecer progresión medible, reglas comprobadas y puzles resolubles y distintos. Los mínimos se verifican con un solucionador cuando sea aplicable; aumentar una mezcla aleatoria no certifica dificultad.
 
+
+## Cajas (Sokoban)
+![Cajas](cajas/assets/cover.svg)
+Empuja las dos cajas hasta las metas. Solo puedes empujar, nunca tirar; planifica los movimientos para no atraparlas.
+- Carpeta: `cajas/`. [Jugar](https://djl.com.es/games/cajas/). Backup: `cajas.zip` y agregado a `games.zip`.
+- 60 tableros con dos cajas y dos metas; campaña, contrarreloj de 120 segundos y reto diario determinista.
+- Dificultad ordenada por empujes mínimos certificados con búsqueda y, a igualdad, estados visitados. Cada puzle se verifica como resoluble.
+- Flechas, botones en pantalla y gesto de deslizamiento; deshacer paso, pausa y reinicio. Táctil, ratón y teclado.
+- 35 premios propios, progreso local, tarjeta compartible, sonidos suaves opcionales y copia/restauración.
+- Validador: `node scripts/check-cajas.mjs`.
 
 ## Ilumina (Akari)
 ![Ilumina](ilumina/assets/cover.svg)
