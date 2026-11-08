@@ -171,7 +171,7 @@ Gira y encaja las siete piezas para completar filas horizontales. Las líneas de
 
 <a href="https://djl.com.es/games/rush/"><img src="rush/assets/cover.svg" alt="Portada de Rush Hour" width="460"></a>
 
-Despeja el atasco desplazando cada vehículo únicamente por su carril. El objetivo es abrir una ruta hasta el borde derecho para que salga el coche rojo. El tablero de 6 × 6 se genera con una solución válida y la campaña aumenta gradualmente la dificultad en 60 niveles.
+Despeja el atasco desplazando cada vehículo únicamente por su carril. El objetivo es abrir una ruta hasta el borde derecho para que salga el coche rojo. La campaña contiene 60 tableros diferentes de 6 × 6, ordenados por dificultad real: entre 9 y 30 desplazamientos mínimos de vehículos. Cada mínimo se calcula mediante búsqueda exhaustiva por amplitud, contando un desplazamiento continuo de cualquier longitud como una jugada. El contador de la interfaz cuenta casillas recorridas. Los tableros están precalculados: no se ejecuta el solucionador en el navegador ni en el VPS. Las partidas antiguas en curso se reinician al actualizar; los niveles desbloqueados y los récords se conservan.
 
 Incluye contrarreloj de 120 segundos y reto diario determinista. Puedes arrastrar los coches con el dedo o el ratón, seleccionarlos y moverlos con los botones o usar las flechas del teclado; Intro saca el coche rojo cuando la salida está libre. También ofrece deshacer, pausa, efectos suaves con interruptor, progreso local y 35 insignias propias.
 
