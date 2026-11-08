@@ -30,7 +30,7 @@ Los números son los del PDF, no la posición global del catálogo. A: 1–21, r
 
 | Orden | Juego | Verificación prevista | Estado |
 | --- | --- | --- | --- |
-| 1 | Ilumina (Akari) | Solución única y mínimo de lámparas | Pendiente |
+| 1 | Ilumina (Akari) | Solución única y mínimo de lámparas | En curso: `ilumina/`; reglas y solucionador exacto publicados. Pendientes campaña, interfaz, integración y validación completa. |
 | 2 | Cajas (Sokoban) | BFS/A* y empujes mínimos | Pendiente |
 | 3 | Inunda | Óptimo exacto mediante IDA* | Pendiente |
 | 4 | Minas seguras | Solucionador sin adivinanzas ni situaciones 50/50 | Pendiente |
