@@ -163,3 +163,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Explicación inicial visible, agua y fugas identificables, deshacer y pistas con penalización. Mantener la carcasa común y adaptación a tablets verticales.
 
 La campaña revisada deja al menos el 75 % de las piezas giratorias desorientadas. Además del tamaño y del coste óptimo, ordena las redes por las piezas que siguen siendo ambiguas tras propagar las restricciones locales: de 0 a 25, sin retrocesos. Esta es una medida estructural del solucionador, no una estimación del tiempo que tardará cada persona. Los primeros seis niveles son 4 × 4, los siguientes dieciocho son 5 × 5 y los treinta y seis restantes, 6 × 6. Al actualizar se reinicia solamente la partida antigua en curso; se conservan récords y niveles desbloqueados.
+
+## Tarjetas del catálogo: títulos completos
+- Las portadas se muestran completas, con proporción estable y `object-fit: contain`; no recortar títulos integrados en las ilustraciones.
+- Las etiquetas como «¡Juega ya!» van en el bloque de información, nunca encima de la portada. El título HTML admite varias líneas, sin elipsis ni altura fija, y las categorías y etiquetas se redistribuyen en móvil, tablet y escritorio.
