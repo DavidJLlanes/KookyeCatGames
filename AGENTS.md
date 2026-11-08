@@ -171,3 +171,10 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 ## Selector de juegos de la vitrina
 - Para 50 juegos o más, mantener un selector compacto con búsqueda por nombre, lista alfabética y desplazamiento interno. No volver a una fila o cuadrícula permanente con un botón por juego.
 - Mantener «Todos los juegos» y «Arcade», navegación por teclado, nombres completos y controles táctiles. Buscar juegos no debe descargar sus catálogos; cargar premios bajo demanda y conservar la paginación y los filtros de tipo y texto.
+
+## Hoja de ruta y orden «haz el siguiente juego»
+- La lista permanente y el estado de los 43 juegos nuevos hasta alcanzar 50 están en [ROADMAP.md](ROADMAP.md), transcritos de la hoja de ruta de David.
+- Cuando David diga «haz el siguiente juego», leer este archivo y ROADMAP.md desde la versión actual de main, contrastar el catálogo y completar un único juego: el primero pendiente en el orden numerado. Si hay uno en curso, terminarlo antes de avanzar. No pedir que repita las normas.
+- Aplicar todas las normas existentes y los requisitos de verificación de la hoja de ruta. Una instrucción explícita posterior de David tiene prioridad sobre el orden.
+- Al completar y verificar el juego, publicar en main y actualizar su estado, carpeta y enlace en ROADMAP.md, además del README, catálogo y caché. Entregar el comando de despliegue manual; no ejecutar el despliegue ni sincronizar la copia local sin petición.
+- Esta instrucción guarda el plan; no autoriza a iniciar juegos sin una petición ni crea un calendario automático.
