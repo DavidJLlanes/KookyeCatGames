@@ -9,9 +9,9 @@ export function inspect(tiles,size){
  return{wet,leaks,won:wet.size===tiles.length&&leaks.length===0};
 }
 export function puzzleIndex(c){return c.mode==='classic'?c.level-1:c.mode==='daily'?25+(c.seed%35):10+(c.seed%20);}
-export function createPuzzle(config){const p=PUZZLES[puzzleIndex(config)];if(!p)throw Error('Nivel desconocido');return{puzzleVersion:1,config:{...config},size:p.size,tiles:p.tiles.slice(),solution:p.solution.slice(),optimal:p.optimal,moves:0,elapsed:0,undoCount:0,hintCount:0,undoStack:[],counted:false,finished:false};}
+export function createPuzzle(config){const p=PUZZLES[puzzleIndex(config)];if(!p)throw Error('Nivel desconocido');return{puzzleVersion:2,config:{...config},size:p.size,tiles:p.tiles.slice(),solution:p.solution.slice(),optimal:p.optimal,moves:0,elapsed:0,undoCount:0,hintCount:0,undoStack:[],counted:false,finished:false};}
 export function isValidGame(g){
- if(!g||g.puzzleVersion!==1||!['classic','timed','daily'].includes(g.config?.mode)||!Number.isInteger(g.config.seed)||g.config.seed<0)return false;
+ if(!g||g.puzzleVersion!==2||!['classic','timed','daily'].includes(g.config?.mode)||!Number.isInteger(g.config.seed)||g.config.seed<0)return false;
  const p=PUZZLES[puzzleIndex(g.config)];if(!p||g.size!==p.size||g.optimal!==p.optimal||!Array.isArray(g.solution)||g.solution.join(',')!==p.solution.join(','))return false;
  const validTiles=tiles=>Array.isArray(tiles)&&tiles.length===p.tiles.length&&tiles.every((m,i)=>{let v=p.tiles[i];for(let k=0;k<4;k++){if(m===v)return true;v=rotate(v);}return false;});
  return validTiles(g.tiles)&&Array.isArray(g.undoStack)&&g.undoStack.length<=100&&g.undoStack.every(validTiles)&&['moves','elapsed','undoCount','hintCount'].every(k=>Number.isInteger(g[k])&&g[k]>=0)&&g.undoStack.length<=g.moves&&typeof g.finished==='boolean';
