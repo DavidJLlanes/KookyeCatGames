@@ -2,3 +2,5 @@
 .ilumina-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin:10px 0;font-size:.85rem;color:#35435d}.ilumina-legend span{display:inline-flex;align-items:center;gap:6px}.ilumina-key{display:inline-grid;place-items:center;width:22px;height:22px;border:2px solid #54617b;border-radius:5px;background:#fff;color:#526078;font-style:normal}.ilumina-key.lit{background:#ffe184;color:#6c4700}.ilumina-key.wall{background:#172238;color:#fff}
 
 .arcade-game.ilumina .light-cell.conflict{background:#b51f38;color:#fff;border:3px solid #740d20;box-shadow:inset 0 0 0 2px #fff;}.ilumina-key.error{background:#b51f38;color:#fff;border-color:#740d20}
+
+.arcade-game.ilumina .light-cell.clue-pending{background:#ffca64;color:#45280a;border:3px solid #c36b00;box-shadow:inset 0 0 0 2px #fff5d8}.arcade-game.ilumina .light-cell.conflict.clue-pending{background:#b51f38;color:#fff;border-color:#740d20}
