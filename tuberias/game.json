@@ -1,0 +1,23 @@
+{
+  "id": "tuberias",
+  "name": "Conecta tuberías",
+  "version": "1.0.0",
+  "schemaVersion": 2,
+  "levels": 60,
+  "modes": [
+    "classic",
+    "timed",
+    "daily"
+  ],
+  "controls": [
+    "touch",
+    "pointer",
+    "keyboard"
+  ],
+  "progress": "local",
+  "awards": "./achievements.js",
+  "rules": "./rules.js",
+  "scoring": "./scoring.js",
+  "interface": "./interface.js",
+  "interfaceContract": 1
+}
