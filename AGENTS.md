@@ -178,3 +178,8 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 - Aplicar todas las normas existentes y los requisitos de verificación de la hoja de ruta. Una instrucción explícita posterior de David tiene prioridad sobre el orden.
 - Al completar y verificar el juego, publicar en main y actualizar su estado, carpeta y enlace en ROADMAP.md, además del README, catálogo y caché. Entregar el comando de despliegue manual; no ejecutar el despliegue ni sincronizar la copia local sin petición.
 - Esta instrucción guarda el plan; no autoriza a iniciar juegos sin una petición ni crea un calendario automático.
+
+## Octavo juego
+- Ilumina (Akari) vive en `ilumina/`, destino `/var/www/djl.com.es/games/ilumina/`. 60 tableros 5 × 5 con solución única, campaña, contrarreloj y reto diario; 35 premios y backup `ilumina.zip`.
+- Las lámparas iluminan filas y columnas hasta un muro, no pueden verse entre sí y deben respetar las pistas ortogonales de los muros. Verificar con `node scripts/check-ilumina.mjs`.
+- La campaña progresa por bifurcaciones del solucionador exacto y, a igualdad, por número mínimo de lámparas. No presentar esa métrica como tiempo humano garantizado.
