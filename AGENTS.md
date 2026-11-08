@@ -138,3 +138,13 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 ## Instalación en Safari
 - La portada debe ofrecer un botón de instalación accesible y explicar los pasos manuales de Safari en iPhone/iPad (Compartir → Añadir a pantalla de inicio), ya que iOS Safari no emite el evento `beforeinstallprompt`.
 - Mantener iconos Apple y metadatos de web app, manifiesto y service worker con scope `/games/`; comprobar el flujo en Safari móvil cuando haya un dispositivo/navegador de prueba disponible.
+
+## Dificultad progresiva: norma permanente
+- Todos los juegos nuevos y las revisiones de juegos existentes deben tener una lógica bien implementada y dificultad progresiva medible. No confundir más mezclas aleatorias, piezas o velocidad con dificultad real.
+- Definir la medida propia del juego (solución mínima, dependencias, objetivos, ritmo) y validar que la campaña progresa según ella. Comprobar que los puzles tienen solución, no se repiten y respetan las reglas.
+- Para puzles como Rush Hour y Lights Out, verificar las soluciones y medir su coste óptimo. Precalcular cuando convenga para no trasladar cálculos costosos al dispositivo ni al VPS.
+
+## Sexto juego
+- Lights Out vive en `lights/`, destino `/var/www/djl.com.es/games/lights/`: tablero 5 × 5, 60 niveles distintos en doce escalones de 3 a 14 pulsaciones óptimas, cinco tableros por escalón.
+- Cada toque invierte la casilla y sus vecinas ortogonales, sin envolver bordes. Todas las soluciones se verifican enumerando las 32 posibles primeras filas y propagando las siguientes; se selecciona la solución de menor peso.
+- Contrarreloj de 120 segundos y reto diario, 35 premios propios, backup `lights.zip`, controles táctiles/ratón/teclado, sonido suave opcional, interfaz compartida y adaptación a tablets verticales.
