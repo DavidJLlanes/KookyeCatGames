@@ -15,8 +15,8 @@ export async function makeShareCard({profile,scope='arcade',title,subtitle,score
   const rare=earned.filter(item=>item.tier==='LEGENDARIO'||item.tier==='ORO');
   const showcase=[...rare.reverse(),...earned.filter(item=>!rare.includes(item)).reverse()].slice(0,3);
   const icons=await Promise.all(showcase.map(badgeImage));
-  const accent=scope==='picross'?'#ec5fa7':scope==='fusion-2048'?'#2b85ed':scope==='bubbleshooter'?'#157d70':scope==='tetris'?'#6552c9':'#815ce2';
-  const secondary=scope==='picross'?'#ffd3e7':scope==='fusion-2048'?'#d3eaff':scope==='bubbleshooter'?'#d8f4eb':scope==='tetris'?'#e2ddff':'#eadfff';
+  const accent=scope==='picross'?'#ec5fa7':scope==='fusion-2048'?'#2b85ed':scope==='bubbleshooter'?'#157d70':scope==='tetris'?'#6552c9':scope==='tuberias'?'#087e91':'#815ce2';
+  const secondary=scope==='picross'?'#ffd3e7':scope==='fusion-2048'?'#d3eaff':scope==='bubbleshooter'?'#d8f4eb':scope==='tetris'?'#e2ddff':scope==='tuberias'?'#e5f7f8':'#eadfff';
   const total=catalog.length,won=earned.length,ratio=total?won/total:0;
   const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=630;
   const c=canvas.getContext('2d');if(!c)throw new Error('No se pudo crear la tarjeta.');
@@ -24,7 +24,7 @@ export async function makeShareCard({profile,scope='arcade',title,subtitle,score
   c.fillStyle=secondary;c.beginPath();c.arc(1100,60,245,0,Math.PI*2);c.fill();c.beginPath();c.arc(55,610,180,0,Math.PI*2);c.fill();
   rect(c,30,28,1140,574,34,'#ffffff');c.strokeStyle='#dce5f3';c.lineWidth=3;c.beginPath();c.roundRect(30,28,1140,574,34);c.stroke();
   rect(c,62,57,305,46,16,'#eaf3ff');text(c,'✦  KOOKYECAT GAMES',80,87,20,'#31517c',900);
-  rect(c,965,57,171,46,16,secondary);text(c,scope==='arcade'?'MI ARCADE':game?.name?.toUpperCase()||'MI JUEGO',984,87,16,accent,900);
+  rect(c,965,57,171,46,16,secondary);c.font='900 16px system-ui, sans-serif';text(c,clip(c,scope==='arcade'?'MI ARCADE':game?.name?.toUpperCase()||'MI JUEGO',135),984,87,16,accent,900);
   text(c,title||game?.name||'Mi arcade',70,174,57,'#172441',950);
   text(c,scope==='arcade'?'Cada partida cuenta':subtitle||'Mi progreso',72,213,21,'#63718e',650);
   if(scope==='bubbleshooter'){
