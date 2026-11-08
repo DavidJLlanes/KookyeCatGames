@@ -3,12 +3,12 @@ import{PUZZLES}from'../tuberias/levels.js';
 import{createPuzzle,rotate,inspect,isValidGame}from'../tuberias/engine.js';
 import{configuration}from'../tuberias/rules.js';
 import{solve}from'./pipes-solver.mjs';
-let previous=0,size=0;const unique=new Set();
+let previous=0,size=0,reasoning=0;const unique=new Set();
 for(let i=0;i<60;i++){
  const p=PUZZLES[i],g=createPuzzle(configuration('classic',i+1));
  assert(isValidGame(g));assert(!inspect(g.tiles,g.size).won);assert(p.optimal>=previous);assert(p.size>=size);previous=p.optimal;size=p.size;
  const key=p.size+':'+p.tiles.join(',');assert(!unique.has(key));unique.add(key);
- const found=solve(p.tiles,p.size).solutions;assert.equal(found.length,1);assert.deepEqual(found[0],p.solution);
+ const analysis=solve(p.tiles,p.size);assert.equal(analysis.unresolved,p.reasoning);assert(p.reasoning>=reasoning);reasoning=p.reasoning;assert.equal(p.optimal,13+i);const rotatable=p.tiles.filter(m=>rotate(m)!==m).length;assert(p.tiles.filter((m,j)=>m!==p.solution[j]).length/rotatable>=.75);const found=analysis.solutions;assert.equal(found.length,1);assert.deepEqual(found[0],p.solution);
  let cost=0;
  for(let j=0;j<g.tiles.length;j++){const before=g.tiles[j];let t=before;for(let r=0;r<4;r++)t=rotate(t);assert.equal(t,before);let turns=0;while(g.tiles[j]!==p.solution[j]){g.tiles[j]=rotate(g.tiles[j]);cost++;assert(++turns<=3);}}
  assert.equal(cost,p.optimal);assert(inspect(g.tiles,g.size).won);
