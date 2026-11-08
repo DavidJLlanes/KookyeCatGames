@@ -1,0 +1,2 @@
+export function finalScore(g){return Math.max(100,6000-Math.max(0,g.moves-g.optimal)*150-g.undoCount*180+Math.max(0,120-g.elapsed)*5);}
+export function reduceIluminaEvent(progress,event){const m=progress.metrics,p=event.payload||{};if(event.type==='light_pressed')m.presses++;if(event.type==='game_completed'){if(p.mode==='daily')m.dailyWins++;if(p.mode==='timed')m.timedWins++;if(p.undoCount===0)m.noUndo++;if(p.moves===p.targetMoves&&p.undoCount===0)m.optimalWins++;}}
