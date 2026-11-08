@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-6%20juegos-ED539A?style=for-the-badge" alt="6 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-360%20niveles-168B79?style=for-the-badge" alt="360 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-7%20juegos-ED539A?style=for-the-badge" alt="7 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-420%20niveles-168B79?style=for-the-badge" alt="420 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Seis juegos y 360 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Siete juegos y 420 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -65,6 +65,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 | **Tetris** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Tetris](https://djl.com.es/tetris/) |
 | **Rush Hour** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Rush Hour](https://djl.com.es/games/rush/) |
 | **Lights Out** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Lights Out](https://djl.com.es/games/lights/) |
+| **Conecta tuberías** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Conecta tuberías](https://djl.com.es/games/tuberias/) |
 
 ### Picross
 
@@ -130,6 +131,7 @@ El perfil se guarda en la base IndexedDB `kookye-cat-games-local-v2`, dentro del
 | `tetris.zip` | Partida, estadísticas, niveles y premios de Tetris. | Dentro de Tetris. |
 | `rush.zip` | Partida, estadísticas, niveles y premios de Rush Hour. | Dentro de Rush Hour. |
 | `lights.zip` | Partida, estadísticas, niveles y premios de Lights Out. | Dentro de Lights Out. |
+| `tuberias.zip` | Partida, estadísticas, niveles y premios de Conecta tuberías. | Dentro de Conecta tuberías. |
 
 Las copias incluyen metadatos y se validan por formato, versión y juego antes de restaurarse. Una copia individual solo sustituye el progreso de ese juego. Los archivos se generan y leen en el navegador: no se suben ni se descomprimen en el VPS.
 
@@ -189,6 +191,20 @@ El contrarreloj ofrece 120 segundos y el reto diario selecciona un tablero avanz
 
 **Carpeta:** [`lights/`](lights/) · **Manifiesto:** [`game.json`](lights/game.json) · **Copia:** `lights.zip` · **Destino:** `/var/www/djl.com.es/games/lights/`.
 
+### Conecta tuberías
+
+<a href="https://djl.com.es/games/tuberias/"><img src="tuberias/assets/cover.svg" alt="Portada de Conecta tuberías" width="460"></a>
+
+Gira las tuberías para llevar el agua desde IN hasta FIN y conectar toda la red sin fugas. Las piezas con agua se iluminan; los puntos rojos señalan conexiones abiertas. Cada toque gira 90° a la derecha. En escritorio también se puede usar el ratón o navegar con las flechas y girar con Enter/espacio.
+
+Los **60 niveles tienen solución única** y crecen de **3 × 3 a 6 × 6**, con un coste óptimo no decreciente de **2 a 31 giros**. Un solucionador comprueba las orientaciones posibles, descarta conexiones incompatibles y exige una red completamente conectada. Los tableros se precalculan; no hay cálculos pesados ni generación de partidas en el VPS.
+
+Incluye contrarreloj de 120 segundos, reto diario determinista, pausa, deshacer, pistas con penalización de 300 puntos, sonidos opcionales, 35 premios y tarjeta de progreso. La ayuda inicial aparece en la página del juego. El progreso y las copias se guardan solo en el dispositivo.
+
+**Carpeta:** [`tuberias/`](tuberias/) · **Manifiesto:** [`game.json`](tuberias/game.json) · **Copia:** `tuberias.zip` · **Destino:** `/var/www/djl.com.es/games/tuberias/`.
+
+Comprobación de la campaña: `node scripts/check-tuberias.mjs` (unicidad, mínimos, progresión, giros, conectividad y fugas).
+
 ## Desarrollo local
 
 ### Requisitos
@@ -247,7 +263,7 @@ Los generadores Python que crean imágenes rasterizadas requieren Pillow. `rende
 | [`assets/js/`](assets/js/) | Almacenamiento, ZIP, backups, tarjetas, sonidos, mascota y actualizaciones. |
 | [`assets/css/`](assets/css/) | Identidad visual general, interfaz compartida y componentes comunes. |
 | [`assets/art/`](assets/art/) y [`assets/mascot/`](assets/mascot/) | Ilustraciones e imágenes de la mascota. |
-| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/), [`tetris/`](tetris/) y [`rush/`](rush/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
+| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/), [`tetris/`](tetris/), [`rush/`](rush/), [`lights/`](lights/) y [`tuberias/`](tuberias/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
 | [`scripts/`](scripts/) | Comprobaciones y generación de recursos. |
 | [`AGENTS.md`](AGENTS.md) | Normas permanentes de diseño, arquitectura, privacidad y ampliación. |
 
