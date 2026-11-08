@@ -157,7 +157,9 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 
 ## Séptimo juego
 - Conecta tuberías vive en `tuberias/`, destino `/var/www/djl.com.es/games/tuberias/`. Cada toque gira una pieza 90° en sentido horario; la red gana cuando todas las piezas reciben agua desde IN y no queda ninguna conexión abierta. FIN está abajo a la derecha.
-- Campaña de 60 redes con solución única, de 3 × 3 a 6 × 6, con mínimo no decreciente de 2 a 31 giros. La dificultad combina tamaño y coste óptimo; validar unicidad, conexiones, fugas y solución con `scripts/check-tuberias.mjs` y `scripts/pipes-solver.mjs`.
+- Campaña de 60 redes con solución única, de 4 × 4 a 6 × 6, con mínimo no decreciente de 13 a 72 giros. La dificultad combina tamaño y coste óptimo; validar unicidad, conexiones, fugas y solución con `scripts/check-tuberias.mjs` y `scripts/pipes-solver.mjs`.
 - El solucionador se utiliza durante el desarrollo, no se ejecuta en el navegador ni en el VPS. Los niveles publicados son datos estáticos.
 - Contrarreloj de 120 segundos y reto diario determinista, 35 insignias propias, backup `tuberias.zip`, tarjeta individual, controles táctiles/ratón/teclado y sonidos suaves sin música.
 - Explicación inicial visible, agua y fugas identificables, deshacer y pistas con penalización. Mantener la carcasa común y adaptación a tablets verticales.
+
+La campaña revisada deja al menos el 75 % de las piezas giratorias desorientadas. Además del tamaño y del coste óptimo, ordena las redes por las piezas que siguen siendo ambiguas tras propagar las restricciones locales: de 0 a 25, sin retrocesos. Esta es una medida estructural del solucionador, no una estimación del tiempo que tardará cada persona. Los primeros seis niveles son 4 × 4, los siguientes dieciocho son 5 × 5 y los treinta y seis restantes, 6 × 6. Al actualizar se reinicia solamente la partida antigua en curso; se conservan récords y niveles desbloqueados.
