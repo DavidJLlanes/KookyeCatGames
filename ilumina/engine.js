@@ -14,12 +14,12 @@ export function topology(cells,size){
  return {visible,adjacent};
 }
 export function inspect(cells,size,lamps){
- const {visible,adjacent}=topology(cells,size),lit=new Set(),conflicts=new Set(),badClues=[],excessClues=[];
+ const {visible,adjacent}=topology(cells,size),lit=new Set(),conflicts=new Set(),badClues=[],excessClues=[],clueCounts={};
  for(const i of lamps){if(cells[i]!==-2)continue;for(const j of visible[i]){lit.add(j);if(j!==i&&lamps.includes(j)){conflicts.add(i);conflicts.add(j);}}}
- cells.forEach((c,i)=>{if(c<0)return;const count=adjacent(i).filter(j=>lamps.includes(j)).length;if(count!==c)badClues.push(i);if(count>c)excessClues.push(i);});
+ cells.forEach((c,i)=>{if(c<0)return;const count=adjacent(i).filter(j=>lamps.includes(j)).length;clueCounts[i]=count;if(count!==c)badClues.push(i);if(count>c)excessClues.push(i);});
  const dark=cells.flatMap((c,i)=>c===-2&&!lit.has(i)?[i]:[]);
  const valid=lamps.every(i=>Number.isInteger(i)&&cells[i]===-2)&&new Set(lamps).size===lamps.length;
- return {lit:[...lit],conflicts:[...conflicts],badClues,excessClues,dark,won:valid&&!dark.length&&!conflicts.size&&!badClues.length};
+ return {lit:[...lit],conflicts:[...conflicts],badClues,excessClues,clueCounts,dark,won:valid&&!dark.length&&!conflicts.size&&!badClues.length};
 }
 
 export function hash(s){let h=2166136261;for(const c of String(s))h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0;}
