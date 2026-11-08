@@ -1,0 +1,1 @@
+import{setupGameInterface}from'../assets/js/game-interface.js?v=50';setupGameInterface({name:'Cajas',board:'#board',workspace:'#play'});
