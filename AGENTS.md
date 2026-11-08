@@ -124,7 +124,7 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 
 ## Cuarto juego
 - Tetris vive en `tetris/`: campaña de 60 niveles de líneas objetivo crecientes, contrarreloj de 120 segundos para completar 15 filas y reto diario determinista; 35 insignias propias y backup `tetris.zip`.
-- Tablero de 10 × 20, siete piezas, giro con ajuste lateral, caída fantasma, caída rápida y velocidad creciente cada diez filas. Controles táctiles por botones y gestos en el tablero (toque o deslizar arriba para girar, deslizar a izquierda/derecha para mover, deslizar abajo para bajar y gesto largo/rápido hacia abajo para caída rápida), ratón por botones y teclado (flechas, X, espacio y P).
+- Tablero de 10 × 20, siete piezas, giro con ajuste lateral, caída fantasma, caída rápida y velocidad creciente cada diez filas. Controles táctiles por botones y gestos en el tablero (toque o deslizar arriba para girar, arrastrar lateralmente para mover la pieza de forma continua mientras se mantiene el dedo apoyado, deslizar abajo para bajar y gesto largo/rápido hacia abajo para caída rápida), ratón por botones y teclado (flechas, X, espacio y P).
 - Conservar la carcasa compartida de escritorio/móvil, los efectos suaves sin música y su interruptor local. Actualizar catálogo, README, eventos y caché offline al ampliar la plataforma.
 
 ## Instalación en Safari
