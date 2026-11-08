@@ -148,3 +148,9 @@ Crear una arcade web instalable en `https://djl.com.es/games`, pensada para apro
 - Lights Out vive en `lights/`, destino `/var/www/djl.com.es/games/lights/`: tablero 5 × 5, 60 niveles distintos en doce escalones de 3 a 14 pulsaciones óptimas, cinco tableros por escalón.
 - Cada toque invierte la casilla y sus vecinas ortogonales, sin envolver bordes. Todas las soluciones se verifican enumerando las 32 posibles primeras filas y propagando las siguientes; se selecciona la solución de menor peso.
 - Contrarreloj de 120 segundos y reto diario, 35 premios propios, backup `lights.zip`, controles táctiles/ratón/teclado, sonido suave opcional, interfaz compartida y adaptación a tablets verticales.
+
+## Explicación breve de cada juego: norma permanente
+- Cada juego existente y futuro debe mostrar una explicación breve, visible al abrir su propia página, antes de los modos y del tablero. Usar el componente compartido `arcade-game-intro`, manteniendo el tablero como protagonista y el mismo diseño responsive.
+- Explicar en lenguaje sencillo el objetivo y la acción principal; añadir un ejemplo o aclarar una regla poco intuitiva cuando sea necesario. No dar por hecho que el jugador conoce el juego.
+- Estas instrucciones de juego se muestran únicamente dentro de la página de cada juego. No añadir bloques de instrucciones a la portada, al catálogo ni a otras páginas. Las descripciones y documentación ya requeridas del README se mantienen.
+- La ayuda ampliada «Cómo jugar» puede seguir disponible, pero no sustituye a esta explicación inicial visible. Mantener ambos textos coherentes con las reglas y los controles reales al modificar un juego.
