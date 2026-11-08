@@ -1,5 +1,7 @@
 /** Lightweight game metadata. Add an entry; game code and awards load only when needed. */
 export const GAMES = Object.freeze([
+ {id:'ilumina',name:'Ilumina',path:'./ilumina/',art:'./ilumina/assets/cover.svg',category:'Puzle · Deducción',description:'Ilumina 60 tableros de Akari con solución única.',awardCount:35,levels:60,modes:['classic','timed','daily'],catalog:'../ilumina/achievements.js?v=1',progress:{gamesPlayed:0,solved:0,playedSeconds:0,totalPoints:0,arcadeXp:0,bestScore:0,bestTime:null,completedPuzzles:[],completedLevels:[],unlockedLevel:1,active:null,metrics:{presses:0,optimalWins:0,noUndo:0,dailyWins:0,timedWins:0}}},
+
   {
     id: 'picross', name: 'Picross', path: './picross/', art: './assets/art/picross.svg',
     category: 'Puzle · Lógica', description: 'Descubre dibujos ocultos siguiendo las pistas. ¡Cada casilla cuenta!',
