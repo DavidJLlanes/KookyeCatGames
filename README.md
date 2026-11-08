@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-5%20juegos-ED539A?style=for-the-badge" alt="5 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-300%20niveles-168B79?style=for-the-badge" alt="300 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-6%20juegos-ED539A?style=for-the-badge" alt="6 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-360%20niveles-168B79?style=for-the-badge" alt="360 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Cinco juegos y 300 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Seis juegos y 360 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -64,6 +64,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 | **Bubble Shooter** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Bubble Shooter](https://djl.com.es/bubbleshooter/) |
 | **Tetris** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Tetris](https://djl.com.es/tetris/) |
 | **Rush Hour** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Rush Hour](https://djl.com.es/games/rush/) |
+| **Lights Out** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Lights Out](https://djl.com.es/games/lights/) |
 
 ### Picross
 
@@ -128,6 +129,7 @@ El perfil se guarda en la base IndexedDB `kookye-cat-games-local-v2`, dentro del
 | `bubbleshooter.zip` | Partida, estadísticas, niveles y premios de Bubble Shooter. | Dentro de Bubble Shooter. |
 | `tetris.zip` | Partida, estadísticas, niveles y premios de Tetris. | Dentro de Tetris. |
 | `rush.zip` | Partida, estadísticas, niveles y premios de Rush Hour. | Dentro de Rush Hour. |
+| `lights.zip` | Partida, estadísticas, niveles y premios de Lights Out. | Dentro de Lights Out. |
 
 Las copias incluyen metadatos y se validan por formato, versión y juego antes de restaurarse. Una copia individual solo sustituye el progreso de ese juego. Los archivos se generan y leen en el navegador: no se suben ni se descomprimen en el VPS.
 
@@ -176,6 +178,16 @@ Despeja el atasco desplazando cada vehículo únicamente por su carril. El objet
 Incluye contrarreloj de 120 segundos y reto diario determinista. Puedes arrastrar los coches con el dedo o el ratón, seleccionarlos y moverlos con los botones o usar las flechas del teclado; Intro saca el coche rojo cuando la salida está libre. También ofrece deshacer, pausa, efectos suaves con interruptor, progreso local y 35 insignias propias.
 
 **Carpeta:** [`rush/`](rush/) · **Manifiesto:** [`game.json`](rush/game.json) · **Copia individual:** `rush.zip` · **Destino VPS:** `/var/www/djl.com.es/games/rush/`.
+
+### Lights Out
+
+<a href="https://djl.com.es/games/lights/"><img src="lights/assets/cover.svg" alt="Portada de Lights Out" width="460"></a>
+
+Apaga las 25 luces. Cada pulsación cambia la casilla elegida y sus vecinas de arriba, abajo, izquierda y derecha; los bordes no se conectan. La campaña contiene **60 tableros distintos**, con cinco niveles en cada escalón de **3 a 14 pulsaciones mínimas**. Un solucionador exhaustivo compara las 32 posibilidades de la primera fila y obtiene la solución más corta de cada tablero. La dificultad se mide por ese mínimo, no por mezclas aleatorias.
+
+El contrarreloj ofrece 120 segundos y el reto diario selecciona un tablero avanzado reproducible. Incluye deshacer, pausa, mínimo inicial visible, 35 premios, sonidos suaves opcionales y controles con dedo, ratón o teclado: flechas para navegar y Enter/espacio para pulsar. Los símbolos distinguen luces encendidas y apagadas además del color.
+
+**Carpeta:** [`lights/`](lights/) · **Manifiesto:** [`game.json`](lights/game.json) · **Copia:** `lights.zip` · **Destino:** `/var/www/djl.com.es/games/lights/`.
 
 ## Desarrollo local
 
@@ -280,3 +292,5 @@ sudo chown -R www-data:www-data /var/www/djl.com.es/games
 El alojamiento debe exponer ese directorio en [https://djl.com.es/games/](https://djl.com.es/games/). Los comandos se limitan al directorio del proyecto y no utilizan `--delete`. Para desplegar una revisión concreta, sustituye `refs/heads/main` por el SHA completo del commit revisado.
 
 El despliegue se ejecuta manualmente. Publicar cambios en GitHub no significa desplegarlos automáticamente en el VPS.
+
+**Norma de dificultad:** cada juego nuevo debe ofrecer progresión medible, reglas comprobadas y puzles resolubles y distintos. Los mínimos se verifican con un solucionador cuando sea aplicable; aumentar una mezcla aleatoria no certifica dificultad.
