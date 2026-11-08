@@ -7,6 +7,9 @@ import { exportAllBackup, restoreBackup } from './backups.js?v=50';
 import { shareProgressCard, labelShareButtons } from './share-card.js';
 
 const $ = selector => document.querySelector(selector);
+let awardScope = 'all';
+const normalizeGameName = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es').trim();
+
 
 // Capture Chrome's install event as soon as this module loads. The page performs
 // asynchronous profile and achievement work before DOMContentLoaded finishes.
@@ -65,7 +68,7 @@ setupInstallControls();
 
 function renderTrophies(profile) {
   const owned = new Set(profile.achievements);
-  const scope = document.querySelector('[data-award-scope].selected')?.dataset.awardScope || 'all';
+  const scope = awardScope;
   const kind = document.querySelector('[data-award-kind].selected')?.dataset.awardKind || 'all';
   const search = $('#award-search').value.trim().toLocaleLowerCase('es');
   const visible = ACHIEVEMENTS.filter(item => (scope === 'all' || item.scope === scope) && (kind === 'all' || item.kind === kind) &&
@@ -125,30 +128,58 @@ document.addEventListener('DOMContentLoaded', async () => {
       recordArcadeAction(profile, 'visit', today); unlockAchievements(profile); await saveProfile(profile);
     }
   } catch { /* Private mode may disable session storage. */ }
-  const scopeGroup = document.querySelector('[data-award-scope="all"]')?.parentElement;
-  for (const game of GAMES) {
-    const button = document.createElement('button');
-    button.type = 'button'; button.dataset.awardScope = game.id; button.textContent = game.name; button.setAttribute('aria-pressed', 'false');
-    scopeGroup?.append(button);
+  const picker = $('#award-game-picker');
+  const gameSearch = $('#award-game-search');
+  const gameOptions = $('#award-game-options');
+  const scopes = [{id:'all',name:'Todos los juegos'}, {id:'arcade',name:'Arcade · premios generales'},
+    ...GAMES.map(game => ({id:game.id,name:game.name})).sort((a,b)=>a.name.localeCompare(b.name,'es'))];
+  function renderGameOptions(){
+    const query=normalizeGameName(gameSearch.value);
+    const visible=scopes.filter(game=>normalizeGameName(game.name).includes(query));
+    gameOptions.replaceChildren(...visible.map(game=>{
+      const button=document.createElement('button');
+      button.type='button';button.dataset.awardScope=game.id;button.textContent=game.name;
+      button.classList.toggle('selected',game.id===awardScope);
+      button.setAttribute('aria-pressed',String(game.id===awardScope));
+      return button;
+    }));
+    $('#award-game-count').textContent=visible.length ? (query?visible.length+' opciones encontradas':GAMES.length+' juegos disponibles') : 'No hay juegos con ese nombre.';
   }
-  $('#award-filters').addEventListener('click', async event => {
-    const button = event.target.closest('button[data-award-scope],button[data-award-kind]');
-    if (!button) return;
-    const attribute = button.hasAttribute('data-award-scope') ? 'data-award-scope' : 'data-award-kind';
-    document.querySelectorAll(`[${attribute}]`).forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', String(item === button)); });
-    $('#trophy-list').dataset.limit = '24';
-    if (button.dataset.awardScope && button.dataset.awardScope !== 'all' && button.dataset.awardScope !== 'arcade') await loadAchievementCatalog([button.dataset.awardScope]);
-    renderTrophies(profile);
+  renderGameOptions();
+  gameSearch.addEventListener('input',renderGameOptions);
+  picker.addEventListener('toggle',()=>{
+    if(picker.open){gameSearch.value='';renderGameOptions();gameSearch.focus({preventScroll:true});}
+  });
+  picker.addEventListener('keydown',event=>{
+    if(event.key==='Escape'){event.preventDefault();picker.open=false;picker.querySelector('summary').focus();}
+    if(event.key==='ArrowDown'&&event.target===gameSearch){event.preventDefault();gameOptions.querySelector('button')?.focus();}
+  });
+  document.addEventListener('click',event=>{if(picker.open&&!picker.contains(event.target))picker.open=false;});
+  gameOptions.addEventListener('click',async event=>{
+    const button=event.target.closest('button[data-award-scope]');if(!button)return;
+    awardScope=button.dataset.awardScope;
+    $('#award-game-current').textContent=scopes.find(game=>game.id===awardScope).name;
+    picker.open=false;picker.querySelector('summary').focus();
+    $('#trophy-list').dataset.limit='24';
+    try{if(awardScope!=='all'&&awardScope!=='arcade')await loadAchievementCatalog([awardScope]);renderTrophies(profile);}
+    catch{showToast('No se pudieron cargar los premios. Comprueba la conexión y vuelve a elegir el juego.');}
+  });
+  $('#award-filters').addEventListener('click', event => {
+    const button=event.target.closest('button[data-award-kind]');if(!button)return;
+    document.querySelectorAll('[data-award-kind]').forEach(item=>{
+      item.classList.toggle('selected',item===button);item.setAttribute('aria-pressed',String(item===button));
+    });
+    $('#trophy-list').dataset.limit='24';renderTrophies(profile);
   });
   $('#award-search').addEventListener('input', async () => {
     $('#trophy-list').dataset.limit = '24';
-    if ($('#award-search').value.trim() && document.querySelector('[data-award-scope].selected')?.dataset.awardScope === 'all') await loadAchievementCatalog();
+    if ($('#award-search').value.trim() && awardScope === 'all') await loadAchievementCatalog();
     renderTrophies(profile);
   });
   $('#more-awards').addEventListener('click', async () => {
     const nextLimit = Number($('#trophy-list').dataset.limit || 24) + 24;
     $('#trophy-list').dataset.limit = String(nextLimit);
-    const scope = document.querySelector('[data-award-scope].selected')?.dataset.awardScope;
+    const scope = awardScope;
     const kind = document.querySelector('[data-award-kind].selected')?.dataset.awardKind;
     const search = $('#award-search').value.trim().toLocaleLowerCase('es');
     const matching = () => ACHIEVEMENTS.filter(item => (scope === 'all' || item.scope === scope) &&
