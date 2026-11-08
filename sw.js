@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v63';
+const CACHE = 'kookye-cat-games-shell-v64';
 const FILES = [
   './tuberias/', './tuberias/levels.js', './tuberias/engine.js', './tuberias/rules.js', './tuberias/scoring.js', './tuberias/interface.js', './tuberias/game.json', './tuberias/tuberias.js', './tuberias/index.html', './tuberias/tuberias.css', './tuberias/achievements.js', './tuberias/assets/icon.svg', './tuberias/assets/cover.svg',
   './lights/', './lights/engine.js', './lights/lights.js', './lights/index.html', './lights/lights.css', './lights/interface.js', './lights/rules.js', './lights/scoring.js', './lights/game.json', './lights/achievements.js', './lights/assets/icon.svg', './lights/assets/cover.svg',
