@@ -343,7 +343,7 @@ Coloca lámparas para iluminar todas las casillas blancas, sin que se vean entre
 
 Cambia el color de la zona conectada desde la esquina superior izquierda para absorber las casillas vecinas del mismo color. La meta es dejar todo el tablero de un solo color. Puedes superar el mínimo, pero la puntuación premia los cambios eficientes.
 
-60 niveles distintos de 4 × 4 a 6 × 6, ordenados por **mínimo exacto no decreciente de 3 a 11 cambios**. Se certifican con una búsqueda exhaustiva sobre componentes monocromáticos, equivalente a explorar todas las secuencias de colores útiles; la implementación del juego consume tableros precalculados. El número de movimientos mínimo se muestra en pantalla. Valida la campaña con `node scripts/check-inunda.mjs`.
+60 niveles distintos de 4 × 4 a 6 × 6, ordenados por **mínimo exacto no decreciente de 3 a 11 cambios**. Se certifican con una búsqueda exhaustiva sobre componentes monocromáticos, equivalente a explorar todas las secuencias de colores útiles; la implementación del juego consume tableros precalculados. El número de movimientos mínimo se muestra en pantalla. Valida la campaña y reproduce las 60 rutas óptimas con el motor de juego mediante `node scripts/check-inunda.mjs` (dos búsquedas independientes).
 
 Campaña, contrarreloj de 120 segundos y reto diario determinista. Toca un color o una casilla, pulsa los botones de la paleta o utiliza las teclas 1–5; las flechas permiten recorrer la paleta al enfocar el tablero. Hay deshacer, pausa, reinicio y pantalla completa. El juego incluye 35 insignias propias, sonidos suaves opcionales, tarjeta compartible y progreso local.
 
