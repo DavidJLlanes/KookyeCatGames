@@ -7,8 +7,8 @@
   <p>Arcade web instalable · Progreso local · Ratón, teclado y táctil</p>
   <p>
     <a href="https://djl.com.es/games/"><img src="https://img.shields.io/badge/JUGAR-Abrir%20la%20arcade-2584F4?style=for-the-badge" alt="Jugar a KookyeCat Games"></a>
-    <img src="https://img.shields.io/badge/CATÁLOGO-9%20juegos-ED539A?style=for-the-badge" alt="9 juegos disponibles">
-    <img src="https://img.shields.io/badge/CAMPAÑAS-540%20niveles-168B79?style=for-the-badge" alt="540 niveles de campaña">
+    <img src="https://img.shields.io/badge/CATÁLOGO-10%20juegos-ED539A?style=for-the-badge" alt="10 juegos disponibles">
+    <img src="https://img.shields.io/badge/CAMPAÑAS-600%20niveles-168B79?style=for-the-badge" alt="600 niveles de campaña">
   </p>
 </div>
 
@@ -20,7 +20,7 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 
 ## Qué ofrece la arcade
 
-- **Ocho juegos y 540 niveles de campaña**, además de contrarrelojes y retos diarios.
+- **Diez juegos y 600 niveles de campaña**, además de contrarrelojes y retos diarios.
 - **PWA instalable** con caché de los recursos principales y actualización automática.
 - **Interfaz unificada**, adaptable a escritorio, tablet y móvil, con pantalla completa.
 - **Logros y trofeos con insignias propias**, dificultad visible y vitrina filtrable.
@@ -66,6 +66,9 @@ KookyeCat Games reúne juegos de lógica, estrategia y puntería en una web est�
 | **Rush Hour** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Rush Hour](https://djl.com.es/games/rush/) |
 | **Lights Out** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Lights Out](https://djl.com.es/games/lights/) |
 | **Conecta tuberías** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Conecta tuberías](https://djl.com.es/games/tuberias/) |
+| **Ilumina** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Ilumina](https://djl.com.es/games/ilumina/) |
+| **Cajas** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Cajas](https://djl.com.es/games/cajas/) |
+| **Inunda** | 60 niveles | Contrarreloj de 120 s y reto diario | 35 | [Abrir Inunda](https://djl.com.es/games/inunda/) |
 
 ### Picross
 
@@ -265,7 +268,7 @@ Los generadores Python que crean imágenes rasterizadas requieren Pillow. `rende
 | [`assets/js/`](assets/js/) | Almacenamiento, ZIP, backups, tarjetas, sonidos, mascota y actualizaciones. |
 | [`assets/css/`](assets/css/) | Identidad visual general, interfaz compartida y componentes comunes. |
 | [`assets/art/`](assets/art/) y [`assets/mascot/`](assets/mascot/) | Ilustraciones e imágenes de la mascota. |
-| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/), [`tetris/`](tetris/), [`rush/`](rush/), [`lights/`](lights/) y [`tuberias/`](tuberias/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
+| Carpetas [`picross/`](picross/), [`2048/`](2048/), [`bubbleshooter/`](bubbleshooter/), [`tetris/`](tetris/), [`rush/`](rush/), [`lights/`](lights/) [`tuberias/`](tuberias/), [`ilumina/`](ilumina/), [`cajas/`](cajas/) e [`inunda/`](inunda/) | Cada juego ocupa una subcarpeta directa de la raíz de la arcade. |
 | [`scripts/`](scripts/) | Comprobaciones y generación de recursos. |
 | [`AGENTS.md`](AGENTS.md) | Normas permanentes de diseño, arquitectura, privacidad y ampliación. |
 
@@ -333,3 +336,15 @@ Coloca lámparas para iluminar todas las casillas blancas, sin que se vean entre
 - Táctil y ratón: tocar para colocar/quitar. Teclado: flechas y Enter/espacio. Deshacer, pausa, reinicio, pantalla completa y sonidos suaves opcionales.
 - 35 premios e insignias propios, progreso local, tarjeta compartible y restauración de copias.
 - Validación reproducible: `node scripts/check-ilumina.mjs`. El solucionador vive en scripts y no se carga durante las partidas.
+
+## Inunda
+
+<a href="https://djl.com.es/games/inunda/"><img src="inunda/assets/cover.svg" alt="Portada de Inunda" width="460"></a>
+
+Cambia el color de la zona conectada desde la esquina superior izquierda para absorber las casillas vecinas del mismo color. La meta es dejar todo el tablero de un solo color. Puedes superar el mínimo, pero la puntuación premia los cambios eficientes.
+
+60 niveles distintos de 4 × 4 a 6 × 6, ordenados por **mínimo exacto no decreciente de 3 a 11 cambios**. Se certifican con una búsqueda exhaustiva sobre componentes monocromáticos, equivalente a explorar todas las secuencias de colores útiles; la implementación del juego consume tableros precalculados. El número de movimientos mínimo se muestra en pantalla. Valida la campaña con `node scripts/check-inunda.mjs`.
+
+Campaña, contrarreloj de 120 segundos y reto diario determinista. Toca un color o una casilla, pulsa los botones de la paleta o utiliza las teclas 1–5; las flechas permiten recorrer la paleta al enfocar el tablero. Hay deshacer, pausa, reinicio y pantalla completa. El juego incluye 35 insignias propias, sonidos suaves opcionales, tarjeta compartible y progreso local.
+
+**Carpeta:** [`inunda/`](inunda/) · **Manifiesto:** [`game.json`](inunda/game.json) · **Copia:** `inunda.zip`, también incluida en `games.zip` · **Destino:** `/var/www/djl.com.es/games/inunda/`.

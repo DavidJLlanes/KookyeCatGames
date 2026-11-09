@@ -1,0 +1,2 @@
+export function finalScore(g){return Math.max(100,6000+Math.max(0,120-g.elapsed)*8-Math.max(0,g.moves-g.optimal)*360)}
+export function reduceFloodEvent(p,e){const m=p.metrics||{};if(e.type==='flood_move')m.moves=(m.moves||0)+1;if(e.type==='game_completed'){if(e.payload.moves===e.payload.optimal)m.optimalWins=(m.optimalWins||0)+1;if(!e.payload.undoCount)m.noUndo=(m.noUndo||0)+1;if(e.payload.mode==='daily')m.dailyWins=(m.dailyWins||0)+1;if(e.payload.mode==='timed')m.timedWins=(m.timedWins||0)+1}p.metrics=m}

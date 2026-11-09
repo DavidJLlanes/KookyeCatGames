@@ -192,3 +192,7 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 ## Revisión de dificultad de Cajas
 - La campaña actual de `cajas/` usa tres cajas, tres metas y obstáculos internos; sus 60 niveles son distintos, con dificultad ordenada por mínimo de empujes (de 5 a 12) y estados explorados. El selector de nivel debe mostrar siempre 01–60, nunca valores indefinidos.
 - Al cambiar los tableros, aumentar la versión de la partida activa y descartarla si pertenece al conjunto anterior; conservar los niveles completados, premios y récords.
+
+## Décimo juego: Inunda
+- Inunda vive en `inunda/` con 60 niveles 4×4 a 6×6, campaña, contrarreloj de 120 segundos y reto diario determinista. Su mínimo de cambios se certifica con búsqueda exhaustiva de componentes (`node scripts/check-inunda.mjs`); el tablero muestra ese mínimo y no bloquea la victoria si el jugador lo supera.
+- La zona de la esquina superior izquierda cambia al color escogido y absorbe los componentes vecinos de ese color. Táctil, ratón, teclas 1–5 y flechas con foco, deshacer, pausa, sonido opcional, 35 premios, backup `inunda.zip` y diseño común.
