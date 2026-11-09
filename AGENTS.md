@@ -196,3 +196,6 @@ La campaña revisada deja al menos el 75 % de las piezas giratorias desorientada
 ## Décimo juego: Inunda
 - Inunda vive en `inunda/` con 60 niveles 4×4 a 6×6, campaña, contrarreloj de 120 segundos y reto diario determinista. Su mínimo de cambios se certifica con búsqueda exhaustiva de componentes (`node scripts/check-inunda.mjs`); el tablero muestra ese mínimo y no bloquea la victoria si el jugador lo supera.
 - La zona de la esquina superior izquierda cambia al color escogido y absorbe los componentes vecinos de ese color. Táctil, ratón, teclas 1–5 y flechas con foco, deshacer, pausa, sonido opcional, 35 premios, backup `inunda.zip` y diseño común.
+
+## Regla de victoria de Inunda
+- Campaña y reto diario: hay que inundar todo el tablero en el número óptimo de cambios certificado; al agotarlo sin terminar se pierde la partida y se puede reintentar. Contrarreloj: 120 segundos y dos cambios más que el mínimo. Los colores sin frontera no consumen jugada; el tablero solo acepta toques en las casillas vecinas de la zona inundada. Conservar progreso ya completado al implantar el límite; una partida activa antigua que lo exceda se reinicia.

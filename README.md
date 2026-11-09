@@ -341,10 +341,10 @@ Coloca lámparas para iluminar todas las casillas blancas, sin que se vean entre
 
 <a href="https://djl.com.es/games/inunda/"><img src="inunda/assets/cover.svg" alt="Portada de Inunda" width="460"></a>
 
-Cambia el color de la zona conectada desde la esquina superior izquierda para absorber las casillas vecinas del mismo color. La meta es dejar todo el tablero de un solo color. Puedes superar el mínimo, pero la puntuación premia los cambios eficientes.
+Cambia el color de la zona conectada desde la esquina superior izquierda para absorber las casillas vecinas del mismo color. La meta es dejar todo el tablero de un solo color. En campaña y reto diario debes completarlo en el mínimo certificado: si agotas los cambios sin terminar, vuelves a intentarlo. El contrarreloj añade dos cambios extra al límite, además de sus 120 segundos.
 
 60 niveles distintos de 4 × 4 a 6 × 6, ordenados por **mínimo exacto no decreciente de 3 a 11 cambios**. Se certifican con una búsqueda exhaustiva sobre componentes monocromáticos, equivalente a explorar todas las secuencias de colores útiles; la implementación del juego consume tableros precalculados. El número de movimientos mínimo se muestra en pantalla. Valida la campaña y reproduce las 60 rutas óptimas con el motor de juego mediante `node scripts/check-inunda.mjs` (dos búsquedas independientes).
 
-Campaña, contrarreloj de 120 segundos y reto diario determinista. Toca un color o una casilla, pulsa los botones de la paleta o utiliza las teclas 1–5; las flechas permiten recorrer la paleta al enfocar el tablero. Hay deshacer, pausa, reinicio y pantalla completa. El juego incluye 35 insignias propias, sonidos suaves opcionales, tarjeta compartible y progreso local.
+Campaña, contrarreloj de 120 segundos y reto diario determinista. Toca una casilla vecina de la zona o un color disponible de la paleta; utiliza las teclas 1–5 o las flechas con foco y Enter; las flechas permiten recorrer la paleta al enfocar el tablero. Hay deshacer, pausa, reinicio y pantalla completa. El juego incluye 35 insignias propias, sonidos suaves opcionales, tarjeta compartible y progreso local.
 
 **Carpeta:** [`inunda/`](inunda/) · **Manifiesto:** [`game.json`](inunda/game.json) · **Copia:** `inunda.zip`, también incluida en `games.zip` · **Destino:** `/var/www/djl.com.es/games/inunda/`.
