@@ -1,4 +1,4 @@
-const CACHE = 'kookye-cat-games-shell-v71';
+const CACHE = 'kookye-cat-games-shell-v72';
 const FILES = [
   './inunda/',
   './inunda/levels.js',
